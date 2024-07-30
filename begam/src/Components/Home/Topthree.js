@@ -1,51 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getPlayerOfWeek, getTournaments } from '../../api/api';
-
-const topPlayers = [
-  {
-    imgSrc: 'images/player-1.png',
-    name: 'Barton Griggs',
-    xp: '1970 XP Earned',
-    dateRange: '04/05 - 04/12',
-    credits: '+20 credits',
-    profileLink: 'profile.html'
-  },
-  {
-    imgSrc: 'images/player-2.png',
-    name: 'Mervin Trask',
-    xp: '1970 XP Earned',
-    dateRange: '04/05 - 04/12',
-    credits: '+20 credits',
-    profileLink: 'profile.html'
-  },
-  {
-    imgSrc: 'images/player-3.png',
-    name: 'Adria Poulin',
-    xp: '1970 XP Earned',
-    dateRange: '04/05 - 04/12',
-    credits: '+20 credits',
-    profileLink: 'profile.html'
-  }
-];
+import { getPlayerOfWeek } from '../../api/api';
 
 export default function Topthree() {
-  const token = useSelector((state) => state.token);
-  const [players, setPlayers] = useState([]);
+  const [results, setResults] = useState([]);
+  const authToken = useSelector((state) => state.token);
 
-  const playerOfTheWeek = async () => {
-    try {
-      const response = await getPlayerOfWeek({token});
-      setPlayers(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching tournaments:", error);
+  useEffect(() => {
+    const fetchResults = async () => {
+      try {
+        const response = await getPlayerOfWeek(authToken);
+        // Ensure response data is an array
+        if (Array.isArray(response.data.data)) {
+          setResults(response.data.data);
+        } else {
+          console.error('Unexpected response data format:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching tournament results:', error);
+      }
+    };
+
+    if (authToken) {
+      fetchResults();
     }
-  };
+  }, [authToken]);
 
-  useEffect(()=> {
-    playerOfTheWeek();
-  },[])
   return (
     <section id="players-week-section">
       <div className="overlay pt-120 pb-120">
@@ -59,28 +39,27 @@ export default function Topthree() {
             </div>
           </div>
           <div className="row mp-none">
-            {topPlayers.map((player, index) => (
+            {results.map((player, index) => (
               <div className="col-lg-4 col-md-6" key={index}>
                 <div className={`single-item text-center ${index === 1 ? 'mid-area' : ''}`}>
                   {index === 1 && (
                     <div className="top-level">
-                      <img src="images/star.png" alt="star"/>
+                      <img src="images/star.png" alt="star" />
                     </div>
                   )}
                   <div className="img-area">
                     <div className="img-wrapper">
-                      <img src={player.imgSrc} alt="player"/>
+                      <img src="images/player-1.png" alt={player.userName} />
                     </div>
                   </div>
-                  <a href={player.profileLink}><h5>{player.name}</h5></a>
+                  <a href={player.profileLink}><h5>{player.userName}</h5></a>
                   <p className="date">
-                    <span className="text-sm earn">{player.xp}</span>
-                    <span className="text-sm">{player.dateRange}</span>
+                    <span className="text-sm earn">{player.rank}</span>
                   </p>
                   <p className="text-sm credit">
-                    <span className="text-sm"><img src="images/credit-icon.png" alt="credit"/> {player.credits}</span>
+                    <span className="text-sm"> {player.tournamentName}</span>
                   </p>
-                  <a href={player.profileLink} className="cmn-btn">View Profile</a>
+                
                 </div>
               </div>
             ))}

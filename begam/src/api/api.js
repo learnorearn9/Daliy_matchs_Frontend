@@ -1,35 +1,79 @@
-import { axiosInstance, authAxiosInstance } from './axios'
-
+import { axiosInstance, authAxiosInstance,authAdminInstance } from "./axios";
 
 export const login = (credentials) => {
-    return axiosInstance.post('/login', credentials);
+  return axiosInstance.post("/login", credentials);
 };
 
 export const signup = (userData) => {
-    return axiosInstance.post('/signup', userData);
+  return axiosInstance.post("/signup", userData);
 };
 
 export const verify = (credentials) => {
-    return axiosInstance.post('/verify-otp',credentials);
+  return axiosInstance.post("/verify-otp", credentials);
 };
 
 export const logout = (token) => {
-    return axiosInstance.post('/logout',token);
+  return axiosInstance.post("/logout", token);
 };
 
-export const getTournaments = () => {
-    return authAxiosInstance.get('/home/get/tournament', {
-      params: {
-        date: '2024-07-13',
-      },
-    });
-  };
+export const getTournaments = (token) => {
+  return authAxiosInstance.get("/home/get/tournament", {
+    params: {
+      date: "2024-07-22",
+    },
+    headers: { "x-auth-token": token }
+  });
+};
 
-  export const getPlayerOfWeek = (token) => {
-    return axiosInstance.get('/home/tournament/result',token);
-  }
+export const getTournamentResults = (token) => {
+  return authAxiosInstance.get("/home/get/tournament/result", {
+    headers: { "x-auth-token": token },
+    "startDate":"2024-07-12",
+    "endDate":"2024-07-26"
+  });
+};
+
+export const getPlayerOfWeek = (token) => {
+  return authAxiosInstance.get("/home/get/tournament/best/palyer/week", {
+    headers: { "x-auth-token": token },
+  });
+};
+
+export const getUserDetails = (token) => {
+  return axiosInstance.get("/get/user/details", {
+    headers: { "x-auth-token": token },
+  });
+};
+
+export const getCounts = () => {
+  return authAxiosInstance.get("/home/tournament/result");
+};
+
+export const getUserReview = () => {
+  return axiosInstance.get("/home/get/review");
+};
+
+export const joinTournament = (data,token) => {
+  return authAxiosInstance.post("/tournament/join",data ,{
+    headers: { "x-auth-token": token },
+  });
+};
 
 
-  export const getUserReview = () => {
-    return axiosInstance.get('/home/get/review');
-  };
+export const participents = (token) => {
+  return axiosInstance.post("/get/user/payment-status", {
+    headers: { "x-auth-token": token },
+  });
+};
+
+export const updateUserDetails = (data,token) => {
+  return authAxiosInstance.post("/update-profile",data,{
+    headers: { "x-auth-token": token },
+  });
+};
+
+export const createTournament = (data,token) => {
+  return authAdminInstance.post("/create/tournament",data,{
+    headers: { "x-auth-token": token },
+  });
+};

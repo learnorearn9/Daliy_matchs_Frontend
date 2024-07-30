@@ -29,9 +29,6 @@ export default function Games() {
                 </div>
               ))}
             </div>
-            <div className="btn-area text-center">
-              <a href="tournaments.html" className="cmn-btn">View All</a>
-            </div>
           </div>
         </div>
       </div>

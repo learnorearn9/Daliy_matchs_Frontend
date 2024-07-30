@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../Home/Navbar'
 import Statistics from '../Home/Statistics'
 import Features from '../Home/Features'
-import Testimonial from '../Home/Testimonal'
-import Footer from '../Footer/footer'
+import Testimonial from '../Home/Reviews'
+import Footer from '../Footer/Footer'
 import ScrollToTop from '../atoms/scrollTotop'
 import Preloader from '../atoms/Preloader'
 import Herosection from '../Home/Herosection'
@@ -25,7 +25,7 @@ export default function About() {
     <>
     <ScrollToTop/>
       <Navbar/>
-      {/* <section id="banner-section" class="inner-banner">
+<section id="banner-section" class="inner-banner">
         <div class="ani-img">
             <img class="img-1" src="images/banner-circle-1.png" alt="icon"/>
             <img class="img-2" src="images/banner-circle-2.png" alt="icon"/>
@@ -162,8 +162,7 @@ export default function About() {
             </div>
         </div>
     </section>
-    <Footer/> */}
-    <Herosection/>
+    <Footer/> 
     </>
   )
 }

@@ -917,6 +917,7 @@ body::-webkit-scrollbar-thumb:hover {
     border-radius: 20px;
     padding: 80px 100px 0;
     margin-bottom: -8px;
+    
 }
 #available-game-section .main-container .btn-area{
     margin-top: 40px;
@@ -930,6 +931,7 @@ body::-webkit-scrollbar-thumb:hover {
     margin: 0 -15px;
     margin-bottom: -7px;
     animation: slide 20s linear infinite;
+ 
 }
 #available-game-section .slick-initialized .slick-arrow {
     position: absolute;
@@ -1834,9 +1836,6 @@ body::-webkit-scrollbar-thumb:hover {
 #tournaments-section.tournaments .section-header{
     margin-top: 7px;
 }
-#banner-section.inner-banner.tournaments{
-    margin-bottom: 430px;
-}
 #banner-section.inner-banner .headign-info {
     margin-bottom: -570px;
 }
@@ -2286,49 +2285,49 @@ body::-webkit-scrollbar-thumb:hover {
     color: var(--body-color);
 }
 
-#tournaments-content .participants h4{
+.participants h4{
     text-transform: uppercase;
     margin-bottom: 25px;
 }
-#tournaments-content .participants-single{
+.participants-single{
     padding: 30px 0;
     display: flex;
     justify-content: space-between;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
-#tournaments-content .participants-single:last-child{
+ .participants-single:last-child{
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-#tournaments-content .participants-single img{
+.participants-single img{
     width: 50px;
     height: 50px;
     border-radius: 50%;
     background: #FFB9F2;
     margin-right: 15px;
 }
-#tournaments-content .participants-single .right-area .dot{
+.participants-single .right-area .dot{
     width: 4px;
     height: 4px;
     border-radius: 50%;
     background: rgba(211, 211, 211, 0.5);
 }
-#tournaments-content .participants-single .nice-select{
+.participants-single .nice-select{
     padding: 0;
 }
-#tournaments-content .participants-single .nice-select:after{
+.participants-single .nice-select:after{
     display: none;
 }
-#tournaments-content .participants-single .nice-select .list {
+.participants-single .nice-select .list {
     left: -65px;
 }
-#tournaments-content .participants-single .nice-select.open .list {
+.participants-single .nice-select.open .list {
     left: -120px;
     padding: 10px 12px;
 }
-#tournaments-content .participants-single .nice-select.open .list li{
+.participants-single .nice-select.open .list li{
     margin: 5px 0;
 }
-#tournaments-content .participants-single .nice-select.open .list li i{
+.participants-single .nice-select.open .list li i{
     margin-right: 10px;
 }
 #tournaments-content .prizes .table {
@@ -2482,16 +2481,25 @@ body::-webkit-scrollbar-thumb:hover {
 #login-reg .login-reg-main h4{
     margin-bottom: 30px;
 }
-#login-reg .login-reg-main form input{
+#login-reg .login-reg-main form input,.profile-input input{
     background: #370898;
     border-radius: 10px;
     padding: 15px 25px;
     border: none;
     color: var(--body-color);
 }
-#login-reg .login-reg-main form label{
+#login-reg .login-reg-main form label,.profile-input label{
     display: flex;
     color: var(--body-color);
+}
+.profile-input{
+    width: 400px;
+    display: flex;
+}
+.profile-input label{
+    display: flex;
+    align-items: center;
+    width:100px;
 }
 #login-reg .login-reg-main .recover{
     margin: 20px 0 30px;
@@ -3044,7 +3052,7 @@ body::-webkit-scrollbar-thumb:hover {
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
 }
-#products-content .comments .comment-form .form-group {
+#products-content .comments .comment-form .form-group ,.profile-input{
     margin-bottom: 30px;
 }
 #products-content .comments .comment-form form input:focus,
@@ -3222,7 +3230,7 @@ body::-webkit-scrollbar-thumb:hover {
     padding: 30px 20px;
     margin-bottom: 40px;
 }
-#checkout form .form-group {
+#checkout form .form-group ,.profile-input{
     margin-bottom: 20px;
 }
 #checkout label{
@@ -3231,7 +3239,7 @@ body::-webkit-scrollbar-thumb:hover {
 #checkout .custom-checkbox label{
     color: rgba(255, 255, 255);
 }
-#checkout form .form-group input{
+#checkout form .form-group input,.jointournament{
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     background: transparent;
@@ -3239,7 +3247,7 @@ body::-webkit-scrollbar-thumb:hover {
     height: auto;
     padding: 15px 12px;
 }
-#checkout form .form-group input:focus{
+#checkout form .form-group input:focus,.profile-input input:focus{
     box-shadow: none;
 }
 #checkout form .form-group .custom-control{
@@ -4643,3 +4651,81 @@ body::-webkit-scrollbar-thumb:hover {
     margin-right: 8px;
   }
   
+  /* Navbar.css */
+
+/* Styles for desktop view */
+/* Navbar.css */
+
+/* Styles for desktop view */
+.header-action .logout-icon {
+    display: inline-block;
+  }
+  
+  .header-action .logout-text {
+    display: none;
+  }
+  
+  .header-action .join-btn {
+    display: inline-block;
+  }
+  
+  /* Styles for tablet and mobile view */
+  @media (min-width: 768px) {
+
+    .logout-text {
+        display: none;
+    }
+    .login{
+        display: none;
+    }
+
+    .signup{
+        display: none;
+    }
+  }
+  
+  /* Styles for mobile view */
+  @media (max-width: 600px) {
+    .header-action .join-btn {
+        display: none;
+      }
+.user-info{
+    display: none;
+}
+    .header-action .logout-text {
+      display: inline-block;
+      cursor: pointer;
+      color: white;
+      margin-left: 8px;
+    }
+    
+    #available-game-section .main-container .single-item{
+        min-width: 50%;
+    }
+  }
+  
+    .qr-code-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .qr-code-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .qr-code img {
+      width: 200px;
+      height: 200px;
+    }
+    .cmn-btn {
+      margin-top: 20px;
+    }

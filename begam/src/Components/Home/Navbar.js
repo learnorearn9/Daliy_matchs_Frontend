@@ -1,32 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux"; // Import useSelector to access Redux state
+import { useSelector, useDispatch } from "react-redux";
 import { clearToken } from "../../ReduxStore/action";
-import { useDispatch } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
 } from "@mui/material";
+import { getUserDetails, logout } from "../../api/api";
+// Importing the CSS file
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [username,setUsername] = useState("");
+  const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(true);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch(); // Initialize useDispatch
+  const dispatch = useDispatch();
 
-  const authToken = useSelector((state) => state.token); // Assuming token is stored in Redux state
+  const authToken = useSelector((state) => state.token);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-
+    // console.log("authtoekn",authToken);
+    getUserDetail();
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -41,10 +46,28 @@ export default function Navbar() {
     setOpen(false);
   };
 
-  const confirmLogout = () => {
+  const getUserDetail = async () => {
+    try {
+      const res = await getUserDetails(authToken); // Log the name field
+        setUsername(res.data.data.user.name);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
+  
+  
+  
+  
+  const confirmLogout = async () => {
+    // const res = await logout(authToken);
+    console.log("Cleard");
     dispatch(clearToken());
     navigate("/login");
     setOpen(false);
+  };
+
+  const toggleNavbar = () => {
+    setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
   return (
@@ -68,14 +91,17 @@ export default function Navbar() {
               data-toggle="collapse"
               data-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent"
-              aria-expanded="false"
+              aria-expanded={!isNavbarCollapsed}
               aria-label="Toggle navigation"
+              onClick={toggleNavbar}
             >
-              <i className="fas fa-bars"></i>
+              <MenuIcon style={{ color: "white" }} />
             </button>
             <nav className="navbar navbar-expand-lg p-0">
               <div
-                className="navbar-collapse collapse"
+                className={`navbar-collapse collapse ${
+                  !isNavbarCollapsed ? "show" : ""
+                }`}
                 id="navbarSupportedContent"
               >
                 <ul className="navbar-nav main-menu ml-auto">
@@ -89,33 +115,61 @@ export default function Navbar() {
                   </li>
                   <li>
                     <Link
+                      to="/about"
+                      className={location.pathname === "/about" ? "active" : ""}
+                    >
+                      About
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       to="/tournament"
                       className={
                         location.pathname === "/tournament" ? "active" : ""
                       }
                     >
-                      Tournaments
+                      Tournament
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      to="/about"
-                      className={location.pathname === "/about" ? "active" : ""}
-                    >
-                      About Us
-                    </Link>
-                  </li>
-                  {authToken && (
-                    <li>
-                      <Link
-                        to="/profile"
-                        className={
-                          location.pathname === "/profile" ? "active" : ""
-                        }
-                      >
-                        Profile
-                      </Link>
-                    </li>
+                  {authToken ? (
+                    <>
+                      <li>
+                        <Link
+                          to="/profile"
+                          className={
+                            location.pathname === "/profile" ? "active" : ""
+                          }
+                        >
+                          Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                        >
+                          <span className="logout-text" onClick={handleLogout}>
+                            Logout
+                          </span>
+                        </Link>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                     <li>
+                        <Link
+                          to="/profile"
+                          className="login"
+                        >
+                          Login
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/profile"
+                          className="signup"
+                        >
+                          Sign Up
+                        </Link>
+                      </li></>
                   )}
                 </ul>
               </div>
@@ -123,8 +177,9 @@ export default function Navbar() {
             <div className="right-area header-action d-flex align-items-center">
               {authToken ? (
                 <div className="user-info">
-                  <span>Welcome, User</span>
+                  <span className="welcome-message">Welcome, {username}</span>
                   <IconButton
+                    className="logout-icon"
                     color="inherit"
                     onClick={handleLogout}
                     style={{ color: "white" }}
@@ -137,7 +192,7 @@ export default function Navbar() {
                   <Link to="/login" className="login-btn">
                     Login
                   </Link>
-                  <Link to="/signup" className="cmn-btn">
+                  <Link to="/signup" className="cmn-btn join-btn">
                     Join Now!
                   </Link>
                 </>

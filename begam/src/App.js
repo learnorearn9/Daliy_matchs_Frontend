@@ -16,6 +16,8 @@ import Protected from "./routes/Protected";
 import About from "./Components/About/About";
 import Tournament from "./Components/Tournaments/Tournament";
 import Profile from "./Components/Profile/Profile";
+import RecoverPassword from "./Components/Authentication/RecoverPassword";
+import CreateTournament from "./Components/Admin/CreateTournament";
 
 const App = () => {
 
@@ -27,9 +29,11 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/verify" element={<VerifyEmail />} />
-          <Route exact path="/about" element={<Protected component={About} />} />
+          <Route exact path="/recover" element={<RecoverPassword />} />
+          <Route exact path="/about" element={<About/>} />
           <Route exact path="/tournament" element={<Protected component={Tournament} />} />
           <Route exact path="/profile" element={<Protected component={Profile} />} />
+          <Route exact path="/createtournament" element={<Protected component={CreateTournament} />} />
         </Routes>
       </BrowserRouter>
     </>
