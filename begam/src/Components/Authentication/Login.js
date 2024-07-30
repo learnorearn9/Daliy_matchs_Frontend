@@ -55,6 +55,7 @@ export default function Login() {
       navigate("/");
     } catch (err) {
       console.error("Login failed:", err);
+
       setNotifications([{ type: "error", message: "Login failed. Please try again later." }]);
     } finally {
       setLoading(false);
@@ -119,7 +120,7 @@ export default function Login() {
                       </div>
                       <div className="form-group recover">
                         <p>
-                          Forgot your password? <Link to={"/reset"}>Recover Password</Link>
+                          Forgot your password? <Link to={"/recover"}>Recover Password</Link>
                         </p>
                       </div>
                       <div className="form-group">

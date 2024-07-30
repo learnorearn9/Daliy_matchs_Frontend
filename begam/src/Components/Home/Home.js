@@ -3,17 +3,15 @@ import Navbar from "./Navbar";
 import Herosection from "./Herosection";
 import Games from "./Games";
 import Work from "./Work";
-import Tournaments from "./Tournaments";
 import Topthree from "./Topthree";
 import Features from "./Features";
-import Testimonial from "./Testimonal";
+import Testimonial from "./Reviews";
 import Statistics from "./Statistics";
-import Footer from "../Footer/footer";
 import ScrollToTop from "../atoms/scrollTotop";
 import Preloader from "../atoms/Preloader";
 import UserTournaments from "./UserTournaments";
 import ResultTable from "./ResultTable";
-
+import Footer from "../Footer/Footer";
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +31,7 @@ export default function Home() {
       <Preloader/>
       <Navbar />
       <Herosection />
-      {/* <Games />
+       <Games />
       <Work />
       <UserTournaments/> 
       <ResultTable/>
@@ -41,7 +39,7 @@ export default function Home() {
       <Topthree />
       <Features />
       <Testimonial />
-      <Footer /> */}
+      <Footer/> 
     </>
   );
 }

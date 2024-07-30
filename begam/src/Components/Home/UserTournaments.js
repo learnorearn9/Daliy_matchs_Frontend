@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getTournaments } from "../../api/api";
-import { format, parseISO } from "date-fns"; // Import date-fns functions
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { format, parseISO } from "date-fns";
 
 export default function UserTournaments() {
   const [tournaments, setTournaments] = useState([]);
-
+const token = useSelector((state) => state.token);
   const fetchUserTournaments = async () => {
     try {
-      const response = await getTournaments();
+      const response = await getTournaments(token);
       setTournaments(response.data.tournamentDetail ? [response.data.tournamentDetail] : []);
     } catch (error) {
       console.error("Error fetching tournaments:", error);
@@ -58,7 +60,7 @@ export default function UserTournaments() {
                               </span>
                             </div>
                             <div className="date-area bg">
-                              <span className="date">{tournament.date}</span>
+                              <span className="date">8:00 P.M</span>
                             </div>
                           </div>
                           <div className="single-box d-flex">
@@ -66,10 +68,10 @@ export default function UserTournaments() {
                               <span className="head">ENTRY/PLAYER</span>
                               <span className="sub">{tournament.entry}</span>
                             </div> */}
-                            {/* <div className="box-item">
-                              <span className="head">Team Size</span>
-                              <span className="sub">{tournament.teamSize}</span>
-                            </div> */}
+                             <div className="box-item" style={{padding:"5px"}}>
+                              <span className="head" style={{marginRight:"10px"}}>Total Participents</span>
+                              <span className="sub">{tournament.totalparticipants}</span>
+                            </div>
                             {/* <div className="box-item">
                               <span className="head">Max Teams</span>
                               <span className="sub">{tournament.maxTeams}</span>
@@ -94,14 +96,26 @@ export default function UserTournaments() {
                               <img src="images/price-coin.png" alt="image" />
                               prize
                             </span>
-                            <h4 className="dollar">{tournament.firstPrize}</h4>
-                            <a
-                              href="tournaments-single.html"
+                            <h4 className="dollar">₹ {tournament.firstPrize}</h4>
+                           {token ? (
+                            <>
+                           <Link
+                             to={'/tournament'}
                               className="cmn-btn"
                             >
                               View Tournament
-                            </a>
-                            {/* <p>Top 3 Players Win a Cash Prize</p> */}
+                            </Link>
+                            </>
+                           ):(
+                            <>
+                            <Link
+                             to={'/login'}
+                              className="cmn-btn"
+                            >
+                              View Tournament
+                            </Link>
+                            </>
+                           )}
                           </div>
                         </div>
                       </div>

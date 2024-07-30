@@ -1,6 +1,8 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faTwitter, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { Link } from 'react-router-dom';
+
 
 export default function Footer() {
   return (
@@ -13,9 +15,9 @@ export default function Footer() {
                 <a className="site-logo site-title" href="index.html"><img src="images/logo.png" alt="site-logo" /></a>
               </div>
               <ul className="menu-side d-flex align-items-center">
-                <li><a href="index.html" className="active">Home</a></li>
-                <li><a href="about-us.html">About Us</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><Link to={'/'} className="active">Home</Link></li>
+                <li><Link to={'/about'} >About Us</Link></li>
+                <li><Link to={'/tournament'}>Tournament</Link></li>
               </ul>
             </div>
             <div className="col-lg-4 col-md-4 d-flex align-items-center justify-content-center justify-content-md-end">
@@ -46,5 +48,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+      )
 }

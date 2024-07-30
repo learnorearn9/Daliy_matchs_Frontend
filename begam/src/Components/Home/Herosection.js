@@ -16,7 +16,7 @@ export default function Herosection() {
                                 games to real money eSports</p>
                             <div class="btn-play d-flex justify-content-center align-items-center">
                                 <a class="cmn-btn">
-                                    <Timer/>
+                                   Get Started
                                 </a>
                                 <a class="mfp-iframe popupvideo">
                                     <img src="images/play-icon.png" alt="play"/>
