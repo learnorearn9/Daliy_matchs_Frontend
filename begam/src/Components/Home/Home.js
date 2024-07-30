@@ -11,7 +11,7 @@ import ScrollToTop from "../atoms/scrollTotop";
 import Preloader from "../atoms/Preloader";
 import UserTournaments from "./UserTournaments";
 import ResultTable from "./ResultTable";
-import Footer from "../Footer/Footer";
+import Footer from "./Footer";
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
@@ -38,8 +38,8 @@ export default function Home() {
       <Statistics />
       <Topthree />
       <Features />
-      <Testimonial />
-      <Footer/> 
+      <Testimonial /> 
+      <Footer/>
     </>
   );
 }
