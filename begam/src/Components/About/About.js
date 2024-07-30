@@ -3,10 +3,10 @@ import Navbar from '../Home/Navbar'
 import Statistics from '../Home/Statistics'
 import Features from '../Home/Features'
 import Testimonial from '../Home/Reviews'
-import Footer from '../Footer/Footer'
 import ScrollToTop from '../atoms/scrollTotop'
 import Preloader from '../atoms/Preloader'
 import Herosection from '../Home/Herosection'
+import Footer from '../Home/Footer'
 
 export default function About() {
     const [loading, setLoading] = useState(true);
@@ -162,7 +162,7 @@ export default function About() {
             </div>
         </div>
     </section>
-    <Footer/> 
+ <Footer/>
     </>
   )
 }
