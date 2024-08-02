@@ -3,7 +3,7 @@ import ScrollToTop from "../atoms/scrollTotop";
 import Navbar from "../Home/Navbar";
 import Preloader from "../atoms/Preloader";
 import Details from "./Details";
-import Footer from "../Footer/Footer";
+import Footer from "../Home/Footer";
 import UserDetail from "./UserDetail";
 import { getUserDetails } from "../../api/api";
 import { useSelector } from "react-redux";
