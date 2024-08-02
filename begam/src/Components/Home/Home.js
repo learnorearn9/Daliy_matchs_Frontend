@@ -11,9 +11,9 @@ import ScrollToTop from "../atoms/scrollTotop";
 import Preloader from "../atoms/Preloader";
 import UserTournaments from "./UserTournaments";
 import ResultTable from "./ResultTable";
-import Footer from "../Footer/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Footer from "./Footer";
 AOS.init({
   duration: 1500,
 });
