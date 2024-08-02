@@ -4,7 +4,7 @@ import Timer from './Timer'
 export default function Herosection() {
   return (
     <section id="banner-section">
-    <div class="banner-content d-flex align-items-center">
+    <div class="banner-content d-flex align-items-center" data-aos="fade-up">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-12">

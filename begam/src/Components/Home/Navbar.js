@@ -184,18 +184,18 @@ export default function Navbar() {
                     onClick={handleLogout}
                     style={{ color: "white" }}
                   >
-                    <ExitToAppIcon />
+                    <ExitToAppIcon className="logout"/>
                   </IconButton>
                 </div>
               ) : (
-                <>
+                <div className="buttons">
                   <Link to="/login" className="login-btn">
                     Login
                   </Link>
                   <Link to="/signup" className="cmn-btn join-btn">
                     Join Now!
                   </Link>
-                </>
+                </div>
               )}
             </div>
           </div>

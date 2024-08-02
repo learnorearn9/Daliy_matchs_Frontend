@@ -26,7 +26,7 @@ const Statistics = () => {
 
   return (
     <section id="counter-section">
-      <div className="overlay pt-120 pb-120">
+      <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="800">
         <div className="container">
           <div className="row mp-none">
             <div className="col-lg-3 col-md-6 col-sm-6">

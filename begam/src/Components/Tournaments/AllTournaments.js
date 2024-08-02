@@ -75,7 +75,7 @@ export default function AllTournaments() {
           <img className="img-2" src="images/banner-circle-2.png" alt="icon" />
           <img className="img-3" src="images/banner-circle-2.png" alt="icon" />
         </div>
-        <div className="banner-content d-flex align-items-center">
+        <div className="banner-content d-flex align-items-center"  data-aos="fade-up" data-aos-offset="100">
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-6">
@@ -101,7 +101,7 @@ export default function AllTournaments() {
       </section>
       <section id="tournaments-section">
         <div className="overlay pt-120 pb-120">
-          <div className="container wow fadeInUp">
+          <div className="container wow fadeInUp"  data-aos="fade-up" data-aos-offset="150">
             {tournaments.map((tournament, index) => (
               <div key={index} className="single-item">
                 <div className="row">

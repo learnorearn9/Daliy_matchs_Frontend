@@ -1,4 +1,3 @@
-// src/components/Signup.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Preloader from "../atoms/Preloader";
@@ -16,6 +15,7 @@ export default function Signup() {
     address: "",
   });
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const onChange = (e) => {
@@ -37,17 +37,17 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Clear previous notifications
     setNotifications([]);
-    // console.log("Submitting form with details:", details);
+    setLoading(true);
+
     const errors = validateFields(details);
     if (Object.keys(errors).length > 0) {
       const errorNotifications = Object.entries(errors).map(([key, msg]) => ({
         type: 'error',
         message: msg,
       }));
-      console.log(errorNotifications);
       setNotifications(errorNotifications);
+      setLoading(false);
       return;
     }
 
@@ -64,12 +64,14 @@ export default function Signup() {
       navigate("/verify", { state: { email: details.email } });
     } catch (error) {
       setNotifications([{ type: 'error', message: error.message }]);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <Preloader />
+      {loading && <Preloader />}
       <div className="notification-container">
         {notifications.map((notification, index) => (
           <Notification key={index} type={notification.type} message={notification.message} />
@@ -87,7 +89,7 @@ export default function Signup() {
                   </Link>
                 </div>
                 <div className="col-sm-5 col">
-                  <Link to={"/"}>
+                  <Link to="#">
                     <img src="images/logo.png" alt="Logo" />
                   </Link>
                 </div>
@@ -177,7 +179,6 @@ export default function Signup() {
                         </button>
                       </div>
                     </form>
-
                     <div className="account">
                       <p>
                         Already have an account? <Link to="/login">Sign In</Link>
