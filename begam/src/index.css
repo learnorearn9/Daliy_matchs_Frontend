@@ -3749,7 +3749,7 @@ body::-webkit-scrollbar-thumb:hover {
     }
     #header-section .right-area .cmn-btn {
         margin-left: 10px;
-        padding: 11px 15px;
+        /* padding: 11px 15px; */
     }
     #banner-section .banner-content .ani-illu .left-1 {
         left: -24%;
@@ -4383,8 +4383,8 @@ body::-webkit-scrollbar-thumb:hover {
         display: none;
     }
     #header-section .right-area .cmn-btn {
-        margin-right: 10px;
-        padding: 12px 12px;
+        /* margin-right: 10px; */
+        /* padding: 12px 12px; */
     }
     #available-game-section .slick-initialized .slick-next,
     #available-game-section .slick-initialized .slick-prev {
@@ -4728,4 +4728,18 @@ body::-webkit-scrollbar-thumb:hover {
     }
     .cmn-btn {
       margin-top: 20px;
+    }
+
+    .buttons,.user-info{
+        display: flex;
+align-items: center;
+    }
+
+    .user-info .logout{
+        font-size: 25px;
+        margin-bottom: 5px;
+    }
+
+    .buttons .cmn-btn.join-btn{
+        margin-bottom: 20px;
     }

@@ -11,7 +11,7 @@ export default function Games() {
 
   return (
     <section id="available-game-section">
-      <div className="overlay pb-120">
+      <div className="overlay pb-120" data-aos="fade-up">
         <div className="container wow fadeInUp">
           <div className="main-container">
             <div className="row justify-content-between">

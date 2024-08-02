@@ -126,7 +126,7 @@ export default function Participants() {
   return (
     <>
       <div className="participants" style={{ paddingTop: "30px" }}>
-        <div className="container">
+        <div className="container"  data-aos="fade-up" data-aos-offset="200">
           <div className="row">
             <div className="col-lg-12">
               <div className="participants-area pb-120">

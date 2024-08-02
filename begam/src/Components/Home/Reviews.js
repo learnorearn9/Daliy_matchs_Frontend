@@ -45,7 +45,7 @@ export default function Testimonial() {
 
   return (
     <section id="testimonials-section">
-      <div className="overlay pt-120 pb-120">
+      <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="1300">
         <div className="container wow fadeInUp">
           <div className="row justify-content-center">
             <div className="col-lg-10">

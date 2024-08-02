@@ -62,7 +62,7 @@ export default function ResultTable() {
   }, [authToken]);
 
   return (
-    <section id="tournament">
+    <section id="tournament" data-aos="fade-up" data-aos-offset="700">
       {authToken && (
         <>
           <div
