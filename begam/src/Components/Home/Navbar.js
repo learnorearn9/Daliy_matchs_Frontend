@@ -131,6 +131,16 @@ export default function Navbar() {
                       Tournament
                     </Link>
                   </li>
+                  <li>
+                    <Link
+                      to="/contact"
+                      className={
+                        location.pathname === "/contact" ? "active" : ""
+                      }
+                    >
+                      Contact Us
+                    </Link>
+                  </li>
                   {authToken ? (
                     <>
                       <li>

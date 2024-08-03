@@ -12,7 +12,7 @@ export default function Herosection() {
                 <div class="col-lg-12">
                     <div class="main-content">
                         <div class="top-area justify-content-center text-center">
-                            <h3>Play Unlimited</h3>
+                            <h3>Play Everyday</h3>
                             <h1>Tournaments</h1>
                             <p>Compete in Free and Paid entry Tournaments. Transform your
                                 games to real money eSports</p>

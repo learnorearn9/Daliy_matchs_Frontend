@@ -18,6 +18,7 @@ import Tournament from "./Components/Tournaments/Tournament";
 import Profile from "./Components/Profile/Profile";
 import RecoverPassword from "./Components/Authentication/RecoverPassword";
 import CreateTournament from "./Components/Admin/CreateTournament";
+import Contact from "./Components/Pages/Contact";
 
 const App = () => {
 
@@ -28,6 +29,7 @@ const App = () => {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/contact" element={<Contact/>} />
           <Route exact path="/verify" element={<VerifyEmail />} />
           <Route exact path="/recover" element={<RecoverPassword />} />
           <Route exact path="/about" element={<About/>} />
