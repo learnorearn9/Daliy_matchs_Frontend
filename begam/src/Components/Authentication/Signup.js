@@ -11,8 +11,6 @@ export default function Signup() {
     name: "",
     password: "",
     phoneNumber: "",
-    dob: "",
-    address: "",
   });
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,7 +25,7 @@ export default function Signup() {
 
   const handlePhoneChange = (e) => {
     const phoneNumber = e.target.value;
-    if (phoneNumber.length <= 10) {
+    if (/^\d*$/.test(phoneNumber) && phoneNumber.length <= 10) {
       setDetails((prevDetails) => ({
         ...prevDetails,
         phoneNumber: phoneNumber,
@@ -43,7 +41,7 @@ export default function Signup() {
     const errors = validateFields(details);
     if (Object.keys(errors).length > 0) {
       const errorNotifications = Object.entries(errors).map(([key, msg]) => ({
-        type: 'error',
+        type: "error",
         message: msg,
       }));
       setNotifications(errorNotifications);
@@ -57,13 +55,11 @@ export default function Signup() {
         email: details.email,
         password: details.password,
         phoneNumber: details.phoneNumber,
-        address: details.address,
-        DOB: details.dob,
       });
-      setNotifications([{ type: 'success', message: 'Signup successful!' }]);
+      setNotifications([{ type: "success", message: "Signup successful!" }]);
       navigate("/verify", { state: { email: details.email } });
     } catch (error) {
-      setNotifications([{ type: 'error', message: error.message }]);
+      setNotifications([{ type: "error", message: error.message }]);
     } finally {
       setLoading(false);
     }
@@ -74,7 +70,11 @@ export default function Signup() {
       {loading && <Preloader />}
       <div className="notification-container">
         {notifications.map((notification, index) => (
-          <Notification key={index} type={notification.type} message={notification.message} />
+          <Notification
+            key={index}
+            type={notification.type}
+            message={notification.message}
+          />
         ))}
       </div>
       <section id="login-reg">
@@ -83,15 +83,15 @@ export default function Signup() {
             <div className="top-area">
               <div className="row d-flex align-items-center">
                 <div className="col-sm-5 col">
-                  <Link className="back-home" to={"/"}>
-                    <img src="images/left-icon.png" alt="Back To Begam" />
-                    Back To Begam
+                  <Link className="back-home" to="/">
+                    <img src="images/left-icon.png" alt="back to home" />
+                    Home Page
                   </Link>
                 </div>
                 <div className="col-sm-5 col">
-                  <Link to="#">
-                    <img src="images/logo.png" alt="Logo" />
-                  </Link>
+                  <a href="#">
+                    <img src="images/logo.png" alt="logo" />
+                  </a>
                 </div>
               </div>
             </div>
@@ -102,9 +102,9 @@ export default function Signup() {
                   <div className="form-area">
                     <form onSubmit={handleSubmit}>
                       <div className="form-group">
-                        <label>Name</label>
+                        <label>Full Name</label>
                         <input
-                          placeholder="Enter your Name"
+                          placeholder="Enter your Full Name"
                           type="text"
                           id="name"
                           name="name"
@@ -129,36 +129,12 @@ export default function Signup() {
                         <label>Phone Number</label>
                         <input
                           placeholder="Enter your Phone Number"
-                          type="number"
+                          type="text"
                           id="phoneNumber"
                           name="phoneNumber"
                           value={details.phoneNumber}
                           onChange={handlePhoneChange}
                           autoComplete="new-phone"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Date of Birth</label>
-                        <input
-                          placeholder="Select Your Date of Birth"
-                          type="date"
-                          id="dob"
-                          name="dob"
-                          value={details.dob}
-                          onChange={onChange}
-                          autoComplete="new-dob"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Address</label>
-                        <input
-                          placeholder="Enter your Address"
-                          type="text"
-                          id="address"
-                          name="address"
-                          value={details.address}
-                          onChange={onChange}
-                          autoComplete="new-address"
                         />
                       </div>
                       <div className="form-group">
@@ -175,7 +151,7 @@ export default function Signup() {
                       </div>
                       <div className="form-group">
                         <button type="submit" className="cmn-btn">
-                          Sign Up
+                          Sign Up Free
                         </button>
                       </div>
                     </form>

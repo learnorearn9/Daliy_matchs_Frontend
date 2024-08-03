@@ -4863,3 +4863,15 @@ body::-webkit-scrollbar-thumb:hover {
 .buttons .cmn-btn.join-btn {
   margin-bottom: 20px;
 }
+
+@media (max-width: 991px) {
+  .header-action .join-btn {
+    display: none;
+  }
+  .user-info {
+    display: none;
+  } 
+  .login-btn{
+    display: none;
+  }
+}
