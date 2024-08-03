@@ -77,3 +77,9 @@ export const createTournament = (data,token) => {
     headers: { "x-auth-token": token },
   });
 };
+
+export const insertResult = (data,token) => {
+  return authAdminInstance.post("/add-result",data,{
+    headers: { "x-auth-token": token },
+  });
+};

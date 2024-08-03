@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createTournament } from "../../api/api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function CreateTournament() {
@@ -13,6 +13,7 @@ export default function CreateTournament() {
     secondPrize: "",
     fees: ""
   });
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -41,8 +42,10 @@ export default function CreateTournament() {
     if (validate()) {
       try {
         const res = await createTournament(tournamentData, token);
+        navigate('/profile')
         console.log("Tournament created successfully:", res);
       } catch (error) {
+        navigate('/error')
         console.error("Error creating tournament:", error);
       }
     }
@@ -52,11 +55,22 @@ export default function CreateTournament() {
     <section id="login-reg">
       <div className="overlay pb-120">
         <div className="container">
+        <div className="top-area">
+                <div className="row d-flex align-items-center">
+                  <div className="col-sm-5 col">
+                    <Link className="back-home" to={"/profile"}>
+                      <img src="images/left-icon.png" alt="Back to Home" />
+                      Back To Profile
+                    </Link>
+                  </div>
+                  <div className="col-sm-5 col">
+                    <Link to="#">
+                      <img src="images/logo.png" alt="Logo" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
           <div className="row pt-120 d-flex justify-content-center">
-            <Link className="back-home" to={"/"}>
-              <img src="images/left-icon.png" alt="Back To Begam" />
-              Back To Begam
-            </Link>
             <div className="col-lg-6">
               <div className="login-reg-main text-center">
                 <h4>Create Tournament</h4>

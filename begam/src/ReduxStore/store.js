@@ -43,7 +43,7 @@ const inactivityMiddleware = store => {
   const checkInactivity = () => {
     const lastActive = localStorage.getItem('lastActive');
     const currentTime = Date.now();
-    if (lastActive && currentTime - lastActive > 1 * 60 * 1000) { // 2 minutes
+    if (lastActive && currentTime - lastActive > 15 * 60 * 1000) { 
       store.dispatch(clearToken());
     }
   };
@@ -53,7 +53,7 @@ const inactivityMiddleware = store => {
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => {
       store.dispatch(clearToken());
-    }, 1 * 60 * 1000); // 2 minutes for testing
+    }, 15 * 60 * 1000); 
     localStorage.setItem('lastActive', Date.now());
   };
 
