@@ -24,7 +24,7 @@ const token = useSelector((state) => state.token);
         <>
         {token && (
     <section id="tournaments-section">
-    <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="500">
+    <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="320" data-aos-delay="100">
       <div className="container wow fadeInUp">
         <div className="row d-flex justify-content-center">
           <div className="col-lg-8 text-center">
@@ -50,17 +50,20 @@ const token = useSelector((state) => state.token);
               </div>
               <div className="col-lg-6 col-md-9 d-flex align-items-center">
                 <div className="mid-area">
-                  <h4>{tournament.name}</h4>
+                  {/* <h4>{tournament.name}</h4> */}
+                  <h4>Coming Soon...</h4>
                   <div className="title-bottom d-flex">
                     <div className="time-area bg">
                       <img src="images/waitng-icon.png" alt="image" />
                       <span>Starts on</span>
                       <span className="time">
-                        {format(parseISO(tournament.startTime), 'MMMM dd, yyyy')}
+                        {/* {format(parseISO(tournament.startTime), 'MMMM dd, yyyy')} */}
+                        soon..
                       </span>
                     </div>
                     <div className="date-area bg">
-                      <span className="date">8:00 P.M</span>
+                      {/* <span className="date">8:00 P.M</span> */}
+                      <span className="date">..</span>
                     </div>
                   </div>
                   <div className="single-box d-flex">
@@ -70,7 +73,7 @@ const token = useSelector((state) => state.token);
                     </div> */}
                      <div className="box-item" style={{padding:"5px"}}>
                       <span className="head" style={{marginRight:"10px"}}>Total Participents</span>
-                      <span className="sub">{tournament.totalparticipants}</span>
+                      {/* <span className="sub">{tournament.totalparticipants}</span> */}
                     </div>
                     {/* <div className="box-item">
                       <span className="head">Max Teams</span>
@@ -96,7 +99,7 @@ const token = useSelector((state) => state.token);
                       <img src="images/price-coin.png" alt="image" />
                       prize
                     </span>
-                    <h4 className="dollar">₹ {tournament.firstPrize}</h4>
+                    {/* <h4 className="dollar">₹ {tournament.firstPrize}</h4> */}
                    {token ? (
                     <>
                    <Link

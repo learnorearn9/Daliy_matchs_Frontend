@@ -36,12 +36,12 @@ const features = [
 export default function Features() {
   return (
     <section id="features-section">
-      <div className="overlay pt-120" data-aos="fade-up" data-aos-offset="1200">
+      <div className="overlay pt-120" data-aos="fade-up" data-aos-offset="720" data-aos-delay="150">
         <div className="container wow fadeInUp">
           <div className="row justify-content-center">
             <div className="col-lg-10">
               <div className="section-header text-center">
-                <h2 className="title">Begam Games Features</h2>
+                <h2 className="title">Daily Matches Games Features</h2>
                 <p>The biggest esports tournaments anytime, anywhere</p>
               </div>
             </div>
