@@ -114,17 +114,20 @@ export default function AllTournaments() {
                   </div>
                   <div className="col-lg-6 col-md-9 d-flex align-items-center">
                     <div className="mid-area">
-                      <h4>{tournament.name}</h4>
+                      {/* <h4>{tournament.name}</h4> */}
+                      <h4>Coming Soon..</h4>
                       <div className="title-bottom d-flex">
                         <div className="time-area bg">
                           <img src="images/waitng-icon.png" alt="image" />
                           <span>Starts on</span>
                           <span className="time">
-                            {format(parseISO(tournament.startTime), "MMMM dd, yyyy")}
+                            {/* {format(parseISO(tournament.startTime), "MMMM dd, yyyy")} */}
+                            soon..
                           </span>
                         </div>
                         <div className="date-area bg">
-                          <span className="date">8:00 P.M</span>
+                          {/* <span className="date">8:00 P.M</span> */}
+                          ..
                         </div>
                       </div>
                       <div className="single-box d-flex">
@@ -132,7 +135,7 @@ export default function AllTournaments() {
                           <span className="head" style={{ marginRight: "10px" }}>
                             Total Participants
                           </span>
-                          <span className="sub">{tournament.totalparticipants}</span>
+                          {/* <span className="sub">{tournament.totalparticipants}</span> */}
                         </div>
                       </div>
                     </div>
@@ -144,7 +147,7 @@ export default function AllTournaments() {
                           <img src="images/price-coin.png" alt="image" />
                           prize
                         </span>
-                        <h4 className="dollar">₹ {tournament.firstPrize}</h4>
+                        {/* <h4 className="dollar">₹ {tournament.firstPrize}</h4> */}
                         {token ? (
                           activeTournament === tournament.tournamentId ? (
                             <>

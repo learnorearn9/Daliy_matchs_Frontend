@@ -3,10 +3,10 @@ import useCounter from './Counter'; // Ensure the path is correct
 import { getUserReview } from '../../api/api';
 
 const Statistics = () => {
-  const matchesPlayed = useCounter(100, 3); // Count to 100100 in 3 seconds
-  const winningsPaid = useCounter(500, 3); // Example value, replace with actual
-  const activeLadders = useCounter(300, 3); // Example value, replace with actual
-  const xpEarned = useCounter(200, 3); // Example value, replace with actual
+  const matchesPlayed = useCounter(1,10); // Count to 100100 in 3 seconds
+  const winningsPaid = useCounter(1,10); // Example value, replace with actual
+  const activeLadders = useCounter(1,10); // Example value, replace with actual
+  const xpEarned = useCounter(1,10); // Example value, replace with actual
 
   const [review,setReview] = useState([]);
 
@@ -26,7 +26,7 @@ const Statistics = () => {
 
   return (
     <section id="counter-section">
-      <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="800">
+      <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="520" data-aos-delay="100">
         <div className="container">
           <div className="row mp-none">
             <div className="col-lg-3 col-md-6 col-sm-6">

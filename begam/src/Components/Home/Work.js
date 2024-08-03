@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import {Link} from 'react-router-dom'
 
 const steps = [
   {
@@ -27,9 +29,12 @@ const steps = [
 ];
 
 export default function Work() {
+  const token = useSelector(state => state.token);
+
+
   return (
     <section id="how-works-section" className="border-area">
-      <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="300">
+      <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="220" data-aos-delay="100">
         <div className="container wow fadeInUp">
           <div className="row d-flex justify-content-center">
             <div className="col-lg-6 text-center">
@@ -59,7 +64,8 @@ export default function Work() {
           </div>
           <div className="row d-flex justify-content-center">
             <div className="col-lg-6 text-center">
-              <a href="registration.html" className="cmn-btn">Join Now!</a>
+              {!token &&(
+              <Link to={"/login"} className="cmn-btn">Join Now!</Link>)}
             </div>
           </div>
         </div>

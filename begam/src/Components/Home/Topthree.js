@@ -30,7 +30,7 @@ export default function Topthree() {
     <>
     {authToken && (
  <section id="players-week-section">
- <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="1000">
+ <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="620" data-aos-delay="150">
    <div className="container wow fadeInUp">
      <div className="row justify-content-center">
        <div className="col-lg-7 mb-30">

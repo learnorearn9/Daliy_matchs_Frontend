@@ -1,7 +1,9 @@
 import React from 'react'
-import Timer from './Timer'
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export default function Herosection() {
+    const token = useSelector((state) => state.token);
   return (
     <section id="banner-section">
     <div class="banner-content d-flex align-items-center" data-aos="fade-up">
@@ -15,9 +17,15 @@ export default function Herosection() {
                             <p>Compete in Free and Paid entry Tournaments. Transform your
                                 games to real money eSports</p>
                             <div class="btn-play d-flex justify-content-center align-items-center">
-                                <a class="cmn-btn">
-                                   Get Started
-                                </a>
+                                {token ? (
+                                     <Link class="cmn-btn" to={'/tournament'}>
+                                     Get Started
+                                  </Link>
+                                ):(
+                                    <Link class="cmn-btn" to={'/login'}>
+                                     Get Started
+                                  </Link> 
+                                )}
                                 <a class="mfp-iframe popupvideo">
                                     <img src="images/play-icon.png" alt="play"/>
                                 </a>

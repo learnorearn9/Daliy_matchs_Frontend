@@ -3,21 +3,21 @@ import { getUserReview } from '../../api/api';
 
 const testimonials = [
   {
-    imgSrc: 'images/testimonials-user-1.png',
+    imgSrc: 'images/avtar boy.png',
     quote: "I play Tournament every day, it's a great way to relax and win cash too!",
     name: 'Hemant Kashyap',
     location: 'Texas, USA',
     amount: '$306'
   },
   {
-    imgSrc: 'images/testimonials-user-1.png',
+    imgSrc: 'images/avtar boy.png',
     quote: 'When I hang out with my friends, we play Tournament, its so much fun',
     name: 'Harish Maru',
     location: 'Frankfurt, Germany',
     amount: '$496'
   },
   {
-    imgSrc: 'images/testimonials-user-1.png',
+    imgSrc: 'images/avtar boy.png',
     quote: 'I joined for the community but ended up winning cash, amazing.',
     name: 'Harsh Verma',
     location: 'Ontario, Canada',
@@ -45,7 +45,7 @@ export default function Testimonial() {
 
   return (
     <section id="testimonials-section">
-      <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="1300">
+      <div className="overlay pt-120 pb-120" data-aos="fade-up" data-aos-offset="80" data-aos-delay="150">
         <div className="container wow fadeInUp">
           <div className="row justify-content-center">
             <div className="col-lg-10">

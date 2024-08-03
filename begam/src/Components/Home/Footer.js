@@ -16,7 +16,7 @@ export default function Footer() {
               </div>
               <ul className="menu-side d-flex align-items-center">
                 <li><Link to={'/'} className="active">Home</Link></li>
-                <li><Link to={'/about'} >About Us</Link></li>
+                <li><Link to={'/about'} >About</Link></li>
                 <li><Link to={'/tournament'}>Tournament</Link></li>
               </ul>
             </div>
@@ -38,8 +38,8 @@ export default function Footer() {
             <div className="row d-flex align-items-center justify-content-center">
               <div className="col-lg-12 col-md-6">
                 <div className="left-area text-center">
-                  <p>Copyright © 2021. All Rights Reserved By
-                    <a href="#">BEGAM</a>
+                  <p>Copyright © 2024. All Rights Reserved By
+                    <Link >&nbsp; Daily Matches</Link>
                   </p>
                 </div>
               </div>

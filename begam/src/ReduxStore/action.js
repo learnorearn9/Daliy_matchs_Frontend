@@ -7,4 +7,3 @@ export const setToken = (token) => ({
   export const clearToken = () => ({
     type: 'CLEAR_TOKEN',
   });
-  
