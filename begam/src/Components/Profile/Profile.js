@@ -7,12 +7,13 @@ import Footer from "../Home/Footer";
 import UserDetail from "./UserDetail";
 import { getUserDetails } from "../../api/api";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
   const authToken = useSelector((state) => state.token);
   const [user, setUser] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchUserDetails();
   }, []);
@@ -27,6 +28,7 @@ export default function Profile() {
         console.error("User data not found in response:", res);
       }
     } catch (error) {
+      navigate('/error')
       console.error("Error fetching user details:", error);
     }
   };

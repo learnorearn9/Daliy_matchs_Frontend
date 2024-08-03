@@ -18,6 +18,7 @@ export default function Footer() {
                 <li><Link to={'/'} className="active">Home</Link></li>
                 <li><Link to={'/about'} >About</Link></li>
                 <li><Link to={'/tournament'}>Tournament</Link></li>
+                <li><Link to={'/contact'}>Contact Us</Link></li>
               </ul>
             </div>
             <div className="col-lg-4 col-md-4 d-flex align-items-center justify-content-center justify-content-md-end">

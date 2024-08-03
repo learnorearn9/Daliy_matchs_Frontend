@@ -85,7 +85,7 @@ export default function Signup() {
                 <div className="col-sm-5 col">
                   <Link className="back-home" to="/">
                     <img src="images/left-icon.png" alt="back to home" />
-                    Home Page
+                    Back to Home
                   </Link>
                 </div>
                 <div className="col-sm-5 col">

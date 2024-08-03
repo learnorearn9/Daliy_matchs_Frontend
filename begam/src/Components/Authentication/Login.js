@@ -80,7 +80,7 @@ export default function Login() {
                   <div className="col-sm-5 col">
                     <Link className="back-home" to={"/"}>
                       <img src="images/left-icon.png" alt="Back to Home" />
-                      Back To Begam
+                      Back To Home
                     </Link>
                   </div>
                   <div className="col-sm-5 col">
