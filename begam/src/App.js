@@ -25,6 +25,8 @@ import Contact from "./Components/Pages/Contact";
 import InsertResult from "./Components/Admin/InsertResult";
 import Error from "./Components/Pages/Error";
 import InsertPlayerOfTheWeek from "./Components/Admin/InsertPlayerofTheWeek";
+import SingleTournament from "./Components/Tournaments/SingleTournament";
+import Admin from "./Components/Admin/Admin";
 
 const App = () => {
 
@@ -44,6 +46,8 @@ const App = () => {
           <Route exact path="/createtournament" element={<Protected component={CreateTournament} />} />
           <Route exact path="/insertresult" element={<Protected component={InsertResult} />} />
           <Route exact path="/playerofweek" element={<Protected component={InsertPlayerOfTheWeek} />} />
+          <Route path="/singletournament/:id" element={<SingleTournament />} />
+          <Route exact path="/admin" element={<Admin/>} />
           <Route exact path="/error" element={<Error/>} />
         </Routes>
       </BrowserRouter>

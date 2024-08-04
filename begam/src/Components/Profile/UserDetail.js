@@ -12,31 +12,211 @@ export default function UserDetail(props) {
     <section id="all-trophies" className="pb-120">
       <div className="container">
         <div className="tab-content">
-          <div className="tab-pane fade show active" role="tabpanel" aria-labelledby="overview-tab">
-            <div className="statistics-area">
-              <div className="row">
-                <div className="col-lg-9">
-                  <div className="total-area" style={{marginBottom:"30px"}}>
-                    <div className="head-area d-flex justify-content-between">
-                      <div className="left">
-                        <h5>Personal Details</h5>
+          <div
+            className="tab-pane fade show active"
+            role="tabpanel"
+            aria-labelledby="overview-tab"
+          >
+            <div class="statistics-area">
+              <div class="row">
+                <div class="col-lg-9">
+                  <div class="total-area">
+                    <div class="head-area d-flex justify-content-between">
+                      <div class="left">
+                        <h5>Game Statistics</h5>
+                        <p class="text-sm">Player's game specific statistics</p>
+                      </div>
+                      <div class="right">
+                        <p class="text-sm">
+                          Last Update: <span>3 days ago</span>
+                        </p>
                       </div>
                     </div>
-                    <div className="tab-content" id="myTabContents">
-                      <div className="tab-pane fade show active" id="fortnite" role="tabpanel" aria-labelledby="fortnite-tab">
-                        <div className="row">
-                          <div className="col-lg-12 col-md-12">
-                            <div className="profile-input">
-                              <label htmlFor="name">Name</label>
-                              <input id="name" type="text" value={user.name} readOnly />
+                    <div class="tab-content" id="myTabContents">
+                      <div
+                        class="tab-pane fade show active"
+                        id="fortnite"
+                        role="tabpanel"
+                        aria-labelledby="fortnite-tab"
+                      >
+                        <div class="row">
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-1.png"
+                                alt="image"
+                              />
+                              <p>Tournaments Played</p>
+                              <h4>10</h4>
                             </div>
-                            <div className="profile-input">
-                              <label htmlFor="email">Email</label>
-                              <input id="email" type="text" value={user.email} readOnly />
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/my-statistics-icon-4.png"
+                                alt="image"
+                                style={{width:"40px"}}
+                              />
+                              <p>Times<br/> Paid</p>
+                              <h4>5</h4>
                             </div>
-                            <div className="profile-input">
-                              <label htmlFor="phone">Phone</label>
-                              <input id="phone" type="text" value={user.phoneNumber} readOnly />
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/my-statistics-icon-5.png"
+                                alt="image"
+                                style={{width:"90px"}}
+                              />
+                              <p>Tournaments<br/> Won</p>
+                              <h4>0</h4>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="tab-pane fade"
+                        id="warzone"
+                        role="tabpanel"
+                        aria-labelledby="warzone-tab"
+                      >
+                        <div class="row">
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-1.png"
+                                alt="image"
+                              />
+                              <p>Tournaments Entered</p>
+                              <h4>10</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-2.png"
+                                alt="image"
+                              />
+                              <p>Kills Per Game (Average)</p>
+                              <h4>20</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-3.png"
+                                alt="image"
+                              />
+                              <p>Games Played League of Legends</p>
+                              <h4>5</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-4.png"
+                                alt="image"
+                              />
+                              <p>Earnings (Per tournament)</p>
+                              <h4>0</h4>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="tab-pane fade"
+                        id="lofl"
+                        role="tabpanel"
+                        aria-labelledby="lofl-tab"
+                      >
+                        <div class="row">
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-1.png"
+                                alt="image"
+                              />
+                              <p>Tournaments Entered</p>
+                              <h4>10</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-2.png"
+                                alt="image"
+                              />
+                              <p>Kills Per Game (Average)</p>
+                              <h4>20</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-3.png"
+                                alt="image"
+                              />
+                              <p>Games Played League of Legends</p>
+                              <h4>5</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-4.png"
+                                alt="image"
+                              />
+                              <p>Earnings (Per tournament)</p>
+                              <h4>0</h4>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="tab-pane fade"
+                        id="dota"
+                        role="tabpanel"
+                        aria-labelledby="dota-tab"
+                      >
+                        <div class="row">
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-1.png"
+                                alt="image"
+                              />
+                              <p>Tournaments Entered</p>
+                              <h4>10</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-2.png"
+                                alt="image"
+                              />
+                              <p>Kills Per Game (Average)</p>
+                              <h4>20</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-3.png"
+                                alt="image"
+                              />
+                              <p>Games Played League of Legends</p>
+                              <h4>5</h4>
+                            </div>
+                          </div>
+                          <div class="col-lg-3 col-md-6">
+                            <div class="single-item text-center">
+                              <img
+                                src="images/statistics-icon-4.png"
+                                alt="image"
+                              />
+                              <p>Earnings (Per tournament)</p>
+                              <h4>0</h4>
                             </div>
                           </div>
                         </div>
@@ -44,41 +224,54 @@ export default function UserDetail(props) {
                     </div>
                   </div>
                 </div>
-                {/* Sidebar content */}
-                <div className="col-lg-3">
-                  <div className="sidebar-area">
-                    <div className="title-area">
-                      <h5>My Statistics</h5>
-                      <p className="text-sm">My Current progress</p>
+              </div>
+            </div>
+            <div className="statistics-area">
+              <div className="row">
+                <div className="col-lg-9">
+                  <div className="total-area" style={{ marginBottom: "30px" }}>
+                    <div className="head-area d-flex justify-content-between">
+                      <div className="left">
+                        <h5>Personal Details</h5>
+                      </div>
                     </div>
-                    <ul>
-                      <li>
-                        <span><img src="images/my-statistics-icon-3.png" alt="image"/>Tournaments Played</span>
-                        <span>24</span>
-                      </li>
-                      <li>
-                        <span><img src="images/my-statistics-icon-4.png" alt="image"/>Times Paid</span>
-                        <span>10</span>
-                      </li>
-                      <li>
-                        <span><img src="images/my-statistics-icon-5.png" alt="image"/>Tournaments Won</span>
-                        <span>02</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="sidebar-area">
-                    <div className="title-area">
-                      <h5>Earnings</h5>
-                      <p className="text-sm">My current earnings</p>
-                    </div>
-                    <div className="parents-area">
-                      <div className="single-area d-flex align-items-center">
-                        <div className="img-area d-flex align-items-center justify-content-center">
-                          <img src="images/earnings-icon-1.png" alt="image"/>
-                        </div>
-                        <div className="right-area">
-                          <span><img src="images/coin-icon.png" alt="image"/>300</span>
-                          <p className="text-sm">Total Coins Earned</p>
+                    <div className="tab-content" id="myTabContents">
+                      <div
+                        className="tab-pane fade show active"
+                        id="fortnite"
+                        role="tabpanel"
+                        aria-labelledby="fortnite-tab"
+                      >
+                        <div className="row">
+                          <div className="col-lg-12 col-md-12">
+                            <div className="profile-input">
+                              <label htmlFor="name">Name</label>
+                              <input
+                                id="name"
+                                type="text"
+                                value={user.name}
+                                readOnly
+                              />
+                            </div>
+                            <div className="profile-input">
+                              <label htmlFor="email">Email</label>
+                              <input
+                                id="email"
+                                type="text"
+                                value={user.email}
+                                readOnly
+                              />
+                            </div>
+                            <div className="profile-input">
+                              <label htmlFor="phone">Phone</label>
+                              <input
+                                id="phone"
+                                type="text"
+                                value={user.phoneNumber}
+                                readOnly
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

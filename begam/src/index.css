@@ -158,7 +158,7 @@ button {
 input[type="radio"] {
   width: initial;
 }
-input,
+input,select,
 textarea {
   padding: 10px 25px;
   border: 1px solid #4450b8;
@@ -2016,7 +2016,24 @@ body::-webkit-scrollbar-thumb:hover {
 
 /* Testimonials Content */
 #tournaments-content {
-  padding-top: 60px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  padding-top: 500px;
+}
+
+#tournaments-content .tab-content{
+  min-width: 50%;
+}
+#tournaments-content .tab-content .participants{
+  width: 80%;
+}
+#tournaments-content .sidebar{
+  min-width: 50%;
+}
+
+#tournaments-content .sidebar .single-side .participants,#tournaments-content .sidebar .single-side .result-single{
+  width: 80%;
 }
 #tournaments-content .head-area {
   text-transform: uppercase;
@@ -2118,6 +2135,10 @@ body::-webkit-scrollbar-thumb:hover {
   background: #240773;
   border-radius: 10px;
   padding: 30px;
+}
+.participants{
+  margin-left: 10%;
+  width: 50%;
 }
 #tournaments-content .sidebar .participants ul {
   margin-bottom: -30px;
@@ -2566,7 +2587,7 @@ body::-webkit-scrollbar-thumb:hover {
 #login-reg .login-reg-main h4 {
   margin-bottom: 30px;
 }
-#login-reg .login-reg-main form input,
+#login-reg .login-reg-main form input,#login-reg .login-reg-main form select,
 .profile-input input {
   background: #370898;
   border-radius: 10px;
@@ -3330,7 +3351,7 @@ body::-webkit-scrollbar-thumb:hover {
 #checkout .custom-checkbox label {
   color: rgba(255, 255, 255);
 }
-#checkout form .form-group input,
+#checkout form .form-group input,#checkout form .form-group select,
 .jointournament {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -3819,6 +3840,16 @@ body::-webkit-scrollbar-thumb:hover {
   #banner-section .text-right {
     text-align: center !important;
   }
+  #tournaments-content {
+    align-items: center;
+   flex-direction: column;
+  }
+  #tournaments-content .tab-content{
+    min-width: 100%;
+  }
+  #tournaments-content .sidebar{
+    min-width: 100%;
+  }
 }
 
 @media (max-width: 1199px) {
@@ -3864,6 +3895,16 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 @media (max-width: 991px) {
+  #tournaments-content {
+    align-items: center;
+   flex-direction: column;
+  }
+  #tournaments-content .tab-content{
+    min-width: 100%;
+  }
+  #tournaments-content .sidebar{
+    min-width: 100%;
+  }
   h1,
   h1 > a {
     font-size: 54px;
@@ -3900,7 +3941,7 @@ body::-webkit-scrollbar-thumb:hover {
     font-size: 16px;
     line-height: 26px;
   }
-  input,
+  input,select,
   textarea {
     font-size: 16px;
     line-height: 26px;
@@ -4362,7 +4403,7 @@ body::-webkit-scrollbar-thumb:hover {
     font-size: 14px;
     line-height: 18px;
   }
-  input,
+  input,select,
   textarea {
     font-size: 14px;
     line-height: 24px;
@@ -4899,4 +4940,50 @@ body::-webkit-scrollbar-thumb:hover {
     padding: 12px;
     font-size: 14px;
   }
+  .admin-nav{
+    display: none;
+  }
+  .admin-body #login-reg{
+    padding: 20px;
+min-width: 100%;
+  }
+}
+
+.admin-body{
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  max-height: auto;
+}
+.admin-nav{
+  background:#150a55;
+ width: 18%;
+ min-height: 100%;
+}
+
+.admin-body #login-reg{
+  width: 80%;
+}
+
+.admin-nav .back{
+  min-width: 90%;
+  height: 40px;
+  margin: 10px;
+}
+
+.admin-nav button{
+  background: none;
+  border: 1px solid white;
+  color: white;
+  border-radius: 5px;
+  min-width: 90%;
+  height: 40px;
+  margin: 10px;
+}
+
+.admin-nav .admin-options{
+  padding-top: 30px;
+  min-width: 90%;
+  height: 40px;
+  margin: 10px;
 }

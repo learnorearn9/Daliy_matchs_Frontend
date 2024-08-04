@@ -52,27 +52,10 @@ const InsertResult = () => {
   return (
     <>
       <section id="login-reg">
-        <div className="overlay pb-120">
-          <div className="container">
-            <div className="top-area">
-              <div className="row d-flex align-items-center">
-                <div className="col-sm-5 col">
-                  <Link className="back-home" to={"/profile"}>
-                    <img src="images/left-icon.png" alt="Back to Home" />
-                    Back To Profile
-                  </Link>
-                </div>
-                <div className="col-sm-5 col">
-                  <Link to="#">
-                    <img src="images/logo.png" alt="Logo" />
-                  </Link>
-                </div>
-              </div>
-            </div>
             <div className="row pt-120 d-flex justify-content-center">
               <div className="col-lg-6">
                 <div className="login-reg-main text-center">
-                  <h4>Insert Player of the Week</h4>
+                  <h4>Insert Tournament Result</h4>
                   <div className="form-area">
                     <form onSubmit={handleSubmit}>
                       {[
@@ -116,8 +99,6 @@ const InsertResult = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
       </section>
     </>
   );

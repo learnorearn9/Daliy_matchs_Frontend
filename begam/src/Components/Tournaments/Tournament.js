@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../Home/Navbar'
 import ScrollToTop from '../atoms/scrollTotop'
 import Preloader from '../atoms/Preloader';
-import Herosection from '../Home/Herosection';
 import AllTournaments from './AllTournaments';
-import Participents from './Participents';
 
 export default function Tournament() {
     const [loading, setLoading] = useState(true);
@@ -24,7 +22,6 @@ export default function Tournament() {
     <ScrollToTop/>
       <Navbar/>
       <AllTournaments/>
-      <Participents/>
     </>
   )
 }
