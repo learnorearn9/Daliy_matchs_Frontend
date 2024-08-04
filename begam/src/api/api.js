@@ -19,7 +19,7 @@ export const logout = (token) => {
 export const getTournaments = (token) => {
   return authAxiosInstance.get("/home/get/tournament", {
     params: {
-      date: "2024-07-22",
+      date: "2024-08-04",
     },
     headers: { "x-auth-token": token }
   });
@@ -28,8 +28,8 @@ export const getTournaments = (token) => {
 export const getTournamentResults = (token) => {
   return authAxiosInstance.get("/home/get/tournament/result", {
     headers: { "x-auth-token": token },
-    "startDate":"2024-07-12",
-    "endDate":"2024-07-26"
+    "startDate":"2024-08-04",
+    "endDate":"2024-08-05"
   });
 };
 
@@ -61,7 +61,7 @@ export const joinTournament = (data,token) => {
 
 
 export const participents = (token) => {
-  return axiosInstance.post("/get/user/payment-status", {
+  return authAdminInstance.get("/get/user/payment-status", {
     headers: { "x-auth-token": token },
   });
 };
@@ -80,6 +80,18 @@ export const createTournament = (data,token) => {
 
 export const insertResult = (data,token) => {
   return authAdminInstance.post("/add-result",data,{
+    headers: { "x-auth-token": token },
+  });
+};
+
+export const insertPlayerOfTheWeek = (data,token) => {
+  return authAdminInstance.post("/insert/tournament/week/winner",data,{
+    headers: { "x-auth-token": token },
+  });
+};
+
+export const getallUser = (token) => {
+  return authAdminInstance.get("/get/all/users",{
     headers: { "x-auth-token": token },
   });
 };

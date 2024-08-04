@@ -68,10 +68,8 @@ export default function Details(props) {
                   
                   {showOptions && (
                     <div className="options">
-                      <Link to={'/createtournament'}>
-                      <button>Insert Tournament</button></Link>
-                      <Link to={'/playerofweek'}> <button>Insert Player of Week</button></Link>
-                      <Link to={'/insertresult'}>  <button>Insert Tournament Result</button></Link>
+                      <Link to={'/admin'}>
+                      <button>Go to Admin Panel</button></Link>
                     </div>
                   )}
                 </div>

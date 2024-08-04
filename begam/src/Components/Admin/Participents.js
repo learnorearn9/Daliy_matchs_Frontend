@@ -81,7 +81,6 @@ export default function Participants() {
     try {
       const res = await getUserDetails(authToken);
       setRole(res?.data?.data?.user?.role); // Assume role is a boolean
-      console.log(res);
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
@@ -90,7 +89,7 @@ export default function Participants() {
   const getParticipents = async () => {
     try {
       const res = await participents(authToken);
-      console.log(res.data);
+      console.log(res?.data);
     } catch (error) {
       console.error("Error fetching participants:", error);
     }

@@ -7,18 +7,40 @@ import { format, parseISO } from "date-fns";
 export default function UserTournaments() {
   const [tournaments, setTournaments] = useState([]);
 const token = useSelector((state) => state.token);
+const [countdown, setCountdown] = useState('');
   const fetchUserTournaments = async () => {
     try {
       const response = await getTournaments(token);
+      console.log(response.data);
+      
       setTournaments(response.data.tournamentDetail ? [response.data.tournamentDetail] : []);
     } catch (error) {
       console.error("Error fetching tournaments:", error);
     }
   };
 
-  useEffect(() => {
-      fetchUserTournaments();
-  },[]);
+  const calculateCountdown = () => {
+    const now = new Date();
+    const target = new Date(now);
+    target.setHours(20, 0, 0, 0); // Set target time to 8 PM
+
+    if (now > target) {
+      target.setDate(target.getDate() + 1); // If it's past 8 PM, set target to 8 PM next day
+    }
+
+    const difference = target - now;
+    const hours = Math.floor(difference / 1000 / 60 / 60);
+    const minutes = Math.floor((difference / 1000 / 60) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
+
+    setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+  };
+
+ useEffect(() => {
+    fetchUserTournaments();
+    const timer = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
         <>
@@ -50,20 +72,21 @@ const token = useSelector((state) => state.token);
               </div>
               <div className="col-lg-6 col-md-9 d-flex align-items-center">
                 <div className="mid-area">
-                  {/* <h4>{tournament.name}</h4> */}
-                  <h4>Coming Soon...</h4>
+                  <h4>{tournament.name}</h4>
+                  {/* <h4>Coming Soon...</h4> */}
                   <div className="title-bottom d-flex">
                     <div className="time-area bg">
                       <img src="images/waitng-icon.png" alt="image" />
-                      <span>Starts on</span>
+                      <span>Starts in</span>
                       <span className="time">
-                        {/* {format(parseISO(tournament.startTime), 'MMMM dd, yyyy')} */}
-                        soon..
+                        &nbsp;
+                      {countdown}
+                        {/* soon.. */}
                       </span>
                     </div>
                     <div className="date-area bg">
-                      {/* <span className="date">8:00 P.M</span> */}
-                      <span className="date">..</span>
+                      <span> {format(parseISO(tournament.startTime), 'MMMM dd')},&nbsp;</span>
+                      <span className="date">8:00 P.M</span>
                     </div>
                   </div>
                   <div className="single-box d-flex">
@@ -73,7 +96,7 @@ const token = useSelector((state) => state.token);
                     </div> */}
                      <div className="box-item" style={{padding:"5px"}}>
                       <span className="head" style={{marginRight:"10px"}}>Total Participents</span>
-                      {/* <span className="sub">{tournament.totalparticipants}</span> */}
+                      <span className="sub">{tournament.totalparticipants}</span>
                     </div>
                     {/* <div className="box-item">
                       <span className="head">Max Teams</span>
@@ -99,13 +122,10 @@ const token = useSelector((state) => state.token);
                       <img src="images/price-coin.png" alt="image" />
                       prize
                     </span>
-                    {/* <h4 className="dollar">₹ {tournament.firstPrize}</h4> */}
+                    <h4 className="dollar">₹ {tournament.firstPrize}</h4>
                    {token ? (
                     <>
-                   <Link
-                     to={'/tournament'}
-                      className="cmn-btn"
-                    >
+                      <Link to={`/singletournament/${tournament.tournamentId}`} className="cmn-btn">
                       View Tournament
                     </Link>
                     </>

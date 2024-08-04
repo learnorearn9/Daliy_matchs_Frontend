@@ -12,6 +12,7 @@ export default function AllTournaments() {
   const [selectedTournaments, setSelectedTournaments] = useState([]);
   const token = useSelector((state) => state.token);
   const [tournamentStateId, setTournamentStateId] = useState([]);
+  const [countdown, setCountdown] = useState("");
 
   const fetchUserTournaments = async () => {
     try {
@@ -26,34 +27,55 @@ export default function AllTournaments() {
     }
   };
 
+  const calculateCountdown = () => {
+    const now = new Date();
+    const target = new Date(now);
+    target.setHours(20, 0, 0, 0); // Set target time to 8 PM
+
+    if (now > target) {
+      target.setDate(target.getDate() + 1); // If it's past 8 PM, set target to 8 PM next day
+    }
+
+    const difference = target - now;
+    const hours = Math.floor(difference / 1000 / 60 / 60);
+    const minutes = Math.floor((difference / 1000 / 60) % 60);
+    const seconds = Math.floor((difference / 1000) % 60);
+
+    setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+  };
+
   useEffect(() => {
     fetchUserTournaments();
+    const timer = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(timer);
   }, []);
 
-  const handleJoinClick = (tournamentId,tournamentStateId) => {
+  const handleJoinClick = (tournamentId, tournamentStateId) => {
     setActiveTournament(tournamentId);
     setTournamentStateId(tournamentStateId);
   };
 
   const handleSubmit = (tournamentId) => {
-
-    if(!userId){
-        alert("user Id cannot be empty!!");
-        setActiveTournament("");
-        return;
+    if (!userId) {
+      alert("user Id cannot be empty!!");
+      setActiveTournament("");
+      return;
     }
     console.log("User ID:", userId);
     console.log("Tournament ID:", tournamentId);
     console.log(token);
-    console.log(tournaments)
+    console.log(tournaments);
     setSelectedTournaments([...selectedTournaments, tournamentId]);
     setShowQRCode(true); // Show the QR code modal
   };
 
   const handlePaid = async (tournamentId) => {
-
     const res = await joinTournament(
-      { userId, tournamentId: tournamentId, tournamentStateId: tournamentStateId },
+      {
+        pubgId: userId,
+        tournamentId: tournamentId,
+        tournamentStateId: tournamentStateId,
+      },
       token
     );
     console.log(res);
@@ -65,7 +87,6 @@ export default function AllTournaments() {
     setUserId("");
     setActiveTournament(null); // Reset active tournament after submission
   };
-  
 
   return (
     <>
@@ -75,7 +96,11 @@ export default function AllTournaments() {
           <img className="img-2" src="images/banner-circle-2.png" alt="icon" />
           <img className="img-3" src="images/banner-circle-2.png" alt="icon" />
         </div>
-        <div className="banner-content d-flex align-items-center"  data-aos="fade-up" data-aos-offset="100">
+        <div
+          className="banner-content d-flex align-items-center"
+          data-aos="fade-up"
+          data-aos-offset="100"
+        >
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-lg-6">
@@ -87,7 +112,10 @@ export default function AllTournaments() {
                         <li className="breadcrumb-item">
                           <Link to="/">Home</Link>
                         </li>
-                        <li className="breadcrumb-item active" aria-current="page">
+                        <li
+                          className="breadcrumb-item active"
+                          aria-current="page"
+                        >
                           Tournaments
                         </li>
                       </ol>
@@ -101,7 +129,11 @@ export default function AllTournaments() {
       </section>
       <section id="tournaments-section">
         <div className="overlay pt-120 pb-120">
-          <div className="container wow fadeInUp"  data-aos="fade-up" data-aos-offset="150">
+          <div
+            className="container wow fadeInUp"
+            data-aos="fade-up"
+            data-aos-offset="150"
+          >
             {tournaments.map((tournament, index) => (
               <div key={index} className="single-item">
                 <div className="row">
@@ -114,29 +146,57 @@ export default function AllTournaments() {
                   </div>
                   <div className="col-lg-6 col-md-9 d-flex align-items-center">
                     <div className="mid-area">
-                      {/* <h4>{tournament.name}</h4> */}
-                      <h4>Coming Soon..</h4>
+                      <h4>{tournament.name}</h4>
+                      {/* <h4>Coming Soon...</h4> */}
                       <div className="title-bottom d-flex">
                         <div className="time-area bg">
                           <img src="images/waitng-icon.png" alt="image" />
-                          <span>Starts on</span>
+                          <span>Starts in</span>
                           <span className="time">
-                            {/* {format(parseISO(tournament.startTime), "MMMM dd, yyyy")} */}
-                            soon..
+                            &nbsp;
+                            {countdown}
+                            {/* soon.. */}
                           </span>
                         </div>
                         <div className="date-area bg">
-                          {/* <span className="date">8:00 P.M</span> */}
-                          ..
+                          <span>
+                            {" "}
+                            {format(parseISO(tournament.startTime), "MMMM dd")}
+                            ,&nbsp;
+                          </span>
+                          <span className="date">8:00 P.M</span>
                         </div>
                       </div>
                       <div className="single-box d-flex">
+                        {/* <div className="box-item">
+                      <span className="head">ENTRY/PLAYER</span>
+                      <span className="sub">{tournament.entry}</span>
+                    </div> */}
                         <div className="box-item" style={{ padding: "5px" }}>
-                          <span className="head" style={{ marginRight: "10px" }}>
-                            Total Participants
+                          <span
+                            className="head"
+                            style={{ marginRight: "10px" }}
+                          >
+                            Total Participents
                           </span>
-                          {/* <span className="sub">{tournament.totalparticipants}</span> */}
+                          <span className="sub">
+                            {tournament.totalparticipants}
+                          </span>
                         </div>
+                        {/* <div className="box-item">
+                      <span className="head">Max Teams</span>
+                      <span className="sub">{tournament.maxTeams}</span>
+                    </div> */}
+                        {/* <div className="box-item">
+                      <span className="head">Participents : </span>
+                      <span className="sub">{tournament.totalparticipants}</span>
+                    </div> */}
+                        {/* <div className="box-item">
+                      <span className="head">skill Level</span>
+                      <span className="sub">
+                        {tournament.skillLevel}
+                      </span>
+                    </div> */}
                       </div>
                     </div>
                   </div>
@@ -147,40 +207,11 @@ export default function AllTournaments() {
                           <img src="images/price-coin.png" alt="image" />
                           prize
                         </span>
-                        {/* <h4 className="dollar">₹ {tournament.firstPrize}</h4> */}
-                        {token ? (
-                          activeTournament === tournament.tournamentId ? (
-                            <>
-                              <div style={{ padding: "10px" }}>
-                                <input
-                                  className="jointournament"
-                                  type="text"
-                                  placeholder="Enter your ID"
-                                  value={userId}
-                                  onChange={(e) => setUserId(e.target.value)}
-                                />
-                                <button
-                                  className="cmn-btn"
-                                  onClick={() => handleSubmit(tournament.tournamentId)}
-                                  style={{color:"white"}}
-                                >
-                                  Submit 
-                                </button>
-                              </div>
-                            </>
-                          ) : (
-                            <button
-                              className="cmn-btn"
-                              onClick={() => handleJoinClick(tournament.tournamentId,tournament.tournamentStateId)}
-                              style={{color:"white"}}
-                            >
-                              Join Tournament
-                            </button>
-                          )
-                        ) : (
-                          <Link to={"/login"} className="cmn-btn">
-                            View Tournament
-                          </Link>
+                        <h4 className="dollar">₹ {tournament.firstPrize}</h4>
+                        {token && (
+                          <Link to={`/singletournament/${tournament.tournamentId}`} className="cmn-btn">
+                          View Tournament
+                        </Link>
                         )}
                       </div>
                     </div>
@@ -198,7 +229,10 @@ export default function AllTournaments() {
               {/* Replace with your QR code image or component */}
               <img src="images/dummyqr.svg" alt="QR Code" />
             </div>
-            <button className="cmn-btn" onClick={() => handlePaid(activeTournament)}>
+            <button
+              className="cmn-btn"
+              onClick={() => handlePaid(activeTournament)}
+            >
               Paid
             </button>
           </div>
