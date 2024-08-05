@@ -280,6 +280,19 @@ iframe {
   .section-title {
     font-size: 40px;
   }
+  .admin-nav{
+    left:-50%;
+    z-index: 50;
+    transition: 0.5s ease-in-out;
+    position: absolute;
+  }
+  .admin-body #login-reg{
+    padding: 20px;
+    min-width: 100%;
+  }
+  .toggle{
+    display: block;
+  }
 }
 @media (max-width: 575px) {
   .sub-title,
@@ -4940,13 +4953,6 @@ body::-webkit-scrollbar-thumb:hover {
     padding: 12px;
     font-size: 14px;
   }
-  .admin-nav{
-    display: none;
-  }
-  .admin-body #login-reg{
-    padding: 20px;
-min-width: 100%;
-  }
 }
 
 .admin-body{
@@ -4961,7 +4967,7 @@ min-width: 100%;
  min-height: 100%;
 }
 
-.admin-body #login-reg{
+.admin-body #login-reg,.admin-body .participant{
   width: 80%;
 }
 
@@ -4973,8 +4979,8 @@ min-width: 100%;
 
 .admin-nav button{
   background: none;
-  border: 1px solid white;
-  color: white;
+  padding: 5px;
+  color: rgb(228, 228, 228);
   border-radius: 5px;
   min-width: 90%;
   height: 40px;
@@ -4985,5 +4991,31 @@ min-width: 100%;
   padding-top: 30px;
   min-width: 90%;
   height: 40px;
+  
   margin: 10px;
+}
+
+.toggle button{
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  background:#00003e;
+  color: white;
+  border-radius: 5px;
+}
+
+.admin-nav.togglle{
+  left:0px;
+  width: 70%;
+  z-index: 50;
+  transition: 0.5 ease-in-out;
+  position: absolute;
+}
+
+.admin-nav .admin-options button{
+  background:#00003e;
+}
+
+.admin-body .users{
+  width: 100%;
 }

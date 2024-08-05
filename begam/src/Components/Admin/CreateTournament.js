@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { createTournament } from "../../api/api";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBurger, faHamburger } from '@fortawesome/free-solid-svg-icons';
 
-export default function CreateTournament() {
+export default function CreateTournament(props) {
+  const { updateToggle } = props;
   const token = useSelector((state) => state.token);
   const [tournamentData, setTournamentData] = useState({
     name: "",
@@ -51,8 +54,17 @@ export default function CreateTournament() {
     }
   };
 
+  const toggleFunction = () => {
+    updateToggle(prev => !prev);  
+}
+
   return (
     <section id="login-reg">
+       <div className='toggle'>
+                    <button onClick={toggleFunction}>
+                      <FontAwesomeIcon icon={faBurger}/>
+                    </button>
+                </div>
           <div className="row pt-120 d-flex justify-content-center">
             <div className="col-lg-6">
               <div className="login-reg-main text-center">

@@ -16,7 +16,8 @@ export default function ResultTable() {
       try {
         const response = await getTournamentResults(authToken);
         let transformedData = [];
-
+        console.log(response);
+        
         if (Array.isArray(response.data)) {
           // If response.data is an array, transform it if necessary
           transformedData = response.data.map(item => ({
@@ -43,6 +44,9 @@ export default function ResultTable() {
             tournamentSize: item.tournamentSize || "N/A",
             userAge: item.userAge || "N/A"
           }));
+        } else if (response.data.results && response.data.totalCount === 0) {
+          // If response.data has a results property and totalCount is 0
+          transformedData = [];
         } else {
           console.error("Unexpected response format:", response.data);
           setError("Unexpected response format");
@@ -50,6 +54,8 @@ export default function ResultTable() {
         }
 
         setResults(transformedData);
+        console.log(transformedData);
+        
       } catch (error) {
         console.error("Error fetching tournament results:", error);
         setError("Error fetching tournament results");
