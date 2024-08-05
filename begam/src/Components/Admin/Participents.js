@@ -124,8 +124,10 @@ export default function Participants() {
 
   return (
     <>
-      <div className="participants" style={{ paddingTop: "30px" }}>
-        <div className="container"  data-aos="fade-up" data-aos-offset="200">
+    <div className="users">
+      <div className="participant" style={{ paddingTop: "30px" }}>
+        //Participnets api will be called here !1
+        <div className="container">
           <div className="row">
             <div className="col-lg-12">
               <div className="participants-area pb-120">
@@ -220,7 +222,7 @@ export default function Participants() {
               </div>
             </div>
           </div>
-        </div>
+        </div></div>
       </div>
     </>
   );

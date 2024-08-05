@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getallUser, getallTournament, insertResult, getTournaments } from '../../api/api';
+import { getallUser, getTournaments, insertPlayerOfTheWeek } from '../../api/api';
 
-const InsertPlayerOfTheWeek = () => {
+const InsertPlayerOfTheWeek = (props) => {
+    const { updateToggle } = props;
+    
     const token = useSelector((state) => state.token);
     const [playerData, setPlayerData] = useState({
         userId: "",
         tournamentId: "",
         date: "",
-        amount: ""
+        amount: "",
+        rank: ""
     });
     const [users, setUsers] = useState([]);
     const [tournaments, setTournaments] = useState([]);
@@ -31,6 +34,8 @@ const InsertPlayerOfTheWeek = () => {
                 newErrors[key] = "This field is required";
             } else if (key === "amount" && isNaN(value)) {
                 newErrors[key] = "This field must be a number";
+            } else if (key === "rank" && isNaN(value)) {
+                newErrors[key] = "This field must be a number";
             }
         });
         setErrors(newErrors);
@@ -42,7 +47,7 @@ const InsertPlayerOfTheWeek = () => {
         if (validate()) {
             try {
                 console.log("Submitting player data:", playerData);
-                const res = await insertResult(playerData, token);
+                const res = await insertPlayerOfTheWeek(playerData, token);
                 console.log("Player of the Week inserted successfully:", res);
                 navigate('/profile');
             } catch (error) {
@@ -96,9 +101,16 @@ const InsertPlayerOfTheWeek = () => {
         getTournament();
     }, [token]);
 
+    const toggleFunction = () => {
+        updateToggle(prev => !prev);  
+    }
+
     return (
         <>
             <section id="login-reg">
+                <div className='toggle'>
+                    <button onClick={toggleFunction}>T</button>
+                </div>
                 <div className="row pt-120 d-flex justify-content-center">
                     <div className="col-lg-6">
                         <div className="login-reg-main text-center">
@@ -151,7 +163,8 @@ const InsertPlayerOfTheWeek = () => {
                                     </div>
                                     {[
                                         { label: "Date", name: "date", type: "date" },
-                                        { label: "Amount", name: "amount", type: "text" }
+                                        { label: "Amount", name: "amount", type: "text" },
+                                        { label: "Rank", name: "rank", type: "text" }
                                     ].map(({ label, name, type }) => (
                                         <div
                                             className="form-group"
