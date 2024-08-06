@@ -5019,3 +5019,8 @@ body::-webkit-scrollbar-thumb:hover {
 .admin-body .users{
   width: 100%;
 }
+
+.countdown-item {
+  margin: 0 10px; /* Adjust the margin as needed for more or less spacing */
+  font-size: 1.5rem; /* Adjust the font size as needed */
+}
