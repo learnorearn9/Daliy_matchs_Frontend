@@ -48,7 +48,9 @@ export default function Navbar() {
 
   const getUserDetail = async () => {
     try {
-      const res = await getUserDetails(authToken); // Log the name field
+      console.log(authToken);  
+      const res = await getUserDetails(authToken);
+       // Log the name field
         setUsername(res.data.data.user.name);
     } catch (error) {
       console.error("Error fetching user details:", error);

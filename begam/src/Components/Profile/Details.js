@@ -58,7 +58,7 @@ export default function Details(props) {
                   </div>
                 </div>
               </div>
-              <div className="col-md-4 d-flex justify-content-center justify-content-md-end">
+              <div className="col-md-4 d-flex justify-content-end justify-content-md-end">
                 <div className="right d-flex align-items-center">
                   {user?.role && (
                     <button onClick={handleToggleOptions} style={{background:"none"}}>

@@ -32,9 +32,7 @@ const Admin = () => {
       {path === "inserttournament" && <InsertPlayerOfTheWeek updateToggle={updateToggle} />}
       {path === "inserttournamentresult" && <InsertResult updateToggle={updateToggle}/>}
       {path === "allparticipents" && (
-        <div>
           <Participants/>
-        </div>
       )}
     </section>
   );

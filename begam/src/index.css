@@ -2614,7 +2614,7 @@ body::-webkit-scrollbar-thumb:hover {
   color: var(--body-color);
 }
 .profile-input {
-  width: 400px;
+  width: 100%;
   display: flex;
 }
 .profile-input label {
@@ -3697,6 +3697,8 @@ body::-webkit-scrollbar-thumb:hover {
   color: #00fadf;
 }
 #all-trophies .statistics-area {
+  width: 100%;
+
   margin-top: 40px;
   margin-bottom: -7px;
 }
@@ -3908,6 +3910,9 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 @media (max-width: 991px) {
+  .tab-pane{
+    flex-direction: column;
+  }
   #tournaments-content {
     align-items: center;
    flex-direction: column;
@@ -4931,10 +4936,9 @@ body::-webkit-scrollbar-thumb:hover {
 .options{
   display: flex;
   flex-direction: column;
-  background: #100b63;
+  background: #0b1766;
   position: absolute;
   width: auto;
-  border: 1px solid #ddd;
   border-radius: 5px;
   right:35px;
 }
@@ -4946,6 +4950,9 @@ body::-webkit-scrollbar-thumb:hover {
   color: white;
 }
 
+.options:hover{
+  background:#6148ff ; 
+}
 
 @media (max-width: 576px) {
   .profile-input input {
@@ -4995,11 +5002,22 @@ body::-webkit-scrollbar-thumb:hover {
   margin: 10px;
 }
 
+
+/* Show the toggle button on screens smaller than 991px */
+@media (min-width: 990px) {
+  .toggle {
+    display: block;
+  }
+}
+.toggle{
+  display: none;
+}
 .toggle button{
   padding: 5px;
   width: 40px;
   height: 40px;
-  background:#00003e;
+  /* background:#0b1766; */
+  background: #6148ff;
   color: white;
   border-radius: 5px;
 }
@@ -5013,9 +5031,11 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .admin-nav .admin-options button{
-  background:#00003e;
+  background: #0b1766;
 }
-
+.admin-nav .admin-options button:hover{
+  background:  #6148ff;
+}
 .admin-body .users{
   width: 100%;
 }

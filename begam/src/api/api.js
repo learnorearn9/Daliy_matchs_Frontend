@@ -53,6 +53,13 @@ export const getUserReview = () => {
   return axiosInstance.get("/home/get/review");
 };
 
+export const revokeUser = (data,token) => {
+  return authAdminInstance.delete("/revoke-user",data,{
+    headers: { "x-auth-token": token },
+  });
+}; 
+
+
 export const joinTournament = (data,token) => {
   return authAxiosInstance.post("/tournament/join",data ,{
     headers: { "x-auth-token": token },
@@ -95,3 +102,4 @@ export const getallUser = (token) => {
     headers: { "x-auth-token": token },
   });
 };
+

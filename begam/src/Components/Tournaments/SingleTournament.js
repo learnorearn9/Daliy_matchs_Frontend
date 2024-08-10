@@ -265,7 +265,7 @@ const SingleTournament = () => {
                   </li>
                   <li>
                     <span>Available slots</span>
-                    <span>7</span>
+                    <span>6</span>
                   </li>
                 </ul>
               </div>
