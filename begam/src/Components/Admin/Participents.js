@@ -136,7 +136,7 @@ console.log("Revoke>>",participant);
         <div className="participant" style={{ paddingTop: "30px" }}>
           <div className="container">
             <div className="row">
-              <div className="col-lg-12">
+              <div className="col-lg-6">
                 <div className="participants-area pb-120">
                   <h4>Confirmed</h4>
                   <div
@@ -179,7 +179,7 @@ console.log("Revoke>>",participant);
                         </div>
                       </div>
                       {participant.status === "Not Payed" && (
-                        <div className="right-area">
+                        <div className="right-area" style={{padding:"5px"}}>
                           <button
                             onClick={() => handleAcceptClick(participant)}
                             style={{

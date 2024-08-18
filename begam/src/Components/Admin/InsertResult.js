@@ -139,7 +139,7 @@ const InsertResult = (props) => {
                     </button>
                 </div>
         <div className="row pt-120 d-flex justify-content-center">
-          <div className="col-lg-6">
+          <div className="col-lg-5">
             <div className="login-reg-main text-center">
               <h4>Insert Tournament Result</h4>
               <div className="form-area">

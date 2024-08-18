@@ -15,14 +15,15 @@ const Sidebar = (props) => {
         <FontAwesomeIcon icon={faClose}/>
       </div>
       <div className='back'>
+      <Link to={'/profile'}>
+
         <button>
           <FontAwesomeIcon icon={faArrowLeft}/>
         </button>
-        <Link to={'/profile'}>
         <button>
         Back to Profile
-        </button></Link>
-      </div>
+        </button>
+      </Link></div>
       <div className='admin-options'>
         <button onClick={() => updatePath("createtournament")}>Create Tournament</button>
         <button onClick={() => updatePath("updatetournament")}>All Tournament</button>

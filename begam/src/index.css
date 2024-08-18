@@ -280,6 +280,9 @@ iframe {
   .section-title {
     font-size: 40px;
   }
+  .tournament-body,.admin-body .users,.admin-body .users .participant{
+    min-width: 100%;
+  }
   .user-info .logout {
     display: inline-block;
     cursor: pointer;
@@ -5054,7 +5057,7 @@ color: white;
   background:  #6148ff;
 }
 .admin-body .users{
-  width: 100%;
+  width: 80%;
 }
 .filter-options{
   margin-top: 10px;
@@ -5135,6 +5138,10 @@ color: white;
   gap: 20px;
   justify-content: center;
 }
+
+.tournament-body{
+  width: 80%
+}
 .tournament-card .detail{
   margin-bottom: 10px;
 }
@@ -5166,4 +5173,12 @@ justify-content: end;
   margin: 8px;
   border-radius: 8px;
   max-width: 300px;
+}
+
+.admin-empty{
+  display: flex;
+  min-height: 80%;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
 }

@@ -13,11 +13,10 @@ import {
   DialogContentText,
 } from "@mui/material";
 import { getUserDetails, logout } from "../../api/api";
-// Importing the CSS file
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [username,setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(true);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ export default function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    // console.log("authtoekn",authToken);
+
     getUserDetail();
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -49,24 +48,16 @@ export default function Navbar() {
   const getUserDetail = async () => {
     try {
       const res = await getUserDetails(authToken);
-       // Log the name field
-       console.log(res.data);
-       
-        setUsername(res.data.data.user.name);
+      setUsername(res.data.data.user.name);
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
   };
-  
-  
-  
-  
+
   const confirmLogout = async () => {
-    // const res = await logout(authToken);
-    console.log("Cleard");
     const res = await logout(authToken);
     console.log(res);
-    
+
     dispatch(clearToken());
     navigate("/");
     setOpen(false);
@@ -75,6 +66,29 @@ export default function Navbar() {
   const toggleNavbar = () => {
     setIsNavbarCollapsed(!isNavbarCollapsed);
   };
+
+  useEffect(() => {
+    // Scroll to the top when the path changes
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // If the same link is clicked, scroll to the top
+    const handleLinkClick = (e) => {
+      if (location.pathname === e.currentTarget.getAttribute("href")) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+
+    const links = document.querySelectorAll('a[href^="/"]');
+    links.forEach((link) => link.addEventListener("click", handleLinkClick));
+
+    return () => {
+      links.forEach((link) =>
+        link.removeEventListener("click", handleLinkClick)
+      );
+    };
+  }, [location.pathname]);
 
   return (
     <header
@@ -160,8 +174,7 @@ export default function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link
-                        >
+                        <Link>
                           <span className="logout-text" onClick={handleLogout}>
                             Logout
                           </span>
@@ -170,22 +183,17 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
-                     <li>
-                        <Link
-                          to="/profile"
-                          className="login"
-                        >
+                      <li>
+                        <Link to="/login" className="login">
                           Login
                         </Link>
                       </li>
                       <li>
-                        <Link
-                          to="/profile"
-                          className="signup"
-                        >
+                        <Link to="/signup" className="signup">
                           Sign Up
                         </Link>
-                      </li></>
+                      </li>
+                    </>
                   )}
                 </ul>
               </div>
@@ -200,7 +208,7 @@ export default function Navbar() {
                     onClick={handleLogout}
                     style={{ color: "white" }}
                   >
-                    <ExitToAppIcon className="logout"/>
+                    <ExitToAppIcon className="logout" />
                   </IconButton>
                 </div>
               ) : (
