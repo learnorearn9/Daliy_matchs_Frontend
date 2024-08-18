@@ -29,7 +29,7 @@ export default function Details(props) {
                     <nav aria-label="breadcrumb">
                       <ol className="breadcrumb d-flex justify-content-center">
                         <li className="breadcrumb-item">
-                          <Link to={'/'}>Home</Link>
+                          <Link to={'/home'}>Home</Link>
                         </li>
                         <li
                           className="breadcrumb-item active"

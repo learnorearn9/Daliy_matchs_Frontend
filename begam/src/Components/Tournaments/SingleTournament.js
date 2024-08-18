@@ -178,7 +178,7 @@ const SingleTournament = () => {
                     <nav aria-label="breadcrumb">
                       <ol className="breadcrumb d-flex justify-content-center">
                         <li className="breadcrumb-item">
-                          <a href="/">Home</a>
+                          <a href="/home">Home</a>
                         </li>
                         <li
                           className="breadcrumb-item active"
@@ -325,7 +325,6 @@ const SingleTournament = () => {
           </div>
         </div>
       </section>
-      <Footer />
       {showQRCode && (
         <div className="qr-code-modal">
           <div className="qr-code-content">

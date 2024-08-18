@@ -135,8 +135,8 @@ export default function Tournaments(props) {
     };
 
     return (
-        <section>
-            <div className='toggle'>
+        <section className="tournament-body">
+            <div className='toggle' style={{margin:"20px"}}>
                 <button onClick={toggleFunction}>
                     <FontAwesomeIcon icon={faBars} />
                 </button>
