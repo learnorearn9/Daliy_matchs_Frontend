@@ -68,7 +68,7 @@ export default function Navbar() {
     console.log(res);
     
     dispatch(clearToken());
-    navigate("/login");
+    navigate("/");
     setOpen(false);
   };
 

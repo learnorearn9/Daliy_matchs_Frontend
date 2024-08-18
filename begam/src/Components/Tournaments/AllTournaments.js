@@ -3,15 +3,11 @@ import { getTournaments, joinTournament } from "../../api/api";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { format, subHours, subMinutes } from "date-fns";
+import UserTournaments from "../Home/UserTournaments";
 
 export default function AllTournaments() {
   const [tournaments, setTournaments] = useState([]);
-  const [activeTournament, setActiveTournament] = useState(null);
-  const [userId, setUserId] = useState("");
-  const [showQRCode, setShowQRCode] = useState(false);
-  const [selectedTournaments, setSelectedTournaments] = useState([]);
   const token = useSelector((state) => state.token);
-  const [tournamentStateId, setTournamentStateId] = useState([]);
   const [countdowns, setCountdowns] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -54,47 +50,14 @@ export default function AllTournaments() {
 
   useEffect(() => {
     fetchUserTournaments();
-    const timer = setInterval(calculateCountdown, 1000);
-    return () => clearInterval(timer);
   }, []);
 
-  const handleJoinClick = (tournamentId, tournamentStateId) => {
-    setActiveTournament(tournamentId);
-    setTournamentStateId(tournamentStateId);
-  };
+  useEffect(() => {
+    const timer = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, [tournaments]);
 
-  const handleSubmit = (tournamentId) => {
-    if (!userId) {
-      alert("user Id cannot be empty!!");
-      setActiveTournament("");
-      return;
-    }
-    console.log("User ID:", userId);
-    console.log("Tournament ID:", tournamentId);
-    console.log(token);
-    console.log(tournaments);
-    setSelectedTournaments([...selectedTournaments, tournamentId]);
-    setShowQRCode(true); // Show the QR code modal
-  };
 
-  const handlePaid = async (tournamentId) => {
-    const res = await joinTournament(
-      {
-        pubgId: userId,
-        tournamentId: tournamentId,
-        tournamentStateId: tournamentStateId,
-      },
-      token
-    );
-    console.log(res);
-    console.log("User ID:", userId);
-    // console.log("Tournament ID:", swappedTournamentId);
-    // console.log("Tournament State ID:", swappedTournamentStateId);
-    alert("success");
-    setShowQRCode(false); // Hide the QR code modal
-    setUserId("");
-    setActiveTournament(null); // Reset active tournament after submission
-  };
 
   return (
     <>
@@ -135,40 +98,36 @@ export default function AllTournaments() {
           </div>
         </div>
       </section>
-      <section id="tournaments-section">
-        <div className="overlay pt-120 pb-120">
-          <div
-            className="container wow fadeInUp"
-            data-aos="fade-up"
-            data-aos-offset="150"
-          >
-            {tournaments
-             .filter((tournament) => {
-              // Filter out tournaments that have already started
-              let startTime = new Date(tournament.startTime);
-              startTime = subMinutes(subHours(startTime, 5), 30);
-              return startTime > new Date();
-            }).map((tournament, index) => (
-              <div key={index} className="single-item" style={{marginBottom:"20px"}}>
-                <div className="row">
-                  <div className="col-lg-3 col-md-3 d-flex align-items-center">
-                    <img
-                      className="top-img"
-                      src="./images/game-img-1.png"
-                      alt="image"
-                    />
-                  </div>
-                  <div className="col-lg-6 col-md-9 d-flex align-items-center">
-                    <div className="mid-area">
-                      <h4>{tournament.name}</h4>
-                      {/* <h4>Coming Soon...</h4> */}
-                      <div className="title-bottom d-flex">
-                        <div className="time-area bg">
-                          <img src="images/waitng-icon.png" alt="image" />
-                          <span>Starts in</span>
+            {token && (
+        <section id="tournaments-section">
+            <div className="container wow fadeInUp">
+              {tournaments
+                .filter((tournament) => {
+                  // Filter out tournaments that have already started
+                  let startTime = new Date(tournament.startTime);
+                  startTime = subMinutes(subHours(startTime, 5), 30);
+                  return startTime > new Date();
+                })
+                .map((tournament, index) => (
+                  <div key={index} className="single-item" style={{ marginBottom: "20px",marginTop: "20px" }}>
+                    <div className="row">
+                      <div className="col-lg-3 col-md-3 d-flex align-items-center">
+                        <img
+                          className="top-img"
+                          src="./images/game-img-1.png"
+                          alt="image"
+                        />
+                      </div>
+                      <div className="col-lg-6 col-md-9 d-flex align-items-center">
+                        <div className="mid-area">
+                          <h4>{tournament.name}</h4>
+                          <div className="title-bottom d-flex">
+                            <div className="time-area bg">
+                              <img src="images/waitng-icon.png" alt="image" />
+                              <span>Starts in</span>
                               <span className="time">
                                 &nbsp;
-                                {countdowns[tournament?.tournamentId] || "Loading..."}
+                                {countdowns[tournament.tournamentId] || "Loading..."}
                               </span>
                             </div>
                             <div className="date-area bg">
@@ -180,68 +139,47 @@ export default function AllTournaments() {
                                 {format(subMinutes(subHours(tournament.startTime, 5), 30), "hh:mm a")}
                               </span>
                             </div>
+                          </div>
+                          <div className="single-box d-flex">
+                            <div className="box-item" style={{ padding: "5px" }}>
+                              <span className="head" style={{ marginRight: "10px" }}>
+                                Registered:{" "}
+                              </span>
+                              <span className="sub">{tournament.totalparticipants}</span>
+                            </div>
+                            <div className="box-item" style={{ padding: "5px" }}>
+                              <span className="head" style={{ marginRight: "10px" }}>
+                                Available:{" "}
+                              </span>
+                              <span className="sub">
+                                {tournament.size - tournament.totalparticipants}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="single-box d-flex">
-                        {/* <div className="box-item">
-                      <span className="head">ENTRY/PLAYER</span>
-                      <span className="sub">{tournament.entry}</span>
-                    </div> */}
-                          <div className="box-item" style={{padding:"5px"}}>
-                      <span className="head" style={{marginRight:"10px"}}>Total Participents</span>
-                      <span className="sub">{tournament.size}</span>
-                    </div>
-                    {/* <div className="box-item">
-                      <span className="head">Max Teams</span>
-                      <span className="sub">{tournament.maxTeams}</span>
-                    </div> */}
-                    <div className="box-item"  style={{padding:"5px"}}>
-                      <span className="head" style={{marginRight:"10px"}}>Registred : </span>
-                      <span className="sub">{tournament.totalparticipants}</span>
-                    </div>
-                    <div className="box-item"  style={{padding:"5px"}}>
-                      <span className="head" style={{marginRight:"10px"}}>Available : </span>
-                      <span className="sub">{tournament.size - tournament.totalparticipants}</span>
-                    </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-3 d-flex align-items-center">
-                    <div className="prize-area text-center">
-                      <div className="contain-area">
-                        <span className="prize">
-                          <img src="images/price-coin.png" alt="image" />
-                          prize
-                        </span>
-                        <h4 className="dollar">₹ {tournament.firstPrize}</h4>
-                        {token && (
-                          <Link to={`/singletournament/${tournament.tournamentId}`} className="cmn-btn">
-                          View Tournament
-                        </Link>
-                        )}
+                      <div className="col-lg-3 d-flex align-items-center">
+                        <div className="prize-area text-center">
+                          <div className="contain-area">
+                            <span className="prize">
+                              <img src="images/price-coin.png" alt="image" />
+                              Prize
+                            </span>
+                            <h4 className="dollar">₹ {tournament.firstPrize}</h4>
+                            <Link
+                              to={`/singletournament/${tournament.tournamentId}`}
+                              className="cmn-btn"
+                            >
+                              View Tournament
+                            </Link>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      {showQRCode && (
-        <div className="qr-code-modal">
-          <div className="qr-code-content">
-            <div className="qr-code">
-              {/* Replace with your QR code image or component */}
-              <img src="images/dummyqr.svg" alt="QR Code" />
+                ))}
             </div>
-            <button
-              className="cmn-btn"
-              onClick={() => handlePaid(activeTournament)}
-            >
-              Paid
-            </button>
-          </div>
-        </div>
+        </section>
       )}
     </>
   );

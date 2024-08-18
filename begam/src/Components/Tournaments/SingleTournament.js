@@ -91,9 +91,6 @@ const SingleTournament = () => {
     setCountdowns(updatedCountdowns);
   };
 
-  useEffect(() => {
-    fetchUserTournaments();
-  }, [token]);
 
   useEffect(() => {
     if (tournaments.length > 0) {
@@ -110,9 +107,14 @@ const SingleTournament = () => {
   }, [tournament]);
 
   useEffect(() => {
+    fetchUserTournaments();
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(calculateCountdown, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [tournaments]);
+
 
   const handleJoinNowClick = () => {
     if (isJoining) {
