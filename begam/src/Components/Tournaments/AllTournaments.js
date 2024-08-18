@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getTournaments, joinTournament } from "../../api/api";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { format, parseISO } from "date-fns";
+import { format, subHours, subMinutes } from "date-fns";
 
 export default function AllTournaments() {
   const [tournaments, setTournaments] = useState([]);
@@ -12,13 +12,14 @@ export default function AllTournaments() {
   const [selectedTournaments, setSelectedTournaments] = useState([]);
   const token = useSelector((state) => state.token);
   const [tournamentStateId, setTournamentStateId] = useState([]);
-  const [countdown, setCountdown] = useState("");
+  const [countdowns, setCountdowns] = useState({});
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const fetchUserTournaments = async () => {
     try {
-      const response = await getTournaments(token);
+      const response = await getTournaments(token,currentDate);
       setTournaments(
-        response.data.tournamentDetail ? [response.data.tournamentDetail] : []
+        response.data.tournamentDetail
       );
 
       // console.log(tournaments);
@@ -29,19 +30,26 @@ export default function AllTournaments() {
 
   const calculateCountdown = () => {
     const now = new Date();
-    const target = new Date(now);
-    target.setHours(20, 0, 0, 0); // Set target time to 8 PM
+    const updatedCountdowns = {};
 
-    if (now > target) {
-      target.setDate(target.getDate() + 1); // If it's past 8 PM, set target to 8 PM next day
-    }
+    tournaments.forEach((tournament) => {
+      // Apply the same time adjustments consistently
+      let startTime = new Date(tournament.startTime);
+      startTime = subMinutes(subHours(startTime, 5), 30); // Subtract 5 hours and 30 minutes
 
-    const difference = target - now;
-    const hours = Math.floor(difference / 1000 / 60 / 60);
-    const minutes = Math.floor((difference / 1000 / 60) % 60);
-    const seconds = Math.floor((difference / 1000) % 60);
+      const difference = startTime - now;
 
-    setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+      if (difference > 0) {
+        const hours = Math.floor(difference / 1000 / 60 / 60);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        updatedCountdowns[tournament.tournamentId] = `${hours}h ${minutes}m ${seconds}s`;
+      } else {
+        updatedCountdowns[tournament.tournamentId] = "Started";
+      }
+    });
+
+    setCountdowns(updatedCountdowns);
   };
 
   useEffect(() => {
@@ -134,8 +142,14 @@ export default function AllTournaments() {
             data-aos="fade-up"
             data-aos-offset="150"
           >
-            {tournaments.map((tournament, index) => (
-              <div key={index} className="single-item">
+            {tournaments
+             .filter((tournament) => {
+              // Filter out tournaments that have already started
+              let startTime = new Date(tournament.startTime);
+              startTime = subMinutes(subHours(startTime, 5), 30);
+              return startTime > new Date();
+            }).map((tournament, index) => (
+              <div key={index} className="single-item" style={{marginBottom:"20px"}}>
                 <div className="row">
                   <div className="col-lg-3 col-md-3 d-flex align-items-center">
                     <img
@@ -152,51 +166,42 @@ export default function AllTournaments() {
                         <div className="time-area bg">
                           <img src="images/waitng-icon.png" alt="image" />
                           <span>Starts in</span>
-                          <span className="time">
-                            &nbsp;
-                            {countdown}
-                            {/* soon.. */}
-                          </span>
-                        </div>
-                        <div className="date-area bg">
-                          <span>
-                            {" "}
-                            {format(parseISO(tournament.startTime), "MMMM dd")}
-                            ,&nbsp;
-                          </span>
-                          <span className="date">8:00 P.M</span>
-                        </div>
+                              <span className="time">
+                                &nbsp;
+                                {countdowns[tournament?.tournamentId] || "Loading..."}
+                              </span>
+                            </div>
+                            <div className="date-area bg">
+                              <span>
+                                {format(subMinutes(subHours(tournament.startTime, 5), 30), "MMM dd, yyyy")}
+                                &nbsp;
+                              </span>
+                              <span className="date">
+                                {format(subMinutes(subHours(tournament.startTime, 5), 30), "hh:mm a")}
+                              </span>
+                            </div>
                       </div>
                       <div className="single-box d-flex">
                         {/* <div className="box-item">
                       <span className="head">ENTRY/PLAYER</span>
                       <span className="sub">{tournament.entry}</span>
                     </div> */}
-                        <div className="box-item" style={{ padding: "5px" }}>
-                          <span
-                            className="head"
-                            style={{ marginRight: "10px" }}
-                          >
-                            Total Participents
-                          </span>
-                          <span className="sub">
-                            {tournament.totalparticipants}
-                          </span>
-                        </div>
-                        {/* <div className="box-item">
+                          <div className="box-item" style={{padding:"5px"}}>
+                      <span className="head" style={{marginRight:"10px"}}>Total Participents</span>
+                      <span className="sub">{tournament.size}</span>
+                    </div>
+                    {/* <div className="box-item">
                       <span className="head">Max Teams</span>
                       <span className="sub">{tournament.maxTeams}</span>
                     </div> */}
-                        {/* <div className="box-item">
-                      <span className="head">Participents : </span>
+                    <div className="box-item"  style={{padding:"5px"}}>
+                      <span className="head" style={{marginRight:"10px"}}>Registred : </span>
                       <span className="sub">{tournament.totalparticipants}</span>
-                    </div> */}
-                        {/* <div className="box-item">
-                      <span className="head">skill Level</span>
-                      <span className="sub">
-                        {tournament.skillLevel}
-                      </span>
-                    </div> */}
+                    </div>
+                    <div className="box-item"  style={{padding:"5px"}}>
+                      <span className="head" style={{marginRight:"10px"}}>Available : </span>
+                      <span className="sub">{tournament.size - tournament.totalparticipants}</span>
+                    </div>
                       </div>
                     </div>
                   </div>

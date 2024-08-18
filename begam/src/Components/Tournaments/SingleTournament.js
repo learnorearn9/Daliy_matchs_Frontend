@@ -4,7 +4,8 @@ import Footer from "../Home/Footer";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getTournaments, joinTournament, participents } from "../../api/api";
-import { format, parseISO } from "date-fns";
+import { format, subHours, subMinutes } from "date-fns";
+import Notification from "../atoms/notification";
 
 const SingleTournament = () => {
   const { id } = useParams();
@@ -12,17 +13,24 @@ const SingleTournament = () => {
   const [tournament, setTournament] = useState(null);
   const [participent, setParticipent] = useState([]);
   const token = useSelector((state) => state.token);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(null);
   const [countdown, setCountdown] = useState("");
   const [isJoining, setIsJoining] = useState(false);
   const [pubgId, setPubgId] = useState("");
+  const [countdowns, setCountdowns] = useState({});
   const [showQRCode, setShowQRCode] = useState(false);
-
+  const [notification, setNotification] = useState({ message: "", type: "" });
+  const [isLoading, setIsLoading] = useState(true);
+  
   const fetchUserTournaments = async () => {
     try {
-      const response = await getTournaments(token);
+      const currentDate = format(new Date(), 'yyyy-MM-dd');
+
+    // Pass the current date as a parameter to getTournaments
+    const response = await getTournaments(token, currentDate);
+
       setTournaments(
-        response?.data?.tournamentDetail ? [response.data.tournamentDetail] : []
+        response?.data?.tournamentDetail
       );
     } catch (error) {
       console.error("Error fetching tournaments:", error);
@@ -32,40 +40,60 @@ const SingleTournament = () => {
   const getConfirmedPartcipents = async () => {
     try {
       const response = await participents(token);
-      const totalParticipants = response?.data?.length || 0;
-      setTotal(totalParticipants);
-      const filteredParticipants = response?.data?.filter(
+      const allParticipants = response?.data || [];
+      console.log(allParticipants);
+      // Filter participants by tournamentStateId first
+      console.log(allParticipants[0].tournamentStateId._id);
+      
+      const filteredByTournament = allParticipants.filter(
+        (participant) => participant.tournamentStateId._id === tournament?.tournamentStateId
+      );
+  
+      // Set total count of participants for this tournamentStateId
+      setTotal(filteredByTournament.length);
+  console.log(filteredByTournament);
+  
+      // Further filter by payment status
+      const confirmedParticipants = filteredByTournament.filter(
         (participant) => participant.paymentStatus === true
       );
-      setParticipent(filteredParticipants || []);
+  console.log(confirmedParticipants);
+  
+      // Set confirmed participants
+      setParticipent(confirmedParticipants|| []);
     } catch (error) {
       console.error("Error fetching participants:", error);
     }
   };
+  
 
   const calculateCountdown = () => {
     const now = new Date();
-    const target = new Date(now);
-    target.setHours(20, 0, 0, 0); // Set target time to 8 PM
+    const updatedCountdowns = {};
 
-    if (now > target) {
-      target.setDate(target.getDate() + 1); // If it's past 8 PM, set target to 8 PM next day
-    }
+    tournaments.forEach((tournament) => {
+      // Apply the same time adjustments consistently
+      let startTime = new Date(tournament.startTime);
+      startTime = subMinutes(subHours(startTime, 5), 30); // Subtract 5 hours and 30 minutes
 
-    const difference = target - now;
-    const hours = Math.floor(difference / 1000 / 60 / 60);
-    const minutes = Math.floor((difference / 1000 / 60) % 60);
-    const seconds = Math.floor((difference / 1000) % 60);
+      const difference = startTime - now;
 
-    setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+      if (difference > 0) {
+        const hours = Math.floor(difference / 1000 / 60 / 60);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        updatedCountdowns[tournament.tournamentId] = `${hours}h ${minutes}m ${seconds}s`;
+      } else {
+        updatedCountdowns[tournament.tournamentId] = "Started";
+      }
+    });
+
+    setCountdowns(updatedCountdowns);
   };
 
   useEffect(() => {
     fetchUserTournaments();
-    getConfirmedPartcipents();
-    const timer = setInterval(calculateCountdown, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (tournaments.length > 0) {
@@ -73,6 +101,18 @@ const SingleTournament = () => {
       setTournament(foundTournament);
     }
   }, [tournaments, id]);
+
+  useEffect(() => {
+    if (tournament) {
+      getConfirmedPartcipents();
+      setIsLoading(false); // Data is ready to be displayed
+    }
+  }, [tournament]);
+
+  useEffect(() => {
+    const timer = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleJoinNowClick = () => {
     if (isJoining) {
@@ -95,21 +135,32 @@ const SingleTournament = () => {
         token
       );
       console.log(response); // Log the response from the API
-      alert("Successfully joined the tournament!");
-      setShowQRCode(false); // Hide the QR code modal
+       setNotification({ message: "Successfully joined the tournament!", type: "success" }); // Show success notification
+     setIsJoining(false);
+     setPubgId("");
+       setShowQRCode(false);  // Hide the QR code modal
+        // Refresh the page
+    window.location.reload();
     } catch (error) {
+      console.log(error);
+      
       console.error("Error joining tournament:", error);
+      setNotification({ message:"Error Joining Tournament!!", type: "error" }); // Show error notification
+      setIsJoining(false);
+      setPubgId("");
+      setShowQRCode(false);
     }
   };
 
   return (
     <>
-      <Navbar />
+      <div className="notification-container">
+      <Notification type={notification.type} message={notification.message} /></div>
       <section id="banner-section" className="inner-banner tournaments">
         <div className="ani-img">
           <img
             className="img-1"
-            src="./images/banner-circle-1.png"
+            src="/images/banner-circle-1.png"
             alt="icon"
           />
           <img className="img-2" src="/images/banner-circle-2.png" alt="icon" />
@@ -168,19 +219,18 @@ const SingleTournament = () => {
                       <div className="time-area bg">
                         <img src="/images/waitng-icon.png" alt="image" />
                         <span>Starts in</span>
-                        <span className="time">&nbsp;{countdown}</span>
+                        <span className="time">&nbsp; {countdowns[tournament?.tournamentId] || "Loading..."}</span>
                       </div>
                       <div className="date-area bg">
                         {tournament?.startTime ? (
                           <>
-                            <span className="date">
-                              {format(
-                                parseISO(tournament.startTime),
-                                "MMMM dd"
-                              )}
-                              ,&nbsp;
-                            </span>
-                            <span className="date">8:00 P.M</span>
+                            <span>
+                                {format(subMinutes(subHours(tournament.startTime, 5), 30), "MMM dd, yyyy")}
+                                &nbsp;
+                              </span>
+                              <span className="date">
+                                {format(subMinutes(subHours(tournament.startTime, 5), 30), "hh:mm a")}
+                              </span>
                           </>
                         ) : (
                           <span className="date">Loading...</span>
@@ -233,7 +283,7 @@ const SingleTournament = () => {
                         <div className="participants-single" key={index}>
                           <div className="left-area d-flex align-items-center">
                             <img
-                              src={`/images/participant-${index + 1}.png`}
+                              src={`/images/participant-1.png`}
                               alt="images"
                             />
                             <div className="right-side">
@@ -257,15 +307,15 @@ const SingleTournament = () => {
                 <ul>
                   <li>
                     <span>Registered</span>
-                    <span>{total}</span>
+                    <span>{total ? 1 : total}</span>
                   </li>
                   <li>
                     <span>Confirmed</span>
-                    <span>{participent.length}</span>
+                    <span>{participent.length ? 1 : participent.length}</span>
                   </li>
                   <li>
                     <span>Available slots</span>
-                    <span>6</span>
+                    <span>{tournament?.size - total}</span>
                   </li>
                 </ul>
               </div>
@@ -278,7 +328,7 @@ const SingleTournament = () => {
         <div className="qr-code-modal">
           <div className="qr-code-content">
             <div className="qr-code">
-              <img src="/images/qrcode.png" alt="QR Code" />
+              <img src="/images/qrcode.jpg" alt="QR Code" />
             </div>
             <button className="cmn-btn" onClick={handlePaid}>
               Paid

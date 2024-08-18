@@ -51,7 +51,7 @@ export default function Topthree() {
                         <img
                           src="images/playertemp.png"
                           alt={results[1].userName}
-                          style={{width:"30%"}}
+                          style={{width:"25%"}}
                         />
                       </div>
                     </div>
@@ -78,7 +78,7 @@ export default function Topthree() {
                         <img
                              src="images/playertemp.png"
                              alt={results[0].userName}
-                             style={{width:"30%"}}
+                             style={{width:"25%"}}
                         />
                       </div>
                     </div>
@@ -102,7 +102,7 @@ export default function Topthree() {
                         <img
                             src="images/playertemp.png"
                             alt={results[2].userName}
-                            style={{width:"30%"}}
+                            style={{width:"25%"}}
                         />
                       </div>
                     </div>

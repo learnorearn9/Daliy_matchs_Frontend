@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { getUserDetails, participents, revokeUser } from "../../api/api";
+import { getUserDetails, participents, revokeUser, updateStatus } from "../../api/api";
 import { useSelector } from "react-redux";
+import Notification from "../atoms/notification";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-export default function Participants() {
+
+export default function Participants(props) {
   const [participants, setParticipants] = useState([]);
   const [filter, setFilter] = useState("All");
   const token = useSelector((state) => state.token);
   const [role, setRole] = useState(false); // Default to false
+  const [notification, setNotification] = useState({ message: "", type: "" });
 
   useEffect(() => {
     getUserRole();
@@ -25,7 +30,10 @@ export default function Participants() {
   const getParticipents = async () => {
     try {
       const res = await participents(token);
+      console.log(res.data);
+      
       const mappedParticipants = res?.data.map((participant) => ({
+        userId: participant.userId._id,
         id: participant._id,
         name: participant.userId.name,
         img: "images/participant-1.png", // Replace with actual image path if available
@@ -33,40 +41,70 @@ export default function Participants() {
         tournamentId: participant.tournamentId,
         tournamentStateId: participant.tournamentStateId,
       }));
+      //  // Filter participants based on the previous day's date
+      //  const filteredParticipants = mappedParticipants.filter(participant => {
+      //   const participantDate = new Date(participant.tournamentStateId.date);
+      //   const previousDay = new Date();
+      //   previousDay.setDate(previousDay.getDate()+1);
+      //   previousDay.setHours(0, 0, 0, 0);
+        
+      //   return participantDate.toDateString() === previousDay.toDateString();
+      // });
+      
       setParticipants(mappedParticipants || []);
-      console.log(mappedParticipants);
+      console.log(filteredParticipants);
     } catch (error) {
       console.error("Error fetching participants:", error);
     }
   };
 
-  const handleAcceptClick = (participant) => {
+  const handleAcceptClick = async (participant) => {
+
     const data = {
       participantId: participant.id,
       tournamentId: participant.tournamentId,
       tournamentStateId: participant.tournamentStateId._id,
     };
     console.log("Accept clicked with data:", data);
-    // // Update the status to "Payed" after clicking accept
-    // setParticipants((prevParticipants) =>
-    //   prevParticipants.map((p) =>
-    //     p.id === participant.id ? { ...p, status: "Payed" } : p
-    //   )
-    // );
+    try {
+      // Implement the API call to update participant status if applicable
+      // setParticipants((prevParticipants) =>
+      //   prevParticipants.map((p) =>
+      //     p.id === participant.id ? { ...p, status: "Payed" } : p
+      //   )
+      // );
+      const res = await updateStatus(data, token);
+      setNotification({ message: "Participant accepted successfully.", type: "success" });
+      window.location.reload();
+    } catch (error) {
+      setNotification({ message: "Failed to accept participant.", type: "error" });
+      console.error("Error accepting participant:", error);
+    }
   };
-
+  
   const handleRevokeClick = async (participant) => {
+console.log("Revoke>>",participant);
+
     const data = {
-      participantId: participant.id,
+      userId: participant.userId,
       tournamentId: participant.tournamentId,
       tournamentStateId: participant.tournamentStateId._id,
     };
     console.log("Revoke clicked with data:", data);
-    const res = await revokeUser(data,token);
-    console.log(res);
-    
-    // Add any additional logic for revoking here
+    try {
+      const res = await revokeUser(data, token);
+      console.log("Revoke response:", res);
+      setNotification({ message: "Participant revoked successfully.", type: "success" });
+      window.location.reload();
+    } catch (error) {
+      setNotification({
+        message: `Error: ${error.response?.data?.message || "An error occurred"}`,
+        type: "error"
+      });
+      console.error("Error revoking participant:", error);
+    }
   };
+  
 
   const handleFilterChange = (status) => {
     setFilter(status);
@@ -78,9 +116,23 @@ export default function Participants() {
 
   if (!role) return null; // If role is not true, render nothing
 
+  const { updateToggle } = props;
+  const toggleFunction = () => {
+    updateToggle(prev => !prev);  
+}
+
   return (
     <>
+     <div className="notification-container">
+      <Notification type={notification.type} message={notification.message} />
+    </div>
+
       <div className="users" style={{ padding: "20px" }}>
+      <div className='toggle'>
+                    <button onClick={toggleFunction}>
+                      <FontAwesomeIcon icon={faBars}/>
+                    </button>
+                </div> 
         <div className="participant" style={{ paddingTop: "30px" }}>
           <div className="container">
             <div className="row">
@@ -114,11 +166,15 @@ export default function Participants() {
                         <div className="right-side">
                           <h6>
                             {participant.name}{" "}
-                            {participant.status === "Payed" ? (
+                            {/* {participant.status === "Payed" ? (
                               <span style={{ color: "green" }}> (Payed)</span>
                             ) : (
                               <span style={{ color: "red" }}> (Not Payed)</span>
-                            )}
+                            )} */}
+                           - {
+                          
+                              participant.tournamentStateId.tournamentId.name
+                            }
                           </h6>
                         </div>
                       </div>
