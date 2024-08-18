@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getTournamentResults } from "../../api/api";
+import { addDays, format ,subDays} from "date-fns";
 
-const dummyData = [
-  // ... (your dummy data here)
-];
 
 export default function ResultTable() {
   const [results, setResults] = useState([]);
@@ -14,7 +12,17 @@ export default function ResultTable() {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await getTournamentResults(authToken);
+        // Get the current date in 'YYYY-MM-DD' format
+        const currentDate = format(new Date(), 'yyyy-MM-dd');
+
+        // Get the date 2 days before the current date
+        const twoDaysAgo = format(subDays(new Date(),7), 'yyyy-MM-dd');
+    
+        // Get the date 5 days after the current date
+        const fiveDaysLater = format(addDays(new Date(),0), 'yyyy-MM-dd');
+    
+        // Pass the dates to getTournamentResults
+        const response = await getTournamentResults(authToken, twoDaysAgo, fiveDaysLater);
         let transformedData = [];
         console.log(response);
         
@@ -90,10 +98,10 @@ export default function ResultTable() {
                           <th scope="col">Email</th>
                           <th scope="col">Prize</th>
                           <th scope="col">Rank</th>
-                          <th scope="col">Tournament Fees</th>
+                          {/* <th scope="col">Tournament Fees</th> */}
                           <th scope="col">Tournament Name</th>
                           <th scope="col">Tournament Size</th>
-                          <th scope="col">User Age</th>
+                          {/* <th scope="col">User Age</th> */}
                         </tr>
                       </thead>
                       <tbody>
@@ -105,10 +113,10 @@ export default function ResultTable() {
                               <td>{data.email}</td>
                               <td>{data.prize}</td>
                               <td>{data.rank}</td>
-                              <td>{data.tournamentFees}</td>
+                              {/* <td>{data.tournamentFees}</td> */}
                               <td>{data.tournamentName}</td>
                               <td>{data.tournamentSize}</td>
-                              <td>{data.userAge}</td>
+                              {/* <td>{data.userAge}</td> */}
                             </tr>
                           ))
                         ) : error ? (

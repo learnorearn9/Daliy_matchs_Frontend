@@ -54,13 +54,13 @@ export default function Details(props) {
                     <img src="images/profile-logo.png" alt="Image" />
                   </div>
                   <div className="name-area">
-                    <h3>{user.name}</h3>
+                    <h3>{user.user.name}</h3>
                   </div>
                 </div>
               </div>
-              <div className="col-md-4 d-flex justify-content-center justify-content-md-end">
+              <div className="col-md-4 d-flex justify-content-end justify-content-md-end">
                 <div className="right d-flex align-items-center">
-                  {user?.role && (
+                  {user.user?.role && (
                     <button onClick={handleToggleOptions} style={{background:"none"}}>
                       <FontAwesomeIcon icon={faEllipsisVertical} style={{color:"white", fontSize:"22px"}} />
                     </button>

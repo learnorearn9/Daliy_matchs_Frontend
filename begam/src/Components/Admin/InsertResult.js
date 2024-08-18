@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getallUser, getTournaments, insertResult } from "../../api/api";
+import { getAllTournaments, getallUser, getTournaments, insertResult } from "../../api/api";
+import Notification from "../atoms/notification";
+import { format } from 'date-fns';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const InsertResult = (props) => {
   const { updateToggle } = props;
@@ -17,6 +21,8 @@ const InsertResult = (props) => {
   const [tournaments, setTournaments] = useState([]);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [notification, setNotification] = useState({ message: "", type: "" }); // Notification state
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,13 +56,28 @@ const InsertResult = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (validate()) return;
     try {
       const res = await insertResult(playerData, token);
-      navigate('/profile');
       console.log("Result inserted successfully:", res);
+      setNotification({ message: "Result inserted successfully!", type: "success" }); // Success notification
+      setPlayerData({
+        userId: "",
+        tournamentId: "",
+        TournamentStateId: "",
+        rank: "",
+        prize: ""
+      });
     } catch (error) {
       console.error("Error inserting result:", error);
+      if (error.response) {
+        setNotification({
+          message: `Error: ${error.response.data.message || "An error occurred"}`,
+          type: "error"
+        });
+      } else {
+        setNotification({ message: error.message, type: "error" }); // Error notification
+      }
     }
   };
 
@@ -78,11 +99,14 @@ const InsertResult = (props) => {
 
   const getTournament = async () => {
     try {
-      const response = await getTournaments(token);
+      const currentDate = format(new Date(), 'yyyy-MM-dd');
+
+      // Pass the current date as a parameter to getTournaments
+      const response = await getAllTournaments(token);
       console.log("API Response:", response);
-      const tournamentsData = response?.data?.tournamentDetail;
+      const tournamentsData = response?.data;
       if (tournamentsData) {
-        setTournaments([tournamentsData]);
+        setTournaments(tournamentsData);
       } else {
         console.error("Unexpected API response format:", response);
         setTournaments([]);
@@ -105,9 +129,14 @@ const InsertResult = (props) => {
 
   return (
     <>
+     <div className="notification-container">
+        <Notification type={notification.type} message={notification.message} /> {/* Show Notification */}
+      </div>
       <section id="login-reg">
       <div className='toggle'>
-                    <button onClick={toggleFunction}>T</button>
+                    <button onClick={toggleFunction}>
+                      <FontAwesomeIcon icon={faBars}/>
+                    </button>
                 </div>
         <div className="row pt-120 d-flex justify-content-center">
           <div className="col-lg-6">

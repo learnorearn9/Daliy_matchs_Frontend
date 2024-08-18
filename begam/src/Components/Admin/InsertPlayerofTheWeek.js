@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getallUser, getTournaments, insertPlayerOfTheWeek } from '../../api/api';
+import { getAllTournaments, getallUser, getTournaments, insertPlayerOfTheWeek } from '../../api/api';
+import Notification from '../atoms/notification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const InsertPlayerOfTheWeek = (props) => {
     const { updateToggle } = props;
@@ -18,6 +21,8 @@ const InsertPlayerOfTheWeek = (props) => {
     const [tournaments, setTournaments] = useState([]);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+    const [notification, setNotification] = useState({ message: "", type: "" }); // Notification state
+  
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -49,13 +54,20 @@ const InsertPlayerOfTheWeek = (props) => {
                 console.log("Submitting player data:", playerData);
                 const res = await insertPlayerOfTheWeek(playerData, token);
                 console.log("Player of the Week inserted successfully:", res);
-                navigate('/profile');
+                setNotification({ message: "Player of the Week inserted successfully!", type: "success" }); // Success notification
+              
+         
             } catch (error) {
                 console.error("Error inserting player of the week:", error);
                 if (error.response) {
+                    setNotification({
+                        message: `Error: ${error.response.data.message || "An error occurred"}`,
+                        type: "error"
+                    });
                     console.error("Server responded with status code:", error.response.status);
                     console.error("Server response data:", error.response.data);
                 } else {
+                    setNotification({ message: error.message, type: "error" }); // Error notification
                     console.error("Error message:", error.message);
                 }
             }
@@ -81,11 +93,15 @@ const InsertPlayerOfTheWeek = (props) => {
 
     const getTournament = async () => {
         try {
-            const response = await getTournaments(token);
+            const response = await getAllTournaments(token);
             console.log("API Response:", response);
-            const tournamentsData = response?.data?.tournamentDetail;
+            const tournamentsData = response?.data;
             if (tournamentsData) {
-                setTournaments([tournamentsData]);
+                console.log(tournamentsData);
+                
+                setTournaments(tournamentsData);
+                console.log(tournaments);
+                
             } else {
                 console.error("Unexpected API response format:", response);
                 setTournaments([]);
@@ -107,9 +123,14 @@ const InsertPlayerOfTheWeek = (props) => {
 
     return (
         <>
+          <div className="notification-container">
+                <Notification type={notification.type} message={notification.message} /> {/* Show Notification */}
+            </div>
             <section id="login-reg">
                 <div className='toggle'>
-                    <button onClick={toggleFunction}>T</button>
+                    <button onClick={toggleFunction}>
+                        <FontAwesomeIcon icon={faBars}/>
+                    </button>
                 </div>
                 <div className="row pt-120 d-flex justify-content-center">
                     <div className="col-lg-6">

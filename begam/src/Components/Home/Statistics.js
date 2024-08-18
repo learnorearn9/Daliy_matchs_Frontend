@@ -35,7 +35,8 @@ const Statistics = () => {
                   <img src="images/counter-icon-1.png" alt="image" />
                 </div>
                 <h3>
-                  <span className="counter">{matchesPlayed}</span>
+                  {/* <span className="counter">{matchesPlayed}</span> */}
+                  <span className="counter">0</span>
                 </h3>
                 <p style={{textTransform: "uppercase"}}>Matches Played</p>
               </div>
@@ -46,7 +47,8 @@ const Statistics = () => {
                   <img src="images/counter-icon-2.png" alt="image" />
                 </div>
                 <h3>
-                  <span className="counter">{winningsPaid}</span>
+                  {/* <span className="counter">{winningsPaid}</span> */}
+                  <span className="counter">0</span>
                 </h3>
                 <p style={{textTransform: "uppercase"}}>Winnings Paid</p>
               </div>
@@ -57,7 +59,8 @@ const Statistics = () => {
                   <img src="images/counter-icon-3.png" alt="image" />
                 </div>
                 <h3>
-                  <span className="counter">{activeLadders}</span>
+                  {/* <span className="counter">{activeLadders}</span> */}
+                  <span className="counter">0</span>
                 </h3>
                 <p style={{textTransform: "uppercase"}}>Active Ladders</p>
               </div>
@@ -67,8 +70,9 @@ const Statistics = () => {
                 <div className="img-area">
                   <img src="images/counter-icon-4.png" alt="image" />
                 </div>
-                <h3>
-                  <span className="counter">{xpEarned}</span>
+               <h3>
+                {/*    <span className="counter">{xpEarned}</span> */}
+                   <span className="counter">0</span>
                 </h3>
                 <p style={{textTransform: "uppercase"}}>XP Earned</p>
               </div>

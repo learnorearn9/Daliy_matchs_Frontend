@@ -27,6 +27,8 @@ import Error from "./Components/Pages/Error";
 import InsertPlayerOfTheWeek from "./Components/Admin/InsertPlayerofTheWeek";
 import SingleTournament from "./Components/Tournaments/SingleTournament";
 import Admin from "./Components/Admin/Admin";
+import Verify from "./Components/Authentication/Verify";
+import Tournaments from "./Components/Admin/Tournaments";
 
 const App = () => {
 
@@ -34,12 +36,12 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-        <Route exact path="/" element={<Error />} />
-          {/* <Route exact path="/" element={<Home />} />
-          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/home" element={<Home />} />
+          <Route exact path="/" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/contact" element={<Contact/>} />
           <Route exact path="/verify" element={<VerifyEmail />} />
+          <Route exact path="/verify-email" element={<Verify/>} />
           <Route exact path="/recover" element={<RecoverPassword />} />
           <Route exact path="/about" element={<About/>} />
           <Route exact path="/tournament" element={<Protected component={Tournament} />} />
@@ -48,6 +50,7 @@ const App = () => {
           <Route exact path="/insertresult" element={<Protected component={InsertResult} />} />
           <Route exact path="/playerofweek" element={<Protected component={InsertPlayerOfTheWeek} />} />
           <Route path="/singletournament/:id" element={<SingleTournament />} />
+          <Route path="/updatetournament" element={<Protected component={Tournaments} />} />
           <Route exact path="/admin" element={<Admin/>} />
           <Route exact path="/error" element={<Error/>} /> */}
         </Routes>

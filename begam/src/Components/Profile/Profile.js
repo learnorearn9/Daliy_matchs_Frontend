@@ -23,7 +23,7 @@ export default function Profile() {
       const res = await getUserDetails(authToken);
       console.log("API response:", res); // Log the entire response
       if (res?.data?.data?.user) { // Adjusted to match the response structure
-        setUser(res.data.data.user);
+        setUser(res.data.data);
       } else {
         console.error("User data not found in response:", res);
       }

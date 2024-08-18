@@ -48,7 +48,10 @@ export default function Navbar() {
 
   const getUserDetail = async () => {
     try {
-      const res = await getUserDetails(authToken); // Log the name field
+      const res = await getUserDetails(authToken);
+       // Log the name field
+       console.log(res.data);
+       
         setUsername(res.data.data.user.name);
     } catch (error) {
       console.error("Error fetching user details:", error);
@@ -61,6 +64,9 @@ export default function Navbar() {
   const confirmLogout = async () => {
     // const res = await logout(authToken);
     console.log("Cleard");
+    const res = await logout(authToken);
+    console.log(res);
+    
     dispatch(clearToken());
     navigate("/login");
     setOpen(false);
@@ -107,8 +113,8 @@ export default function Navbar() {
                 <ul className="navbar-nav main-menu ml-auto">
                   <li>
                     <Link
-                      to="/"
-                      className={location.pathname === "/" ? "active" : ""}
+                      to="/home"
+                      className={location.pathname === "/home" ? "active" : ""}
                     >
                       Home
                     </Link>

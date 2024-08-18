@@ -3,7 +3,8 @@ import { createTournament } from "../../api/api";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBurger, faHamburger } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBurger, faHamburger } from '@fortawesome/free-solid-svg-icons';
+import Notification from "../atoms/notification";
 
 export default function CreateTournament(props) {
   const { updateToggle } = props;
@@ -14,42 +15,83 @@ export default function CreateTournament(props) {
     checkinPeriod: "",
     firstPrize: "",
     secondPrize: "",
-    fees: ""
+    fees: "",
+    startDateTime: "" // This field will hold the combined date and time
   });
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const [notification, setNotification] = useState({ message: "", type: "" }); // Notification state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTournamentData({
-      ...tournamentData,
+    setTournamentData((prevData) => ({
+      ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleDateTimeChange = (e) => {
+    const { name, value } = e.target;
+    setTournamentData((prevData) => {
+      // Update either date or time, then combine them into startDateTime
+      const updatedData = {
+        ...prevData,
+        [name]: value,
+      };
+
+      // Combine date and time into ISO 8601 format if both are set
+      if (updatedData.date && updatedData.time) {
+        updatedData.startDateTime = new Date(`${updatedData.date}T${updatedData.time}:00.000+00:00`).toISOString();
+      }
+
+      return updatedData;
     });
   };
 
   const validate = () => {
     const newErrors = {};
     Object.entries(tournamentData).forEach(([key, value]) => {
-      if (!value) {
+      if (!value && key !== "startDateTime" && key !== "date" && key !== "time") { // Skip validation for combined field and date/time fields
         newErrors[key] = "This field is required";
-      } else if (key !== "name" && isNaN(value)) {
+      } else if (key !== "name" && key !== "startDateTime" && key !== "date" && key !== "time" && isNaN(value)) {
         newErrors[key] = "This field must be a number";
       }
     });
+  
+    // Validate date and time separately
+    if (!tournamentData.date) newErrors.date = "Date is required";
+    if (!tournamentData.time) newErrors.time = "Time is required";
+  
+    // Validate the combined startDateTime
+    if (!tournamentData.startDateTime) newErrors.startDateTime = "Date and time are required";
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
+      console.log(tournamentData); 
       try {
         const res = await createTournament(tournamentData, token);
-        navigate('/profile')
         console.log("Tournament created successfully:", res);
+        setNotification({ message: "Tournament created successfully!", type: "success" }); // Success notification
+        setTournamentData({
+          name: "",
+          size: "",
+          checkinPeriod: "",
+          firstPrize: "",
+          secondPrize: "",
+          fees: "",
+          startDateTime: "",
+          date: "",
+          time: ""
+        });
       } catch (error) {
-        navigate('/error')
         console.error("Error creating tournament:", error);
+        setNotification({ message: error.response?.data?.message || "Error creating tournament", type: "error" }); // Error notification
       }
     }
   };
@@ -59,43 +101,74 @@ export default function CreateTournament(props) {
 }
 
   return (
-    <section id="login-reg">
-       <div className='toggle'>
-                    <button onClick={toggleFunction}>
-                      <FontAwesomeIcon icon={faBurger}/>
-                    </button>
-                </div>
-          <div className="row pt-120 d-flex justify-content-center">
-            <div className="col-lg-6">
-              <div className="login-reg-main text-center">
-                <h4>Create Tournament</h4>
-                <div className="form-area">
-                  <form onSubmit={handleSubmit}>
-                    {["name", "size", "checkinPeriod", "firstPrize", "secondPrize", "fees"].map((field) => (
-                      <div className="form-group" key={field} style={{ padding: "5px" }}>
-                        <label htmlFor={field}>Enter {field.split(/(?=[A-Z])/).join(" ")}</label>
-                        <input
-                          placeholder={`Enter ${field.split(/(?=[A-Z])/).join(" ")}`}
-                          type="text"
-                          id={field}
-                          name={field}
-                          value={tournamentData[field]}
-                          onChange={handleChange}
-                          required
-                        />
-                        {errors[field] && <div className="error" style={{ color: "red" }}>{errors[field]}</div>}
-                      </div>
-                    ))}
-                    <div className="form-group">
-                      <button type="submit" className="cmn-btn">
-                        Create
-                      </button>
+    <>
+      <div className="notification-container">
+        <Notification type={notification.type} message={notification.message} />
+      </div>
+      <section id="login-reg">
+        <div className='toggle'>
+          <button onClick={toggleFunction}>
+            <FontAwesomeIcon icon={faBars}/>
+          </button>
+        </div>
+        <div className="row pt-120 d-flex justify-content-center">
+          <div className="col-lg-6">
+            <div className="login-reg-main text-center">
+              <h4>Create Tournament</h4>
+              <div className="form-area">
+                <form onSubmit={handleSubmit}>
+                  {["name", "size", "checkinPeriod", "firstPrize", "secondPrize", "fees"].map((field) => (
+                    <div className="form-group" key={field} style={{ padding: "5px" }}>
+                      <label htmlFor={field}>Enter {field.split(/(?=[A-Z])/).join(" ")}</label>
+                      <input
+                        placeholder={`Enter ${field.split(/(?=[A-Z])/).join(" ")}`}
+                        type="text"
+                        id={field}
+                        name={field}
+                        value={tournamentData[field]}
+                        onChange={handleChange}
+                        required
+                      />
+                      {errors[field] && <div className="error" style={{ color: "red" }}>{errors[field]}</div>}
                     </div>
-                  </form>
-                </div>
+                  ))}
+                  {/* Date input field */}
+                  <div className="form-group" style={{ padding: "5px" }}>
+                    <label htmlFor="date">Start Date</label>
+                    <input
+                      type="date"
+                      id="date"
+                      name="date"
+                      value={tournamentData.date || ""}
+                      onChange={handleDateTimeChange}
+                      required
+                    />
+                    {errors.startDateTime && <div className="error" style={{ color: "red" }}>{errors.startDateTime}</div>}
+                  </div>
+                  {/* Time input field */}
+                  <div className="form-group" style={{ padding: "5px" }}>
+                    <label htmlFor="time">Start Time</label>
+                    <input
+                      type="time"
+                      id="time"
+                      name="time"
+                      value={tournamentData.time || ""}
+                      onChange={handleDateTimeChange}
+                      required
+                    />
+                    {errors.startDateTime && <div className="error" style={{ color: "red" }}>{errors.startDateTime}</div>}
+                  </div>
+                  <div className="form-group">
+                    <button type="submit" className="cmn-btn">
+                      Create
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 }

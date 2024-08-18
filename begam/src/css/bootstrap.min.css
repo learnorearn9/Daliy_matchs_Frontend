@@ -1235,9 +1235,9 @@ pre code {
     max-width: 66.666667%;
   }
   .col-lg-9 {
-    -ms-flex: 0 0 75%;
-    flex: 0 0 75%;
-    max-width: 75%;
+    -ms-flex: 0 0 95%;
+    flex: 0 0 95%;
+    max-width: 95%;
   }
   .col-lg-10 {
     -ms-flex: 0 0 83.333333%;
