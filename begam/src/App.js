@@ -36,8 +36,14 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
+<<<<<<< HEAD
           <Route exact path="/home" element={<Home />} />
           <Route exact path="/" element={<Login />} />
+=======
+        <Route exact path="/" element={<Error />} />
+          {/* <Route exact path="/" element={<Home />} />
+          <Route exact path="/login" element={<Login />} />
+>>>>>>> dfc0e9d7c82961c35737732f3fa350801ac548fd
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/contact" element={<Contact/>} />
           <Route exact path="/verify" element={<VerifyEmail />} />
@@ -52,7 +58,7 @@ const App = () => {
           <Route path="/singletournament/:id" element={<SingleTournament />} />
           <Route path="/updatetournament" element={<Protected component={Tournaments} />} />
           <Route exact path="/admin" element={<Admin/>} />
-          <Route exact path="/error" element={<Error/>} />
+          <Route exact path="/error" element={<Error/>} /> */}
         </Routes>
       </BrowserRouter>
     </>
