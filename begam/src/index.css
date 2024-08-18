@@ -286,7 +286,7 @@ iframe {
     color: white;
     margin-left: 8px;
   }
-  
+
   .admin-nav{
     left:-50%;
     z-index: 50;
@@ -5056,7 +5056,6 @@ color: white;
 .admin-body .users{
   width: 100%;
 }
-<<<<<<< HEAD
 .filter-options{
   margin-top: 10px;
 }
@@ -5168,10 +5167,3 @@ justify-content: end;
   border-radius: 8px;
   max-width: 300px;
 }
-=======
-
-.countdown-item {
-  margin: 0 10px; /* Adjust the margin as needed for more or less spacing */
-  font-size: 1.5rem; /* Adjust the font size as needed */
-}
->>>>>>> dfc0e9d7c82961c35737732f3fa350801ac548fd
