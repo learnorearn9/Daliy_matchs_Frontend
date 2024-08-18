@@ -15,7 +15,7 @@ export default function Footer() {
                 <a className="site-logo site-title" href="index.html"><img src="images/logo.png" alt="site-logo" /></a>
               </div>
               <ul className="menu-side d-flex align-items-center">
-                <li><Link to={'/'} className="active">Home</Link></li>
+                <li><Link to={'/home'} className="active">Home</Link></li>
                 <li><Link to={'/about'} >About</Link></li>
                 <li><Link to={'/tournament'}>Tournament</Link></li>
                 <li><Link to={'/contact'}>Contact Us</Link></li>

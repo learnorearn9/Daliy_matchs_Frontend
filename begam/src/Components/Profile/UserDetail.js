@@ -161,7 +161,7 @@ const navigate = useNavigate();
                               />
                               <p>Tournaments Played</p>
                               <h4>
-                                {user.TournamentDetails[0].tournamentsParticipated}
+                                {user.TournamentDetails.tournamentsParticipated}
                               </h4>
                             </div>
                           </div>
@@ -175,7 +175,7 @@ const navigate = useNavigate();
                                 Times
                                 <br /> Paid
                               </p>
-                              <h4>{user.TournamentDetails[0].totalPrizeMoney}</h4>
+                              <h4>{user.TournamentDetails.totalPrizeMoney}</h4>
                             </div>
                           </div>
                           <div class="col-lg-4 col-md-6">
@@ -188,7 +188,7 @@ const navigate = useNavigate();
                                 Tournaments
                                 <br /> Won
                               </p>
-                              <h4>{user.TournamentDetails[0].firstPlaceCount}</h4>
+                              <h4>{user.TournamentDetails.firstPlaceCount}</h4>
                             </div>
                           </div>
                         </div>

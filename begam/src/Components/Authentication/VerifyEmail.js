@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { verify } from "../../api/api";
+import { useSelector } from "react-redux";
 
 export default function VerifyEmail() {
   const location = useLocation();
   const navigate = useNavigate();
   const email = location.state?.email;
   const [otp, setOtp] = useState("");
-
+  const token = useSelector((state) => state.token);
   const handleOtpChange = (e) => {
     setOtp(e.target.value);
   };
@@ -16,7 +17,12 @@ export default function VerifyEmail() {
     e.preventDefault();
     try {
       const response = await verify({email: email,otp:otp});
-      navigate('/login');
+      if(token){
+        navigate('/home')
+      }
+      else{
+        navigate('/')
+      }
     } catch (error) {
       console.error("Error during verification:", error);
       alert("An error occurred during verification");

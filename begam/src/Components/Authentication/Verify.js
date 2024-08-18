@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { updateUserEmail, verifyEmail } from "../../api/api";
+import { useSelector } from "react-redux";
 
 export default function Verify() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
+  const token = useSelector((state) => state.token);
 
   const validateForm = () => {
     const newErrors = {};
@@ -29,7 +31,12 @@ export default function Verify() {
       const res = await verifyEmail(email);
       console.log(res);
       
-    //   navigate("/login");
+      if(token){
+        navigate('/home')
+      }
+      else{
+        navigate('/')
+      }
     } catch (error) {
       console.error("Error during verification:", error);
       alert("An error occurred during verification");
