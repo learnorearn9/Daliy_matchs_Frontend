@@ -32,7 +32,7 @@ export default function Verify() {
       console.log(res);
       
       if(token){
-        navigate('/home')
+        navigate('/')
       }
       else{
         navigate('/')

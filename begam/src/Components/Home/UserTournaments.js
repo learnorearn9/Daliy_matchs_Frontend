@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getTournaments } from "../../api/api";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { format, subHours, subMinutes } from "date-fns";
 
 export default function UserTournaments() {
@@ -9,22 +9,18 @@ export default function UserTournaments() {
   const token = useSelector((state) => state.token);
   const [countdowns, setCountdowns] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date()); // Track the date being used
+  const [showAll, setShowAll] = useState(false); // Toggle to show all tournaments
+  const navigate = useNavigate();
 
   const fetchUserTournaments = async () => {
     try {
       const response = await getTournaments(token, currentDate); // Pass the current date to the API call
       setTournaments(response.data.tournamentDetail);
-
-        //  // If tournaments were fetched with the current date, update to the next day for the next fetch
-        //  const nextDate = new Date(currentDate);
-        //  nextDate.setDate(nextDate.getDate() + 1);
-        //  setCurrentDate(nextDate); // Update to the next day
-   
     } catch (error) {
       console.error("Error fetching tournaments:", error);
     }
   };
-  
+
   const calculateCountdown = () => {
     const now = new Date();
     const updatedCountdowns = {};
@@ -40,7 +36,9 @@ export default function UserTournaments() {
         const hours = Math.floor(difference / 1000 / 60 / 60);
         const minutes = Math.floor((difference / 1000 / 60) % 60);
         const seconds = Math.floor((difference / 1000) % 60);
-        updatedCountdowns[tournament.tournamentId] = `${hours}h ${minutes}m ${seconds}s`;
+        updatedCountdowns[
+          tournament.tournamentId
+        ] = `${hours}h ${minutes}m ${seconds}s`;
       } else {
         updatedCountdowns[tournament.tournamentId] = "Started";
       }
@@ -57,6 +55,8 @@ export default function UserTournaments() {
     const timer = setInterval(calculateCountdown, 1000);
     return () => clearInterval(timer);
   }, [tournaments]);
+
+  const visibleTournaments = showAll ? tournaments : tournaments.slice(0, 3); // Show only 3 tournaments if showAll is false
 
   return (
     <>
@@ -81,15 +81,18 @@ export default function UserTournaments() {
                 </div>
               </div>
 
-              {tournaments
+              {visibleTournaments
                 .filter((tournament) => {
-                  // Filter out tournaments that have already started
                   let startTime = new Date(tournament.startTime);
                   startTime = subMinutes(subHours(startTime, 5), 30);
                   return startTime > new Date();
                 })
                 .map((tournament, index) => (
-                  <div key={index} className="single-item" style={{ marginBottom: "20px" }}>
+                  <div
+                    key={index}
+                    className="single-item"
+                    style={{ marginBottom: "20px" }}
+                  >
                     <div className="row">
                       <div className="col-lg-3 col-md-3 d-flex align-items-center">
                         <img
@@ -107,29 +110,56 @@ export default function UserTournaments() {
                               <span>Starts in</span>
                               <span className="time">
                                 &nbsp;
-                                {countdowns[tournament.tournamentId] || "Loading..."}
+                                {countdowns[tournament.tournamentId] ||
+                                  "Loading..."}
                               </span>
                             </div>
                             <div className="date-area bg">
                               <span>
-                                {format(subMinutes(subHours(tournament.startTime, 5), 30), "MMM dd, yyyy")}
+                                {format(
+                                  subMinutes(
+                                    subHours(tournament.startTime, 5),
+                                    30
+                                  ),
+                                  "MMM dd, yyyy"
+                                )}
                                 &nbsp;
                               </span>
                               <span className="date">
-                                {format(subMinutes(subHours(tournament.startTime, 5), 30), "hh:mm a")}
+                                {format(
+                                  subMinutes(
+                                    subHours(tournament.startTime, 5),
+                                    30
+                                  ),
+                                  "hh:mm a"
+                                )}
                               </span>
                             </div>
                           </div>
                           <div className="single-box d-flex">
-                            <div className="box-item" style={{ padding: "5px" }}>
-                              <span className="head" style={{ marginRight: "10px" }}>
-                                Registered:{" "}
+                            <div
+                              className="box-item"
+                              style={{ padding: "5px" }}
+                            >
+                              <span
+                                className="head"
+                                style={{ marginRight: "10px" }}
+                              >
+                                Enrolled {" "}
                               </span>
-                              <span className="sub">{tournament.totalparticipants}</span>
+                              <span className="sub">
+                                {tournament.totalparticipants}
+                              </span>
                             </div>
-                            <div className="box-item" style={{ padding: "5px" }}>
-                              <span className="head" style={{ marginRight: "10px" }}>
-                                Available:{" "}
+                            <div
+                              className="box-item"
+                              style={{ padding: "5px" }}
+                            >
+                              <span
+                                className="head"
+                                style={{ marginRight: "10px" }}
+                              >
+                              Available 
                               </span>
                               <span className="sub">
                                 {tournament.size - tournament.totalparticipants}
@@ -143,9 +173,11 @@ export default function UserTournaments() {
                           <div className="contain-area">
                             <span className="prize">
                               <img src="images/price-coin.png" alt="image" />
-                              Prize
+                              Entry Fee
                             </span>
-                            <h4 className="dollar">₹ {tournament.firstPrize}</h4>
+                            <h4 className="dollar">
+                              ₹ {tournament.fees}
+                            </h4>
                             <Link
                               to={`/singletournament/${tournament.tournamentId}`}
                               className="cmn-btn"
@@ -158,6 +190,18 @@ export default function UserTournaments() {
                     </div>
                   </div>
                 ))}
+
+              {tournaments.length > 3 && !showAll && (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button
+                    className="cmn-btn"
+                    style={{ color: "white" }}
+                    onClick={() => navigate("/tournament")} // Redirect to the tournaments page
+                  >
+                    View More
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </section>

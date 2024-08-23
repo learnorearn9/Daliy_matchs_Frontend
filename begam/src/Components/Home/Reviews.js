@@ -2,23 +2,31 @@ import React, { useEffect, useState } from "react";
 import { createUserReview, getUserDetails, getUserReview } from "../../api/api";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Notification from "../atoms/notification"; // Import Notification component
 
 export default function Testimonial() {
   const [review, setReview] = useState([]);
-  const [showReviewForm, setShowReviewForm] = useState(false); // State to manage the visibility of the review form
+  const [showReviewForm, setShowReviewForm] = useState(false);
   const token = useSelector((state) => state.token);
-  const [comment, setComment] = useState(""); // State to store the textarea value
-  const [rating, setRating] = useState(""); // State to store the rating input value
-  const [user_id,setUser_Id] = useState("");
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState("");
+  const [user_id, setUser_Id] = useState("");
+  const [notifications, setNotifications] = useState([]); // State for notifications
+
+  useEffect(() => {
+    getReview();
+    if (token) {
+      getUserDetail();
+    }
+  }, []);
+
   const getReview = async () => {
     try {
       const response = await getUserReview();
       const fetchedReviews = response.data;
 
-      // Shuffle the reviews
+      // Shuffle and select reviews
       const shuffledReviews = fetchedReviews.sort(() => 0.5 - Math.random());
-
-      // Select only 3 reviews if more than 3 exist, else show all
       const selectedReviews =
         shuffledReviews.length > 3
           ? shuffledReviews.slice(0, 3)
@@ -30,46 +38,60 @@ export default function Testimonial() {
     }
   };
 
-  useEffect(() => {
-    getReview();
-    if(token){
-      getUserDetail();
-    }
-  }, []);
-
   const getUserDetail = async () => {
     try {
       const res = await getUserDetails(token);
-       // Log the name field
-       setUser_Id(res.data.data.user._id)
-       console.log(res.data.data.user._id);
+      setUser_Id(res.data.data.user._id);
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
   };
 
+  const validateReviewForm = () => {
+    if (!comment.trim()) {
+      setNotifications([{ type: "error", message: "Comment cannot be empty" }]);
+      return false;
+    }
+    if (!rating || rating < 1 || rating > 5) {
+      setNotifications([{ type: "error", message: "Rating must be between 1 and 5" }]);
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async () => {
-    console.log("Review Comment:", comment);
-    console.log("Rating:", rating);
-    console.log("user: ",user_id)
+    setNotifications([]); // Clear previous notifications
 
-    const res = await createUserReview({user_id:user_id,comment:comment,star:rating},token);
-    console.log(res);
-    
-    // You can add logic here to send the review and rating data to the server
-    // Example: submitReview({ comment, rating });
+    if (!validateReviewForm()) return; // Validate form
 
-    // Clear the input fields after submission
-    setComment("");
-    setRating("");
-    setShowReviewForm(false); // Optionally hide the form after submission
+    try {
+      const res = await createUserReview(
+        { user_id: user_id, comment: comment, star: rating },
+        token
+      );
+      setNotifications([{ type: "success", message: "Review submitted successfully!" }]);
+      // Clear the form after submission
+      setComment("");
+      setRating("");
+      setShowReviewForm(false);
+      getReview(); // Refresh the reviews after submission
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      setNotifications([{ type: "error", message: "Failed to submit review. Please try again later." }]);
+    }
   };
 
   return (
     <>
-      {/* Conditionally render the review form based on state */}
-           {showReviewForm && (
+      {/* Notifications Section */}
+      <div className="notification-container">
+        {notifications.map((notification, index) => (
+          <Notification key={index} type={notification.type} message={notification.message} />
+        ))}
+      </div>
+
+      {/* Conditionally render the review form */}
+      {showReviewForm && (
         <div className="back-shadow">
           <span className="close" onClick={() => setShowReviewForm(false)}>
             &times;
@@ -79,27 +101,27 @@ export default function Testimonial() {
               type="text"
               placeholder="Enter Your Review"
               value={comment}
-              onChange={(e) => setComment(e.target.value)} // Update comment state
+              onChange={(e) => setComment(e.target.value)}
             />
             <input
               type="number"
               placeholder="Enter Your Rating"
               value={rating}
-              onChange={(e) => setRating(e.target.value)} // Update rating state
+              onChange={(e) => setRating(e.target.value)}
               min="1"
               max="5"
             />
             <button
               className="cmn-btn"
               style={{ color: "white", marginTop: "10px" }}
-              onClick={handleSubmit} // Call handleSubmit on click
+              onClick={handleSubmit}
             >
               Submit
             </button>
           </div>
         </div>
       )}
-      
+
       <section id="testimonials-section">
         <div
           className="overlay pt-120 pb-120"
@@ -130,7 +152,6 @@ export default function Testimonial() {
                         </div>
                         <div className="title-area">
                           <h6>{testimonial.user_id.name}</h6>
-                          {/* <span>{testimonial.location}</span> */}
                         </div>
                       </div>
                       <div className="amount">
@@ -151,25 +172,20 @@ export default function Testimonial() {
             }}
           >
             {token ? (
-               <button
-               className="cmn-btn"
-               style={{ color: "white" }}
-               onClick={() => setShowReviewForm(true)} // Open the review form on click
-             >
-               Create Review
-             </button>
-            ):(
-             <Link to={'/login'}>
-             <button
-           className="cmn-btn"
-           style={{ color: "white" }}
-           onClick={() => setShowReviewForm(true)} // Open the review form on click
-         >
-           Create Review
-         </button>
-           </Link>
+              <button
+                className="cmn-btn"
+                style={{ color: "white" }}
+                onClick={() => setShowReviewForm(true)}
+              >
+                Create Review
+              </button>
+            ) : (
+              <Link to={"/login"}>
+                <button className="cmn-btn" style={{ color: "white" }}>
+                  Create Review
+                </button>
+              </Link>
             )}
-          
           </div>
         </div>
       </section>

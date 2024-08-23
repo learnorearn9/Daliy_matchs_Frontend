@@ -81,7 +81,7 @@ export default function AllTournaments() {
                     <nav aria-label="breadcrumb">
                       <ol className="breadcrumb d-flex justify-content-center">
                         <li className="breadcrumb-item">
-                          <Link to="/home">Home</Link>
+                          <Link to="/">Home</Link>
                         </li>
                         <li
                           className="breadcrumb-item active"
@@ -163,9 +163,9 @@ export default function AllTournaments() {
                           <div className="contain-area">
                             <span className="prize">
                               <img src="images/price-coin.png" alt="image" />
-                              Prize
+                              Entry Fee
                             </span>
-                            <h4 className="dollar">₹ {tournament.firstPrize}</h4>
+                            <h4 className="dollar">₹ {tournament.fees}</h4>
                             <Link
                               to={`/singletournament/${tournament.tournamentId}`}
                               className="cmn-btn"

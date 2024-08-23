@@ -3,6 +3,8 @@ import { editTournament, getAllTournaments } from "../../api/api";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { format, subHours, subMinutes ,addHours, addMinutes} from "date-fns";
+import Notification from "../atoms/notification";
 
 // Card component to display individual tournament details
 const TournamentCard = ({ tournament, onSave }) => {
@@ -16,7 +18,7 @@ const TournamentCard = ({ tournament, onSave }) => {
         firstPrize,
         secondPrize,
         size,
-        startDateTime: new Date(startDateTime) // Convert ISO to datetime-local format
+        startDateTime: format(new Date(startDateTime), "yyyy-MM-dd'T'HH:mm") // Convert ISO to datetime-local format
     });
 
     const handleChange = (e) => {
@@ -25,12 +27,21 @@ const TournamentCard = ({ tournament, onSave }) => {
     };
 
     const handleSave = () => {
+        const adjustedStartDateTime = addMinutes(addHours(new Date(formData.startDateTime), 5), 30);
+        
         onSave({
             ...formData,
-            startDateTime: new Date(formData.startDateTime).toISOString() // Convert datetime-local back to ISO
+            startDateTime: adjustedStartDateTime.toISOString() // Convert datetime back to ISO
         });
         setIsEditing(false);
     };
+
+    // const formattedStartTime = isValid(new Date(startDateTime))
+    // ? format(subMinutes(subHours(new Date(startDateTime), 5), 30), "hh:mm a")
+    // : "Invalid Date"; // Fallback in case of an invalid date
+    
+    const adjustedStartDateTime = subMinutes(subHours(new Date(startDateTime), 5), 30);
+
 
     return (
         <div className="tournament-card">
@@ -94,8 +105,11 @@ const TournamentCard = ({ tournament, onSave }) => {
                     </div>
                     <div className="detail">
                         <label>Start Time :</label>
-                        <input type="text" value={formData.startDateTime} readOnly />
-                    </div>
+                          <input 
+                            type="text" 
+                            value={format(adjustedStartDateTime, "dd/MM/yyyy hh:mm a")} // Format to show date and adjusted time
+                            readOnly 
+                        /> </div>
                 </>
             )}
         </div>
@@ -110,6 +124,7 @@ export default function Tournaments(props) {
 
     const [tournaments, setTournaments] = useState([]);
     const token = useSelector((state) => state.token);
+    const [notifications, setNotifications] = useState([]); // State for notifications
 
     const fetchUserTournaments = async () => {
         try {
@@ -126,15 +141,25 @@ export default function Tournaments(props) {
 
     const handleSave = async (updatedData) => {
         try {
+            console.log(updatedData);
+            
             const res = await editTournament(updatedData, token); // Send the entire updatedData object
             console.log(res);
+            setNotifications([{ type: "success", message: "Tournament Updated Successfully!!!" }]);
             fetchUserTournaments(); // Re-fetch the tournaments after saving
         } catch (error) {
+            setNotifications([{ type: "error", message: "Error in Updating Tournament!!!" }]);
             console.error("Error saving tournament:", error);
         }
     };
 
     return (
+        <>
+        <div className="notification-container">
+        {notifications.map((notification, index) => (
+          <Notification key={index} type={notification.type} message={notification.message} />
+        ))}
+      </div>
         <section className="tournament-body">
             <div className='toggle' style={{margin:"20px"}}>
                 <button onClick={toggleFunction}>
@@ -147,5 +172,6 @@ export default function Tournaments(props) {
                 ))}
             </div>
         </section>
+        </>
     );
 }

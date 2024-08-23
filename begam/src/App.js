@@ -36,8 +36,8 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/home" element={<Home />} />
-          <Route exact path="/" element={<Login />} />
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/contact" element={<Contact/>} />
           <Route exact path="/verify" element={<VerifyEmail />} />
@@ -52,7 +52,7 @@ const App = () => {
           <Route path="/singletournament/:id" element={<SingleTournament />} />
           <Route path="/updatetournament" element={<Protected component={Tournaments} />} />
           <Route exact path="/admin" element={<Admin/>} />
-          <Route exact path="/error" element={<Error/>} /> */}
+          <Route exact path="/error" element={<Error/>} />
         </Routes>
       </BrowserRouter>
     </>

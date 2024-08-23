@@ -2046,7 +2046,7 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 #tournaments-content .tab-content{
-  min-width: 50%;
+  min-width: 80%;
 }
 #tournaments-content .tab-content .participants{
   width: 80%;
@@ -4770,7 +4770,7 @@ body::-webkit-scrollbar-thumb:hover {
   flex-direction: column;
   gap: 10px; /* Space between notifications */
   max-width: 300px; /* Adjust based on your design */
-  z-index: 9999;
+  z-index: 9999999;
 }
 
 .notification {
@@ -5181,4 +5181,33 @@ justify-content: end;
   align-items: center;
   justify-content: center;
   padding: 15px;
+}
+
+.table-filter{
+  height: 100px;
+}
+.table-filter div{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  height: 100%;
+  width: 40%;
+  border: 1px solid white;
+}
+.table-filter div button{
+  border: 1px solid white;
+}
+.table-filter div input{
+  border-radius: 8px;
+  padding: 10px 25px;
+  border: 1px solid #4450b8;
+  width: 100%;
+  color: white;
+  background: #00003e;
+  font-family: var(--body-font);
+}
+
+.user-tournaments{
+  margin-top: 20px;
 }

@@ -27,14 +27,6 @@ export default function Herosection() {
                                     <h3>{heading}</h3>
                                     <h1>{subheading}</h1>
                                     <p>{description}</p>
-                                    <div className="btn-play d-flex justify-content-center align-items-center">
-                                        <Link className="cmn-btn" to={token ? buttons.loggedIn.link : buttons.loggedOut.link}>
-                                            {token ? buttons.loggedIn.text : buttons.loggedOut.text}
-                                        </Link>
-                                        <a className="mfp-iframe popupvideo">
-                                            <img src={playIcon} alt="play"/>
-                                        </a>
-                                    </div>
                                 </div>
                                 <div className="row justify-content-center">
                                     <div className="col-lg-12">

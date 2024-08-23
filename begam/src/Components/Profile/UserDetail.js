@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAward,
   faCheck,
+  faCircle,
   faCoins,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import { updateUserEmail } from "../../api/api";
+import { participents, updateUserEmail } from "../../api/api";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
+import Notification from "../atoms/notification";
 
 export default function UserDetail(props) {
   const { user } = props;
+  // State for managing tournaments
+  const [userTournaments, setUserTournaments] = useState([]);
   const token = useSelector((state) => state.token);
   const updatedAt = dayjs(user.user.updatedAt);
-console.log(user.user.updatedAt);
+  const [notifications, setNotifications] = useState([]); // State for notifications
+
+  console.log(user.user.updatedAt);
 
   const daysAgo = dayjs().diff(updatedAt, "day");
-const navigate = useNavigate();
+  const navigate = useNavigate();
   // State variables to manage editable state and form data
   const [isEditable, setIsEditable] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,6 +35,7 @@ const navigate = useNavigate();
 
   // Function to handle edit button click
   const handleEditClick = () => {
+    setNotifications([{ type: "success", message: "Edit Clicked!!!" }]);
     setIsEditable(!isEditable);
   };
 
@@ -45,19 +52,45 @@ const navigate = useNavigate();
     // Log the updated form data
     console.log("Updated User Details:", formData);
     // You can make an API call here to update the user details on the server
-    const res = await updateUserEmail(formData,token);
+    const res = await updateUserEmail(formData, token);
     console.log(res);
     navigate("/verify", { state: { email: formData.email } });
     // Disable editing after submitting
     setIsEditable(false);
   };
 
+  const fetchUserTournaments = async () => {
+    try {
+      const res = await participents(token);
+      // Assuming `res.data` contains the list of participants
+      const participants = res.data;
+
+      // Filter tournaments where the user ID matches
+      const filteredTournaments = participants.filter(
+        (participant) => participant.userId._id === user.user._id
+      );
+      setUserTournaments(filteredTournaments); // Update the state
+      console.log("Filtered Tournaments:", userTournaments);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserTournaments();
+  }, [token, user.user._id]);
   // Render nothing if user data is not available
   if (!user) {
     return <div>Loading...</div>;
   }
 
   return (
+<>
+<div className="notification-container">
+        {notifications.map((notification, index) => (
+          <Notification key={index} type={notification.type} message={notification.message} />
+        ))}
+      </div>
     <section id="all-trophies" className="pb-120">
       <div className="container">
         <div className="tab-content">
@@ -96,7 +129,10 @@ const navigate = useNavigate();
                         aria-labelledby="fortnite-tab"
                       >
                         <div className="row">
-                          <div className="col-lg-12 col-md-12">
+                          <div
+                            className="col-lg-12 col-md-12"
+                            style={{ paddingTop: "15px" }}
+                          >
                             <div className="profile-input">
                               <label htmlFor="name">Name</label>
                               <input
@@ -127,6 +163,7 @@ const navigate = useNavigate();
                                 readOnly={!isEditable}
                               />
                             </div>
+                            <div style={{ height: "45px" }}></div>
                           </div>
                         </div>
                       </div>
@@ -200,7 +237,46 @@ const navigate = useNavigate();
             </div>
           </div>
         </div>
+        <div className="user-tournaments">
+          <div className="statistics-area">
+            <div className="row">
+              <div className="col-lg-4">
+                <div className="total-area">
+                  <div className="head-area d-flex justify-content-between">
+                    <div className="left">
+                      <h5>Your Tournaments</h5>
+                    </div>
+                  </div>
+                  <div className="tab-content" id="myTabContents">
+                    <div
+                      className="tab-pane fade show active"
+                      id="fortnite"
+                      role="tabpanel"
+                      aria-labelledby="fortnite-tab"
+                    >
+                      <div className="row">
+                        <div className="col-lg-12 col-md-12">
+                        {userTournaments.length > 0 ? (
+                    userTournaments.map((tournament) => (
+                      <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+                     <FontAwesomeIcon icon={faCircle} style={{color:"white"}}/>
+                      <p key={tournament._id}>{tournament.tournamentStateId.tournamentId.name}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No tournaments found.</p>
+                  )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+    </>
   );
 }
