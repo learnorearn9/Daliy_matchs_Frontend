@@ -5,6 +5,7 @@ import { clearToken } from "../../ReduxStore/action";
 import IconButton from "@mui/material/IconButton";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MenuIcon from "@mui/icons-material/Menu";
+
 import {
   Button,
   Dialog,
@@ -50,6 +51,8 @@ export default function Navbar() {
       const res = await getUserDetails(authToken);
       setUsername(res.data.data.user.name);
     } catch (error) {
+      dispatch(clearToken());
+      navigate("/");
       console.error("Error fetching user details:", error);
     }
   };
@@ -59,7 +62,7 @@ export default function Navbar() {
     console.log(res);
 
     dispatch(clearToken());
-    navigate("/");
+    navigate("/login");
     setOpen(false);
   };
 
@@ -102,7 +105,8 @@ export default function Navbar() {
           <div className="row d-flex header-area">
             <div className="logo-section flex-grow-1 d-flex align-items-center">
               <Link to="/" className="site-logo site-title">
-                <img src="images/logo.png" alt="site-logo" />
+              <img src="/images/logo.png" alt="site-logo" />
+
               </Link>
             </div>
             <button
@@ -127,8 +131,8 @@ export default function Navbar() {
                 <ul className="navbar-nav main-menu ml-auto">
                   <li>
                     <Link
-                      to="/home"
-                      className={location.pathname === "/home" ? "active" : ""}
+                      to="/"
+                      className={location.pathname === "/" ? "active" : ""}
                     >
                       Home
                     </Link>

@@ -52,7 +52,7 @@ export default function Login() {
       setUser("");
       setPwd("");
       setSuccess(true);
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       console.error("Login failed:", err);
       setNotifications([{ type: "error", message: "Login failed. Please try again later." }]);

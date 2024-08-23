@@ -38,7 +38,7 @@ export default function Footer() {
             <div className="col-lg-8 col-md-8 d-flex justify-content-md-between justify-content-center align-items-center cus-grid">
               <div className="logo-section">
                 <Link to="/" className="site-logo site-title">
-                  <img src="images/logo.png" alt="site-logo" />
+                  <img src="/images/logo.png" alt="site-logo" />
                 </Link>
               </div>
               <ul className="menu-side d-flex align-items-center">

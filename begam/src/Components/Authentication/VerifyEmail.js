@@ -18,7 +18,7 @@ export default function VerifyEmail() {
     try {
       const response = await verify({email: email,otp:otp});
       if(token){
-        navigate('/home')
+        navigate('/')
       }
       else{
         navigate('/')

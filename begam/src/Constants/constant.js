@@ -67,7 +67,7 @@ export const ABOUT_PAGE_DATA = {
     banner: {
       heading: "About Us",
       breadcrumb: [
-        { label: "Home", link: "/home" },
+        { label: "Home", link: "/" },
         { label: "About Us", link: "/about" }
       ],
       images: {

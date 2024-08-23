@@ -86,9 +86,18 @@ export default function ResultTable() {
             <h2 className="title">Tournaments Result</h2>
           </div>
           <div className="prizes pb-120">
+            
             <div className="container">
+              {/* <div className="table-filter">
+                <div>
+              <input type="text" placeholder="hjbjh" />
+             <button className="cmn-btn">Search</button> 
+              </div>
+              </div> */}
               <div className="row">
+                
                 <div className="col-lg-12">
+                
                   <div className="table-responsive">
                     <table className="table">
                       <thead>
