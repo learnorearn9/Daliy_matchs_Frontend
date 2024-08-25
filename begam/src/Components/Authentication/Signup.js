@@ -59,7 +59,14 @@ export default function Signup() {
       setNotifications([{ type: "success", message: "Signup successful!" }]);
       navigate("/verify", { state: { email: details.email } });
     } catch (error) {
-      setNotifications([{ type: "error", message: error.message }]);
+      setNotifications([{ type: "error", message: "Unable to Create Account" }]);
+      // Clear form fields on error
+      setDetails({
+        email: "",
+        name: "",
+        password: "",
+        phoneNumber: "",
+      });
     } finally {
       setLoading(false);
     }
@@ -77,7 +84,7 @@ export default function Signup() {
           />
         ))}
       </div>
-      <section id="login-reg" style={{minHeight:"100vh"}}>
+      <section id="login-reg" style={{ minHeight: "100vh" }}>
         <div className="overlay pb-120">
           <div className="container">
             <div className="top-area">

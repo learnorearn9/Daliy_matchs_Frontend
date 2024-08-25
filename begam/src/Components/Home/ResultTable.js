@@ -82,6 +82,7 @@ export default function ResultTable() {
           <div
             className="section-header"
             style={{ display: "flex", justifyContent: "center" }}
+            
           >
             <h2 className="title">Tournaments Result</h2>
           </div>
