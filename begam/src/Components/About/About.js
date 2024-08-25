@@ -4,7 +4,7 @@ import ScrollToTop from "../atoms/scrollTotop";
 import Preloader from "../atoms/Preloader";
 import Footer from "../Home/Footer";
 import { ABOUT_PAGE_DATA } from "../../Constants/constant"; // Adjust the path as necessary
-
+import { Link } from "react-router-dom";
 export default function About() {
   const [loading, setLoading] = useState(true);
 
@@ -42,7 +42,7 @@ export default function About() {
                       <ol className="breadcrumb d-flex justify-content-center">
                         {banner.breadcrumb.map((item, index) => (
                           <li className="breadcrumb-item" key={index}>
-                            <a href={item.link}>{item.label}</a>
+                            <Link to={item.link}>{item.label}</Link>
                           </li>
                         ))}
                       </ol>
@@ -93,18 +93,18 @@ export default function About() {
                         <ul className="d-flex justify-content-center">
                           {Object.entries(member.socialLinks).map(([platform, link]) => (
                             <li key={platform}>
-                              <a href={link}>
+                              <Link>
                                 <i className={`fab fa-${platform}`}></i>
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>
                       </div>
                     </div>
                     <div className="bottom-area">
-                      <a href="#">
+                      <Link>
                         <h5>{member.name}</h5>
-                      </a>
+                      </Link>
                       <p>{member.position}</p>
                     </div>
                   </div>

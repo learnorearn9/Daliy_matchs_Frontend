@@ -7,7 +7,7 @@ import { getTournaments, joinTournament, participents } from "../../api/api";
 import { format, subHours, subMinutes } from "date-fns";
 import Notification from "../atoms/notification";
 import Preloader from "../atoms/Preloader";
-
+import { Link } from "react-router-dom";
 const SingleTournament = () => {
   const { id } = useParams();
   const [tournaments, setTournaments] = useState([]);
@@ -207,7 +207,7 @@ const handleJoinNowClick = () => {
                     <nav aria-label="breadcrumb">
                       <ol className="breadcrumb d-flex justify-content-center">
                         <li className="breadcrumb-item">
-                          <a href="/home">Home</a>
+                          <Link to={'/'}>Home</Link>
                         </li>
                         <li
                           className="breadcrumb-item active"

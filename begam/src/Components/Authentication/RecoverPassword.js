@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function RecoverPassword() {
   const location = useLocation();
@@ -8,6 +9,8 @@ export default function RecoverPassword() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -42,8 +45,16 @@ export default function RecoverPassword() {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
+  };
+
   return (
-    <section id="login-reg" style={{minHeight:"100vh"}}>
+    <section id="login-reg" style={{ minHeight: "100vh" }}>
       <div className="overlay pb-120">
         <div className="container">
           <div className="top-area">
@@ -81,26 +92,46 @@ export default function RecoverPassword() {
                     </div>
                     <div className="form-group">
                       <label htmlFor="password">Enter Password</label>
-                      <input
-                        placeholder="Enter Password"
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
+                      <div className="password-input-wrapper">
+                        <input
+                          placeholder="Enter Password"
+                          type={showPassword ? "text" : "password"}
+                          id="password"
+                          name="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <span
+                          className="password-toggle-icon"
+                          onClick={togglePasswordVisibility}
+                        >
+                          <FontAwesomeIcon
+                            icon={showPassword ? faEyeSlash : faEye}
+                          />
+                        </span>
+                      </div>
                       {errors.password && <p className="error">{errors.password}</p>}
                     </div>
                     <div className="form-group">
                       <label htmlFor="confirmPassword">Confirm Password</label>
-                      <input
-                        placeholder="Confirm Password"
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                      />
+                      <div className="password-input-wrapper">
+                        <input
+                          placeholder="Confirm Password"
+                          type={showConfirmPassword ? "text" : "password"}
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                        <span
+                          className="password-toggle-icon"
+                          onClick={toggleConfirmPasswordVisibility}
+                        >
+                          <FontAwesomeIcon
+                            icon={showConfirmPassword ? faEyeSlash : faEye}
+                          />
+                        </span>
+                      </div>
                       {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
                     </div>
                     <div className="form-group">

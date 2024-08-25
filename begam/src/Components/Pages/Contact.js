@@ -2,7 +2,7 @@ import React from 'react'
 import Herosection from '../Home/Herosection'
 import Navbar from '../Home/Navbar'
 import Footer from '../Home/Footer'
-
+import { Link } from 'react-router-dom'
 const Contact = () => {
   return (
     <>
@@ -48,7 +48,7 @@ const Contact = () => {
                                 </div>
                                 <div class="right-area">
                                     <h6>Email</h6>
-                                    <p class="text-sm"><a href="https://pixner.net/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bedcdbd9dfd3fed9d3dfd7d290ddd1d3">Support@dailymatch.in</a></p>
+                                    <p class="text-sm"><Link>play@dailymatch.in</Link></p>
                                 </div>
                             </div>
                             <div class="single-area d-flex align-items-center">

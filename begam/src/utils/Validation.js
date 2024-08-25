@@ -7,7 +7,7 @@ export const validatePhoneNumber = (phoneNumber) => {
 };
 
 export const validatePassword = (password) => {
-  return password.length === 8; // Ensuring the password is exactly 8 characters long
+  return password.length >= 8; // Ensuring the password is exactly 8 characters long
 };
 
 export const validateFields = (details) => {
@@ -26,7 +26,7 @@ export const validateFields = (details) => {
   if (!details.password || !details.password.trim()) {
     errors.password = "Password is required.";
   } else if (!validatePassword(details.password)) {
-    errors.password = "Password must be exactly 8 characters long.";
+    errors.password = "Password must be atleast 8 characters long.";
   }
 
   if (!details.phoneNumber || !details.phoneNumber.trim()) {

@@ -4,6 +4,8 @@ import Preloader from "../atoms/Preloader";
 import { signup } from "../../api/api";
 import { validateFields } from "../../utils/Validation";
 import Notification from "../atoms/notification";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Signup() {
   const [details, setDetails] = useState({
@@ -14,7 +16,12 @@ export default function Signup() {
   });
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   const onChange = (e) => {
     setDetails((prevDetails) => ({
@@ -96,9 +103,9 @@ export default function Signup() {
                   </Link>
                 </div>
                 <div className="col-sm-5 col">
-                  <a href="#">
+                  <Link>
                     <img src="images/logo.png" alt="logo" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -145,17 +152,26 @@ export default function Signup() {
                         />
                       </div>
                       <div className="form-group">
-                        <label>Password</label>
-                        <input
-                          placeholder="Enter your password"
-                          type="password"
-                          id="password"
-                          name="password"
-                          value={details.password}
-                          onChange={onChange}
-                          autoComplete="new-password"
-                        />
-                      </div>
+  <label>Password</label>
+  <div className="password-input-wrapper">
+    <input
+      placeholder="Enter your password"
+      type={showPassword ? "text" : "password"}
+      id="password"
+      name="password"
+      value={details.password}
+      onChange={onChange}
+      autoComplete="new-password"
+    />
+    <span
+      className="password-toggle-icon"
+      onClick={togglePasswordVisibility}
+    >
+      <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+    </span>
+  </div>
+</div>
+
                       <div className="form-group">
                         <button type="submit" className="cmn-btn">
                           Sign Up Free

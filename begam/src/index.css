@@ -5227,3 +5227,19 @@ justify-content: end;
   margin-bottom: 10px;
   padding: 10px 5px;
 }
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper input {
+  padding-right: 40px; /* Add space for the icon */
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}

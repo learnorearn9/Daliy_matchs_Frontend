@@ -5,19 +5,24 @@ import { login } from "../../api/api";
 import Notification from "../atoms/notification";
 import { setToken } from "../../ReduxStore/action";
 import { useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Login() {
   const location = useLocation();
-  const logoutNotification = location.state?.notification; // Get the logout notification if it exists
+  const logoutNotification = location.state?.notification;
   const userRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [notifications, setNotifications] = useState(logoutNotification ? [logoutNotification] : []); // Initialize notifications with logoutNotification if present
+  const [notifications, setNotifications] = useState(
+    logoutNotification ? [logoutNotification] : []
+  );
 
   useEffect(() => {
     userRef.current.focus();
@@ -32,16 +37,21 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setNotifications([]); // Clear notifications before submitting
+    setNotifications([]);
 
-    // Validate email and password
     if (!validateEmail(user)) {
-      setNotifications((prev) => [...prev, { type: "error", message: "Enter a valid email" }]);
+      setNotifications((prev) => [
+        ...prev,
+        { type: "error", message: "Enter a valid email" },
+      ]);
       return;
     }
 
     if (!validatePassword(pwd)) {
-      setNotifications((prev) => [...prev, { type: "error", message: "Enter a valid password!" }]);
+      setNotifications((prev) => [
+        ...prev,
+        { type: "error", message: "Enter a valid password!" },
+      ]);
       return;
     }
 
@@ -57,10 +67,17 @@ export default function Login() {
       navigate("/");
     } catch (err) {
       console.error("Login failed:", err);
-      setNotifications((prev) => [...prev, { type: "error", message: "Login failed. Please try again later." }]);
+      setNotifications((prev) => [
+        ...prev,
+        { type: "error", message: "Login failed. Please try again later." },
+      ]);
     } finally {
       setLoading(false);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   return (
@@ -70,7 +87,11 @@ export default function Login() {
         <>
           <div className="notification-container">
             {notifications.map((notification, index) => (
-              <Notification key={index} type={notification.type} message={notification.message} />
+              <Notification
+                key={index}
+                type={notification.type}
+                message={notification.message}
+              />
             ))}
           </div>
           <section id="login-reg" style={{ minHeight: "100vh" }}>
@@ -112,19 +133,32 @@ export default function Login() {
                           </div>
                           <div className="form-group">
                             <label>Password</label>
-                            <input
-                              placeholder="Enter your Password"
-                              type="password"
-                              id="password"
-                              value={pwd}
-                              onChange={(e) => setPwd(e.target.value)}
-                              required
-                            />
+                            <div className="password-input-wrapper">
+                              <input
+                                placeholder="Enter your Password"
+                                type={showPassword ? "text" : "password"}
+                                id="password"
+                                value={pwd}
+                                onChange={(e) => setPwd(e.target.value)}
+                                required
+                                autoComplete="off"
+                              />
+                              <span
+                                className="password-toggle-icon"
+                                onClick={togglePasswordVisibility}
+                              >
+                                <FontAwesomeIcon
+                                  icon={showPassword ? faEyeSlash : faEye}
+                                />
+                              </span>
+                            </div>
                           </div>
                           <div className="form-group recover">
                             <p>
-                              Forgot your password? <Link to={"/recover"}>Recover Password</Link>
-                              &nbsp;/ <Link to={"/verify-email"}>Verify Email</Link>
+                              Forgot your password?{" "}
+                              <Link to={"/recover"}>Recover Password</Link>
+                              &nbsp;/{" "}
+                              <Link to={"/verify-email"}>Verify Email</Link>
                             </p>
                           </div>
                           <div className="form-group">
@@ -138,7 +172,8 @@ export default function Login() {
                         </div>
                         <div className="account">
                           <p>
-                            Don't have an account? <Link to={"/signup"}>Sign Up Here</Link>
+                            Don't have an account?{" "}
+                            <Link to={"/signup"}>Sign Up Here</Link>
                           </p>
                         </div>
                       </div>
@@ -153,3 +188,4 @@ export default function Login() {
     </>
   );
 }
+
