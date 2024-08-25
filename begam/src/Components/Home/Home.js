@@ -24,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 1500);
     window.scrollTo(0, 0);
   }, []);
 

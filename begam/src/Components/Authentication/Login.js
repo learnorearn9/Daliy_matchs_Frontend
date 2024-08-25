@@ -19,7 +19,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // State to manage the loader
   const [notifications, setNotifications] = useState(
     logoutNotification ? [logoutNotification] : []
   );
@@ -39,6 +39,7 @@ export default function Login() {
     e.preventDefault();
     setNotifications([]);
 
+    // Form validation
     if (!validateEmail(user)) {
       setNotifications((prev) => [
         ...prev,
@@ -55,7 +56,7 @@ export default function Login() {
       return;
     }
 
-    setLoading(true);
+    setLoading(true); // Show loader before making API call
 
     try {
       const response = await login({ email: user, password: pwd });
@@ -72,7 +73,7 @@ export default function Login() {
         { type: "error", message: "Login failed. Please try again later." },
       ]);
     } finally {
-      setLoading(false);
+      setLoading(false); // Hide loader when API call is complete
     }
   };
 
@@ -82,8 +83,8 @@ export default function Login() {
 
   return (
     <>
-      {loading && <Preloader />}
-      {!loading && (
+      {loading && <Preloader />} {/* Show loader while loading is true */}
+      {!loading && ( // Render form only if loading is false
         <>
           <div className="notification-container">
             {notifications.map((notification, index) => (
@@ -188,4 +189,3 @@ export default function Login() {
     </>
   );
 }
-

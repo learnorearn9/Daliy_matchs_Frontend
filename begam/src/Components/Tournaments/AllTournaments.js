@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { getTournaments, joinTournament } from "../../api/api";
+import { getTournaments } from "../../api/api";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { format, subHours, subMinutes } from "date-fns";
-import UserTournaments from "../Home/UserTournaments";
+import { format, subHours, subMinutes } from "date-fns"; // Import the Preloader component
+import Preloader from "../atoms/Preloader";
 
 export default function AllTournaments() {
   const [tournaments, setTournaments] = useState([]);
-  const token = useSelector((state) => state.token);
   const [countdowns, setCountdowns] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [loading, setLoading] = useState(true); // Loading state
+  const token = useSelector((state) => state.token);
 
   const fetchUserTournaments = async () => {
     try {
-      const response = await getTournaments(token,currentDate);
-      setTournaments(
-        response.data.tournamentDetail
-      );
-
-      // console.log(tournaments);
+      const response = await getTournaments(token, currentDate);
+      setTournaments(response.data.tournamentDetail);
+      setLoading(false); // Set loading to false when data is fetched
     } catch (error) {
       console.error("Error fetching tournaments:", error);
+      setLoading(false); // Also set loading to false on error
     }
   };
 
@@ -29,7 +28,6 @@ export default function AllTournaments() {
     const updatedCountdowns = {};
 
     tournaments.forEach((tournament) => {
-      // Apply the same time adjustments consistently
       let startTime = new Date(tournament.startTime);
       startTime = subMinutes(subHours(startTime, 5), 30); // Subtract 5 hours and 30 minutes
 
@@ -57,10 +55,13 @@ export default function AllTournaments() {
     return () => clearInterval(timer);
   }, [tournaments]);
 
-
-
   return (
     <>
+          {loading ? (
+        <Preloader /> // Show loader while loading
+      ) : (
+        token && (
+          <>
       <section id="banner-section" className="inner-banner tournaments">
         <div className="ani-img">
           <img className="img-1" src="images/banner-circle-1.png" alt="icon" />
@@ -98,18 +99,17 @@ export default function AllTournaments() {
           </div>
         </div>
       </section>
-            {token && (
-        <section id="tournaments-section">
+
+          <section id="tournaments-section">
             <div className="container wow fadeInUp">
               {tournaments
                 .filter((tournament) => {
-                  // Filter out tournaments that have already started
                   let startTime = new Date(tournament.startTime);
                   startTime = subMinutes(subHours(startTime, 5), 30);
                   return startTime > new Date();
                 })
                 .map((tournament, index) => (
-                  <div key={index} className="single-item" style={{ marginBottom: "20px",marginTop: "20px" }}>
+                  <div key={index} className="single-item" style={{ marginBottom: "20px", marginTop: "20px" }}>
                     <div className="row">
                       <div className="col-lg-3 col-md-3 d-flex align-items-center">
                         <img
@@ -179,7 +179,9 @@ export default function AllTournaments() {
                   </div>
                 ))}
             </div>
-        </section>
+          </section>
+          </>
+        )
       )}
     </>
   );
