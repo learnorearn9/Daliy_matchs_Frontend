@@ -36,7 +36,7 @@ export default function Participants(props) {
         userId: participant.userId._id,
         id: participant._id,
         name: participant.userId.name,
-        img: "images/participant-1.png", // Replace with actual image path if available
+        img: "images/boy.png", // Replace with actual image path if available
         status: participant.paymentStatus ? "Payed" : "Not Payed",
         tournamentId: participant.tournamentId,
         tournamentStateId: participant.tournamentStateId,
@@ -136,7 +136,7 @@ console.log("Revoke>>",participant);
         <div className="participant" style={{ paddingTop: "30px" }}>
           <div className="container">
             <div className="row">
-              <div className="col-lg-6">
+              <div className="col-lg-11">
                 <div className="participants-area pb-120">
                   <h4>Confirmed</h4>
                   <div
@@ -159,9 +159,10 @@ console.log("Revoke>>",participant);
                       Not Payed
                     </button>
                   </div>
+                  <div >
                   {filteredParticipants.map((participant) => (
-                    <div className="participants-single" key={participant.id}>
-                      <div className="left-area d-flex align-items-center">
+                    <div className="participants-single" key={participant.id} style={{display:"flex",gap:"20px"}}>
+                      <div className="left-area d-flex align-items-center" style={{minWidth:"55%"}}>
                         <img src={participant.img} alt="participant" />
                         <div className="right-side">
                           <h6>
@@ -184,6 +185,7 @@ console.log("Revoke>>",participant);
                             onClick={() => handleAcceptClick(participant)}
                             style={{
                               marginRight: "10px",
+                              marginBottom:"10px",
                               backgroundColor: "#0D0D59",
                               color: "white",
                               borderRadius: "5px",
@@ -206,7 +208,7 @@ console.log("Revoke>>",participant);
                         </div>
                       )}
                     </div>
-                  ))}
+                  ))}</div>
                 </div>
               </div>
             </div>

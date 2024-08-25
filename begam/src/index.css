@@ -4855,12 +4855,21 @@ body::-webkit-scrollbar-thumb:hover {
 .header-action .join-btn {
   display: inline-block;
 }
-
-/* Styles for tablet and mobile view */
-@media (min-width: 768px) {
+@media (min-width: 991px){
   .logout-text{
     display: none;
   }
+}
+@media (max-width: 991px) {
+  .logout-text{
+    display: block;
+  }
+}
+/* Styles for tablet and mobile view */
+@media (min-width: 768px) {
+  /* .logout-text{
+    display: none;
+  } */
   .login {
     display: none;
   }

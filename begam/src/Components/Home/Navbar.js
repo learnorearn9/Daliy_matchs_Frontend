@@ -5,6 +5,7 @@ import { clearToken } from "../../ReduxStore/action";
 import IconButton from "@mui/material/IconButton";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MenuIcon from "@mui/icons-material/Menu";
+import Notification from "../atoms/notification";
 
 import {
   Button,
@@ -14,6 +15,7 @@ import {
   DialogContentText,
 } from "@mui/material";
 import { getUserDetails, logout } from "../../api/api";
+import Preloader from "../atoms/Preloader";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,9 +25,10 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
+  const [notifications, setNotifications] = useState([]);
   const authToken = useSelector((state) => state.token);
-
+  const [loading, setLoading] = useState(false);
+  
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -47,6 +50,7 @@ export default function Navbar() {
   };
 
   const getUserDetail = async () => {
+    if(authToken){
     try {
       const res = await getUserDetails(authToken);
       setUsername(res.data.data.user.name);
@@ -55,16 +59,29 @@ export default function Navbar() {
       navigate("/");
       console.error("Error fetching user details:", error);
     }
+  }
   };
 
-  const confirmLogout = async () => {
-    const res = await logout(authToken);
-    console.log(res);
+    const confirmLogout = async () => {
+      setLoading(true); // Show the loader
+    
+      const res = await logout(authToken);
+      console.log(res);
+    
+      setLoading(false); // Hide the loader
+    
+      // Wait for a short duration before navigating
+      setTimeout(() => {
+        dispatch(clearToken());
+        navigate("/login", {
+          state: {
+            notification: { type: "success", message: "Logout Successfully !!!" },
+          },
+        });
+      }, 1000); // Adjust the delay time as needed (1000ms = 1 second)
+    };
 
-    dispatch(clearToken());
-    navigate("/login");
-    setOpen(false);
-  };
+  
 
   const toggleNavbar = () => {
     setIsNavbarCollapsed(!isNavbarCollapsed);
@@ -94,6 +111,9 @@ export default function Navbar() {
   }, [location.pathname]);
 
   return (
+    <>
+     {loading && <Preloader />} {/* Show loader if loading is true */}
+
     <header
       id="header-section"
       className={`header-section ${
@@ -245,5 +265,6 @@ export default function Navbar() {
         </DialogActions>
       </Dialog>
     </header>
+    </>
   );
 }

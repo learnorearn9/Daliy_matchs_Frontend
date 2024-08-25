@@ -44,7 +44,7 @@ export default function Verify() {
   };
 
   return (
-    <section id="login-reg">
+    <section id="login-reg" style={{minHeight:"100vh"}}>
       <div className="overlay pb-120">
         <div className="container">
           <div className="top-area">

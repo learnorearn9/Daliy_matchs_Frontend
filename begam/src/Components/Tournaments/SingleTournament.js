@@ -225,7 +225,7 @@ const SingleTournament = () => {
                           flexWrap: "wrap",
                           justifyContent: "center",
                           alignItems: "center",
-                          height: "50px",
+                          height: "65px",
                         }}
                       >
                         <img src="/images/waitng-icon.png" alt="image" />
@@ -242,7 +242,7 @@ const SingleTournament = () => {
                           flexWrap: "wrap",
                           justifyContent: "center",
                           alignItems: "center",
-                          height: "50px",
+                          height: "65px",
                         }}
                       >
                         {tournament?.startTime ? (
@@ -428,7 +428,7 @@ const SingleTournament = () => {
                         <div className="participants-single" key={index}>
                           <div className="left-area d-flex align-items-center">
                             <img
-                              src="/images/participant-1.png"
+                              src="/images/boy.png"
                               alt="Participant"
                             />
                             <div className="right-side">
