@@ -42,7 +42,7 @@ export default function Footer() {
                 </Link>
               </div>
               <ul className="menu-side d-flex align-items-center">
-                <li><Link to="/home" className="active">Home</Link></li>
+                <li><Link to="/" className="active">Home</Link></li>
                 <li><Link to="/about">About</Link></li>
                 <li><Link to="/tournament">Tournament</Link></li>
                 <li><Link to="/contact">Contact Us</Link></li>

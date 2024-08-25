@@ -280,11 +280,14 @@ export default function UserDetail(props) {
                       >
                         <div className="row">
                           <div className="col-lg-12 col-md-12">
+                            <div style={{border:"1px solid white",padding:"10px 5px", borderRadius:"10px",marginBottom:"10px"}}>
                           {upcomingTournaments.length === 0 && (
                               <p>No upcoming tournaments found.</p>
-                            )}
+                            )}</div>
+                            <div>
                             {showAllTournaments
                               ? userTournaments.map((tournament) => (
+                                <>
                                   <div
                                     className="usertournament"
                                     key={tournament._id}
@@ -304,7 +307,7 @@ export default function UserDetail(props) {
                                           .tournamentId.name
                                       }
                                     </p>
-                                  </div>
+                                  </div></>
                                 ))
                               : upcomingTournaments.map((tournament) => (
                                   <div
@@ -328,7 +331,7 @@ export default function UserDetail(props) {
                                     </p>
                                   </div>
                                 ))}
-                          
+                          </div>
                           </div>
                         </div>
                       </div>
