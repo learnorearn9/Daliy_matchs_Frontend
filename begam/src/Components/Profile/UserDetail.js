@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faArrowDown,
+  faArrowUp,
   faAward,
   faCheck,
+  faChevronDown,
+  faChevronUp,
   faCircle,
   faCoins,
   faEdit,
@@ -20,8 +24,8 @@ export default function UserDetail(props) {
   const token = useSelector((state) => state.token);
   const updatedAt = dayjs(user.user.updatedAt);
   const [notifications, setNotifications] = useState([]); // State for notifications
-
-  console.log(user.user.updatedAt);
+  // State to manage the visibility of all tournaments
+  const [showAllTournaments, setShowAllTournaments] = useState(false);
 
   const daysAgo = dayjs().diff(updatedAt, "day");
   const navigate = useNavigate();
@@ -80,6 +84,18 @@ export default function UserDetail(props) {
     fetchUserTournaments();
   }, [token, user.user._id]);
   // Render nothing if user data is not available
+
+  // Filter upcoming tournaments
+  const upcomingTournaments = userTournaments.filter((tournament) => {
+    return dayjs(tournament.tournamentStateId.startDateTime).isAfter(dayjs());
+  });
+
+  // Toggle function for showing all tournaments or only upcoming
+  const handleToggleView = () => {
+    setShowAllTournaments(!showAllTournaments);
+  };
+
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -238,34 +254,82 @@ export default function UserDetail(props) {
           </div>
         </div>
         <div className="user-tournaments">
-          <div className="statistics-area">
-            <div className="row">
-              <div className="col-lg-4">
-                <div className="total-area">
-                  <div className="head-area d-flex justify-content-between">
-                    <div className="left">
-                      <h5>Your Tournaments</h5>
-                    </div>
-                  </div>
-                  <div className="tab-content" id="myTabContents">
-                    <div
-                      className="tab-pane fade show active"
-                      id="fortnite"
-                      role="tabpanel"
-                      aria-labelledby="fortnite-tab"
-                    >
-                      <div className="row">
-                        <div className="col-lg-12 col-md-12">
-                        {userTournaments.length > 0 ? (
-                    userTournaments.map((tournament) => (
-                      <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
-                     <FontAwesomeIcon icon={faCircle} style={{color:"white"}}/>
-                      <p key={tournament._id}>{tournament.tournamentStateId.tournamentId.name}</p>
+            <div className="statistics-area">
+              <div className="row">
+                <div className="col-lg-6">
+                  <div className="total-area">
+                    <div className="head-area d-flex justify-content-between">
+                      <div className="left">
+                        <h5>Your Tournaments</h5>
                       </div>
-                    ))
-                  ) : (
-                    <p>No tournaments found.</p>
-                  )}
+                      <div className="right" style={{ cursor: "pointer" }} onClick={handleToggleView}>
+                        <p style={{ color: "white" }}>
+                          {showAllTournaments ? "Hide All" : "View All"}{" "}
+                          <FontAwesomeIcon
+                            icon={showAllTournaments ? faChevronUp : faChevronDown}
+                          />
+                        </p>
+                      </div>
+                    </div>
+                    <div className="tab-content" id="myTabContents">
+                      <div
+                        className="tab-pane fade show active"
+                        id="fortnite"
+                        role="tabpanel"
+                        aria-labelledby="fortnite-tab"
+                      >
+                        <div className="row">
+                          <div className="col-lg-12 col-md-12">
+                          {upcomingTournaments.length === 0 && (
+                              <p>No upcoming tournaments found.</p>
+                            )}
+                            {showAllTournaments
+                              ? userTournaments.map((tournament) => (
+                                  <div
+                                    className="usertournament"
+                                    key={tournament._id}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faCircle}
+                                      style={{ color: "white" }}
+                                    />
+                                    <p>
+                                      {
+                                        tournament.tournamentStateId
+                                          .tournamentId.name
+                                      }
+                                    </p>
+                                  </div>
+                                ))
+                              : upcomingTournaments.map((tournament) => (
+                                  <div
+                                    className="usertournament"
+                                    key={tournament._id}
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faCircle}
+                                      style={{ color: "white" }}
+                                    />
+                                    <p>
+                                      {
+                                        tournament.tournamentStateId
+                                          .tournamentId.name
+                                      }
+                                    </p>
+                                  </div>
+                                ))}
+                          
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -273,8 +337,7 @@ export default function UserDetail(props) {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+            </div>
       </div>
     </section>
     </>
