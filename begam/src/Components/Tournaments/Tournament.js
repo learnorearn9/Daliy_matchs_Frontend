@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../Home/Navbar'
-import ScrollToTop from '../atoms/scrollTotop'
+import React, { useEffect, useState } from 'react';
+import Navbar from '../Home/Navbar';
+import ScrollToTop from '../atoms/scrollTotop';
 import Preloader from '../atoms/Preloader';
 import AllTournaments from './AllTournaments';
 
@@ -8,20 +8,22 @@ export default function Tournament() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-      window.scrollTo(0, 0);
+        // Simulate a loading delay
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000); // Adjust the time as needed
+        window.scrollTo(0, 0); // Scroll to top when the component mounts
     }, []);
-  
+
     if (loading) {
-      return <Preloader />;
+        return <Preloader />; // Show the Preloader while loading
     }
-  return (
-    <>
-    <ScrollToTop/>
-      <Navbar/>
-      <AllTournaments/>
-    </>
-  )
+
+    return (
+        <>
+            <ScrollToTop />
+            <Navbar />
+            <AllTournaments />
+        </>
+    );
 }

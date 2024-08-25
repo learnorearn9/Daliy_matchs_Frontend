@@ -22,7 +22,8 @@ const SingleTournament = () => {
   const [countdowns, setCountdowns] = useState({});
   const [showQRCode, setShowQRCode] = useState(false);
   const [notification, setNotification] = useState({ message: "", type: "" });
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+  const isLoading = !tournament;
 
   const fetchUserTournaments = async () => {
     try {
@@ -104,7 +105,7 @@ const SingleTournament = () => {
   useEffect(() => {
     if (tournament) {
       getConfirmedPartcipents();
-      setIsLoading(false); // Data is ready to be displayed
+      // setIsLoading(false); // Data is ready to be displayed
     }
   }, [tournament]);
 
@@ -137,60 +138,69 @@ const handleJoinNowClick = () => {
 };
 
 
-  const handlePaid = async () => {
-    if (!tournament) return;
-    setLoading(true); // Start loader
+const handlePaid = async () => {
+  if (!tournament) return;
   
-    try {
-      const response = await joinTournament(
-        {
-          pubgId,
-          tournamentId: id,
-          tournamentStateId: tournament.tournamentStateId, // Extracted from the tournament object
-        },
-        token
-      );
-  
-      console.log(response); // Log the response from the API
-      setShowQRCode(false); 
-      // Delay stopping the loader and showing the notification
-      setTimeout(() => {
-        setLoading(false);
-       // Stop the loader
-        setNotification({
-          message: "Successfully joined the tournament!",
-          type: "success",
-        }); // Show success notification
-      }, 500); // Adjust the delay time (in milliseconds) as needed
-  
-    } catch (error) {
-      console.error("Error joining tournament:", error);
-      setShowQRCode(false);
-      // Delay stopping the loader and showing the notification
-      setTimeout(() => {
-        setLoading(false); 
-       // Stop the loader
-        setNotification({
-          message: "Error Joining Tournament!",
-          type: "error",
-        }); // Show error notification
-      },500); // Adjust the delay time (in milliseconds) as needed
-  
-    } finally {
-      // Reset common states here if needed
-      setIsJoining(false);
-      setPubgId(""); // Hide the QR code modal // Refresh the page
-    }
-  };
-  
+  setLoading(true); // Start loader
+
+  try {
+    const response = await joinTournament(
+      {
+        pubgId,
+        tournamentId: id,
+        tournamentStateId: tournament.tournamentStateId, // Extracted from the tournament object
+      },
+      token
+    );
+
+    console.log(response); // Log the response from the API
+
+    setShowQRCode(false); // Hide the QR code modal
+
+    // Stop the loader and show the notification after a short delay
+    setNotification({
+      message: "Successfully joined the tournament!",
+      type: "success",
+    });
+  } catch (error) {
+    console.error("Error joining tournament:", error);
+
+    setShowQRCode(false); // Hide the QR code modal
+
+    // Stop the loader and show the notification after a short delay
+    setNotification({
+      message: "Error Joining Tournament!",
+      type: "error",
+    });
+  } finally {
+    setLoading(false); // Ensure the loader stops in both success and error cases
+    setIsJoining(false);
+    setPubgId(""); // Reset the PUBG ID
+    // Refresh the page or perform any additional actions if necessary
+  }
+};
+
+useEffect(() => {
+  if (notification) {
+    const timer = setTimeout(() => {
+      setNotification({ message: "", type: "" }); // Clear notification after 3 seconds
+    }, 3000); // Adjust the time (in milliseconds) as needed
+
+    return () => clearTimeout(timer);
+  }
+}, [notification]);
 
   return (
     <>
-  {loading && <Preloader/>}
+          {isLoading ? (
+            <Preloader /> // Show the Preloader when loading
+          ) : (
+            <>
       <Navbar />
       <div className="notification-container">
         <Notification type={notification.type} message={notification.message} />
       </div>
+
       <section id="banner-section" className="inner-banner tournaments">
         <div className="ani-img">
           <img className="img-1" src="/images/banner-circle-1.png" alt="icon" />
@@ -529,6 +539,8 @@ const handleJoinNowClick = () => {
           </div>
         </div>
       )}
+      </>
+    )}
     </>
   );
 };
