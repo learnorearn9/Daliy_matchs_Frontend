@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getPlayerOfWeek } from "../../api/api";
-
+import { Link } from "react-router-dom";
 export default function Topthree() {
   const [results, setResults] = useState([]);
   const authToken = useSelector((state) => state.token);
@@ -55,9 +55,9 @@ export default function Topthree() {
                         />
                       </div>
                     </div>
-                    <a href={results[1].profileLink}>
+                    <Link>
                       <h5>{results[1].userName}</h5>
-                    </a>
+                    </Link>
                     <p className="date">
                       <span className="text-sm earn" style={{fontSize:"24px"}}>{results[1].rank}</span>
                     </p>
@@ -82,9 +82,9 @@ export default function Topthree() {
                         />
                       </div>
                     </div>
-                    <a href={results[0].profileLink}>
+                    <Link>
                       <h5>{results[0].userName}</h5>
-                    </a>
+                    </Link>
                     <p className="date">
                       <span className="text-sm earn" style={{fontSize:"24px"}}>{results[0].rank}</span>
                     </p>
@@ -106,9 +106,9 @@ export default function Topthree() {
                         />
                       </div>
                     </div>
-                    <a href={results[2].profileLink}>
+                    <Link>
                       <h5>{results[2].userName}</h5>
-                    </a>
+                    </Link>
                     <p className="date">
                       <span className="text-sm earn" style={{fontSize:"24px"}}>{results[2].rank}</span>
                     </p>

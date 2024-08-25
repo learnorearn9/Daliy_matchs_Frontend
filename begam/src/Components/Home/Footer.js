@@ -51,9 +51,9 @@ export default function Footer() {
             <div className="col-lg-4 col-md-4 d-flex align-items-center justify-content-center justify-content-md-end">
               <div className="right-area">
                 <ul className="d-flex">
-                  <li><a href="#"><FontAwesomeIcon icon={faFacebookF} /></a></li>
-                  <li><a href="#"><FontAwesomeIcon icon={faTwitter} /></a></li>
-                  <li><a href="#"><FontAwesomeIcon icon={faInstagram} /></a></li>
+                  <li><Link ><FontAwesomeIcon icon={faFacebookF} /></Link></li>
+                  <li><Link ><FontAwesomeIcon icon={faTwitter} /></Link></li>
+                  <li><Link ><FontAwesomeIcon icon={faInstagram} /></Link></li>
                 </ul>
               </div>
             </div>

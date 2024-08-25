@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 export default function Games() {
   const images = [
     "images/game-1.png",
@@ -25,7 +25,7 @@ export default function Games() {
             <div className="available-game-carousel">
               {images.concat(images).map((src, index) => (
                 <div className="single-item" key={index}>
-                  <a href="#"><img src={src} alt={`game-${index}`} /></a>
+                  <Link ><img src={src} alt={`game-${index}`} /></Link>
                 </div>
               ))}
             </div>
