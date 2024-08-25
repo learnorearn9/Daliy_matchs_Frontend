@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { getTournaments, joinTournament, participents } from "../../api/api";
 import { format, subHours, subMinutes } from "date-fns";
 import Notification from "../atoms/notification";
+import Preloader from "../atoms/Preloader";
 
 const SingleTournament = () => {
   const { id } = useParams();
@@ -65,6 +66,7 @@ const SingleTournament = () => {
       console.error("Error fetching participants:", error);
     }
   };
+  const [loading, setLoading] = useState(false);
 
   const calculateCountdown = () => {
     const now = new Date();
@@ -115,49 +117,76 @@ const SingleTournament = () => {
     return () => clearInterval(timer);
   }, [tournaments]);
 
-  const handleJoinNowClick = () => {
-    if (isJoining) {
-      setShowQRCode(true);
-    } else {
-      setIsJoining(true);
+const handleJoinNowClick = () => {
+  // Check if the user is already joining
+  if (isJoining) {
+    // If PUBG ID is missing, show an error and exit
+    if (!pubgId) {
+      setNotification({
+        message: "Error: ID is required!",
+        type: "error",
+      });
+      return;
     }
-  };
+    // If PUBG ID is provided, show the QR code
+    setShowQRCode(true);
+  } else {
+    // Start the joining process
+    setIsJoining(true);
+  }
+};
+
 
   const handlePaid = async () => {
     if (!tournament) return;
-
+    setLoading(true); // Start loader
+  
     try {
       const response = await joinTournament(
         {
           pubgId,
           tournamentId: id,
-          tournamentStateId: tournament.tournamentStateId, // Extracted from tournament object
+          tournamentStateId: tournament.tournamentStateId, // Extracted from the tournament object
         },
         token
       );
+  
       console.log(response); // Log the response from the API
-      setNotification({
-        message: "Successfully joined the tournament!",
-        type: "success",
-      }); // Show success notification
-      setIsJoining(false);
-      setPubgId("");
-      setShowQRCode(false); // Hide the QR code modal
-      // Refresh the page
-      window.location.reload();
+      setShowQRCode(false); 
+      // Delay stopping the loader and showing the notification
+      setTimeout(() => {
+        setLoading(false);
+       // Stop the loader
+        setNotification({
+          message: "Successfully joined the tournament!",
+          type: "success",
+        }); // Show success notification
+      }, 500); // Adjust the delay time (in milliseconds) as needed
+  
     } catch (error) {
-      console.log(error);
-
       console.error("Error joining tournament:", error);
-      setNotification({ message: "Error Joining Tournament!!", type: "error" }); // Show error notification
-      setIsJoining(false);
-      setPubgId("");
       setShowQRCode(false);
+      // Delay stopping the loader and showing the notification
+      setTimeout(() => {
+        setLoading(false); 
+       // Stop the loader
+        setNotification({
+          message: "Error Joining Tournament!",
+          type: "error",
+        }); // Show error notification
+      },500); // Adjust the delay time (in milliseconds) as needed
+  
+    } finally {
+      // Reset common states here if needed
+      setIsJoining(false);
+      setPubgId(""); // Hide the QR code modal // Refresh the page
     }
   };
+  
 
   return (
     <>
+  {loading && <Preloader/>}
       <Navbar />
       <div className="notification-container">
         <Notification type={notification.type} message={notification.message} />
@@ -432,7 +461,7 @@ const SingleTournament = () => {
                               alt="Participant"
                             />
                             <div className="right-side">
-                              <h6>{participant.userId.name}</h6>
+                              <h6>{participant?.userId?.name}</h6>
                             </div>
                           </div>
                         </div>
@@ -447,14 +476,14 @@ const SingleTournament = () => {
               <div class="container">
                 <div class="row">
                   <div class="col-lg-12">
-                    <div class="table-responsive">
+                    <div class="table-responsive" style={{overflowX:"auto"}}>
                       <table class="table">
                         <thead>
                           <tr>
                             <th scope="col">Placement</th>
                             <th scope="col">Current Prize</th>
                             <th scope="col">Potential Prize</th>
-                            <th scope="col">Team</th>
+                            <th scope="col">Winner</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -462,8 +491,8 @@ const SingleTournament = () => {
                             <th class="first" scope="row">
                               1st
                             </th>
-                            <td>₹ {tournament.firstPrize}</td>
-                            <td>₹ {tournament.firstPrize}</td>
+                            <td>₹ {tournament?.firstPrize}</td>
+                            <td>₹ {tournament?.firstPrize}</td>
                             <td>
                               <i class="fas fa-users"></i>To be decided
                             </td>
@@ -472,8 +501,8 @@ const SingleTournament = () => {
                             <th class="second" scope="row">
                               2nd
                             </th>
-                            <td>₹ {tournament.secondPrize}</td>
-                            <td>₹ {tournament.secondPrize}</td>
+                            <td>₹ {tournament?.secondPrize}</td>
+                            <td>₹ {tournament?.secondPrize}</td>
                             <td>
                               <i class="fas fa-users"></i>To be decided
                             </td>
