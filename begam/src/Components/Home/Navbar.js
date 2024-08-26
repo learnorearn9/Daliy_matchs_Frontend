@@ -33,11 +33,12 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 50);
     };
 
-    getUserDetail();
+    if(authToken){
+    getUserDetail();}
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
-    };
+    }
   }, []);
 
   const handleLogout = () => {
@@ -49,7 +50,6 @@ export default function Navbar() {
   };
 
   const getUserDetail = async () => {
-    if (authToken) {
       try {
         const res = await getUserDetails(authToken);
         setUsername(res.data.data.user.name);
@@ -58,7 +58,6 @@ export default function Navbar() {
         navigate("/");
         console.error("Error fetching user details:", error);
       }
-    }
   };
 
   const confirmLogout = async () => {
@@ -74,10 +73,12 @@ export default function Navbar() {
       });
     } catch (error) {
       console.error("Error during logout:", error);
-      setNotifications((prev) => [
-        ...prev,
-        { type: "error", message: "Logout failed. Please try again later." },
-      ]);
+      dispatch(clearToken());
+      navigate("/login", {
+        state: {
+          notification: { type: "success", message: "Logout Successfully !!!" },
+        },
+      });
     } finally {
       setLoading(false); // Hide the loader
     }

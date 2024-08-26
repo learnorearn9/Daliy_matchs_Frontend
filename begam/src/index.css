@@ -10,7 +10,6 @@
   --body-bg: #0e063d;
 }
 html {
-  scroll-behavior: smooth;
   overflow-x: hidden;
 }
 body {
@@ -550,6 +549,7 @@ body::-webkit-scrollbar-thumb:hover {
   border-radius: 4px;
 }
 .header-section .header-bottom {
+  top: 0;
   padding: 10px 10px;
 }
 @media (max-width: 991px) {

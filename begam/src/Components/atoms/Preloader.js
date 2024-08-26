@@ -3,10 +3,11 @@ import React, { useEffect } from 'react';
 export default function Preloader() {
   useEffect(() => {
     const preloader = document.getElementById('preloader');
-    const showDuration = 300;
+    const showDuration = 0; // No initial delay
     const fadeDuration = 500;
 
-    setTimeout(() => {
+    // Function to handle the fade-out transition
+    const handleFadeOut = () => {
       if (preloader) {
         preloader.style.transition = `opacity ${fadeDuration}ms ease`;
         preloader.style.opacity = '0';
@@ -15,10 +16,20 @@ export default function Preloader() {
           preloader.style.display = 'none';
         }, fadeDuration);
       }
-    }, showDuration);
+    };
+
+    // Show preloader initially
+    setTimeout(handleFadeOut, showDuration);
+
+    // Cleanup timeout on unmount
+    return () => {
+      clearTimeout();
+    };
   }, []);
 
   return (
-    <div className="preloader" id="preloader"></div>
+    <div className="preloader" id="preloader">
+      {/* You can add some loading spinner or animation here */}
+    </div>
   );
 }

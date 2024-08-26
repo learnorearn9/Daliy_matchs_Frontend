@@ -19,33 +19,21 @@ AOS.init({
 });
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-    window.scrollTo(0, 0);
-  }, []);
-
-  if (loading) {
-    return <Preloader />;
-  }
   return (
     <>
       <ScrollToTop Path={"/"} />
-      <Preloader/>
+      <Preloader />
       <Navbar />
       <Herosection />
-       <Games />
+      <Games />
       <Work />
-      <UserTournaments/> 
-      <ResultTable/>
+      <UserTournaments />
+      <ResultTable />
       <Statistics />
       <Topthree />
       <Features />
       <Testimonial />
-      <Footer/> 
+      <Footer />
     </>
   );
 }

@@ -437,12 +437,12 @@ useEffect(() => {
                         <ul>
                           <li>
                             <span>Registered</span>
-                            <span>{total ? 1 : total}</span>
+                            <span>{total ? total : 1}</span>
                           </li>
                           <li>
                             <span>Confirmed</span>
                             <span>
-                              {participent.length ? 1 : participent.length}
+                              {participent.length ?  participent.length : 1}
                             </span>
                           </li>
                           <li>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getAllTournaments, getallUser, getTournaments, insertPlayerOfTheWeek } from '../../api/api';
+import { getAllTournaments, getallUser, insertPlayerOfTheWeek } from '../../api/api';
 import Notification from '../atoms/notification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
@@ -15,21 +15,40 @@ const InsertPlayerOfTheWeek = (props) => {
         tournamentId: "",
         date: "",
         amount: "",
-        rank: ""
+        rank: "",
+        tournamentStateId: "",
     });
     const [users, setUsers] = useState([]);
     const [tournaments, setTournaments] = useState([]);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const [notification, setNotification] = useState({ message: "", type: "" }); // Notification state
-  
+
+    useEffect(() => {
+        if (notification) {
+          const timer = setTimeout(() => {
+            setNotification({ type: '', message: '' });
+          }, 10000); // Clear notification after 10 seconds
+          return () => clearTimeout(timer);
+        }
+      });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setPlayerData({
-            ...playerData,
-            [name]: value,
-        });
+        if (name === 'tournamentId') {
+            const selectedTournament = tournaments.find(tournament => tournament._id === value);
+            console.log("Selected Tournament:", selectedTournament); // Debug line
+            setPlayerData({
+                ...playerData,
+                [name]: value,
+                tournamentStateId: selectedTournament?.tournamentStateIds?.[0] || "", // Extract first tournamentStateId or fallback to ""
+            });
+        } else {
+            setPlayerData({
+                ...playerData,
+                [name]: value,
+            });
+        }
     };
 
     const validate = () => {
@@ -49,14 +68,13 @@ const InsertPlayerOfTheWeek = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validate()) {
+        if (validate()) { // Changed this to properly check validation
             try {
                 console.log("Submitting player data:", playerData);
                 const res = await insertPlayerOfTheWeek(playerData, token);
                 console.log("Player of the Week inserted successfully:", res);
                 setNotification({ message: "Player of the Week inserted successfully!", type: "success" }); // Success notification
               
-         
             } catch (error) {
                 console.error("Error inserting player of the week:", error);
                 if (error.response) {
@@ -96,12 +114,8 @@ const InsertPlayerOfTheWeek = (props) => {
             const response = await getAllTournaments(token);
             console.log("API Response:", response);
             const tournamentsData = response?.data;
-            if (tournamentsData) {
-                console.log(tournamentsData);
-                
-                setTournaments(tournamentsData);
-                console.log(tournaments);
-                
+            if (Array.isArray(tournamentsData)) {
+                setTournaments(tournamentsData); // Ensure tournaments data is an array
             } else {
                 console.error("Unexpected API response format:", response);
                 setTournaments([]);
@@ -123,7 +137,7 @@ const InsertPlayerOfTheWeek = (props) => {
 
     return (
         <>
-          <div className="notification-container">
+            <div className="notification-container">
                 <Notification type={notification.type} message={notification.message} /> {/* Show Notification */}
             </div>
             <section id="login-reg">
@@ -171,7 +185,7 @@ const InsertPlayerOfTheWeek = (props) => {
                                         >
                                             <option value="" disabled>Select a tournament</option>
                                             {Array.isArray(tournaments) && tournaments.map(tournament => (
-                                                <option key={tournament.tournamentId} value={tournament.tournamentId}>
+                                                <option key={tournament._id} value={tournament._id}>
                                                     {tournament.name}
                                                 </option>
                                             ))}
