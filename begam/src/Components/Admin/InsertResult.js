@@ -31,9 +31,9 @@ const InsertResult = (props) => {
 
       // If the tournamentId is changed, update the tournamentStateId
       if (name === "tournamentId") {
-        const selectedTournament = tournaments.find(t => t.tournamentId === value);
+        const selectedTournament = tournaments.find(t => t._id === value);
         if (selectedTournament) {
-          updatedData = { ...updatedData, TournamentStateId: selectedTournament.tournamentStateId };
+          updatedData = { ...updatedData,TournamentStateId: selectedTournament?.tournamentStateIds?.[0] || ""};
         }
       }
 
@@ -56,7 +56,7 @@ const InsertResult = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) return;
+    if (!validate()) return;
     try {
       const res = await insertResult(playerData, token);
       console.log("Result inserted successfully:", res);
@@ -177,7 +177,7 @@ const InsertResult = (props) => {
                     >
                       <option value="" disabled>Select a tournament</option>
                       {Array.isArray(tournaments) && tournaments.map(tournament => (
-                        <option key={tournament.tournamentId} value={tournament.tournamentId}>
+                        <option key={tournament._id} value={tournament._id}>
                           {tournament.name}
                         </option>
                       ))}

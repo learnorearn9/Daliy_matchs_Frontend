@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { updateUserEmail, verifyEmail } from "../../api/api";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { verifyEmail } from "../../api/api";
 import { useSelector } from "react-redux";
+import Notification from "../atoms/notification"; // Import Notification component
 
 export default function Verify() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
+  const [notifications, setNotifications] = useState([]);
   const token = useSelector((state) => state.token);
 
   const validateForm = () => {
@@ -22,29 +23,39 @@ export default function Verify() {
 
   const handleVerification = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-    try {
-      // Perform the email verification logic here
-      console.log("Verifying email:", email);
-      const res = await verifyEmail(email);
-      console.log(res);
-      
-      if(token){
-        navigate('/')
+    if (validateForm()) {
+      setNotifications([]); // Clear previous notifications
+      try {
+        // Perform the email verification logic here
+        const res = await verifyEmail(email);
+        if (res.success) {
+          setNotifications([{ type: "success", message: "OTP sent successfully!" }]);
+          if (token) {
+            navigate('/');
+          } else {
+            navigate('/');
+          }
+        } else {
+          setNotifications([{ type: "error", message: "Failed to send OTP. Please try again." }]);
+        }
+      } catch (error) {
+        console.error("Error during verification:", error);
+        setNotifications([{ type: "error", message: "An error occurred during verification" }]);
       }
-      else{
-        navigate('/')
-      }
-    } catch (error) {
-      console.error("Error during verification:", error);
-      alert("An error occurred during verification");
     }
   };
 
+  useEffect(() => {
+    if (notifications.length > 0) {
+      const timer = setTimeout(() => {
+        setNotifications([]);
+      }, 10000); // Clear notifications after 10 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [notifications]);
+
   return (
-    <section id="login-reg" style={{minHeight:"100vh"}}>
+    <section id="login-reg" style={{ minHeight: "100vh" }}>
       <div className="overlay pb-120">
         <div className="container">
           <div className="top-area">
@@ -67,6 +78,15 @@ export default function Verify() {
               <div className="login-reg-main text-center">
                 <h4>Verify Email</h4>
                 <div className="form-area">
+                  <div className="notification-container">
+                    {notifications.map((notification, index) => (
+                      <Notification
+                        key={index}
+                        type={notification.type}
+                        message={notification.message}
+                      />
+                    ))}
+                  </div>
                   <form onSubmit={handleVerification}>
                     <div className="form-group">
                       <label htmlFor="email">Enter Email</label>
@@ -78,9 +98,6 @@ export default function Verify() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                       />
-                      {errors.email && (
-                        <p className="error">{errors.email}</p>
-                      )}
                     </div>
                     <div className="form-group">
                       <button type="submit" className="cmn-btn">

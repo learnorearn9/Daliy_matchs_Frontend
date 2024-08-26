@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createTournament } from "../../api/api";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBurger, faHamburger } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Notification from "../atoms/notification";
 
 export default function CreateTournament(props) {
@@ -16,11 +16,22 @@ export default function CreateTournament(props) {
     firstPrize: "",
     secondPrize: "",
     fees: "",
-    startDateTime: "" // This field will hold the combined date and time
+    startDateTime: "", // This field will hold the combined date and time
+    date: "",
+    time: ""
   });
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [notification, setNotification] = useState({ message: "", type: "" }); // Notification state
+
+  useEffect(() => {
+    if (notification.message) {
+      const timer = setTimeout(() => {
+        setNotification({ type: '', message: '' });
+      }, 10000); // Clear notification after 10 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,15 +79,12 @@ export default function CreateTournament(props) {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log(tournamentData); 
       try {
         const res = await createTournament(tournamentData, token);
-        console.log("Tournament created successfully:", res);
         setNotification({ message: "Tournament created successfully!", type: "success" }); // Success notification
         setTournamentData({
           name: "",
@@ -90,25 +98,29 @@ export default function CreateTournament(props) {
           time: ""
         });
       } catch (error) {
-        console.error("Error creating tournament:", error);
         setNotification({ message: error.response?.data?.message || "Error creating tournament", type: "error" }); // Error notification
       }
+    } else {
+      // Display all validation errors in the notification
+      setNotification({ message: Object.values(errors).join(' '), type: "error" });
     }
   };
 
   const toggleFunction = () => {
     updateToggle(prev => !prev);  
-}
+  };
 
   return (
     <>
       <div className="notification-container">
-        <Notification type={notification.type} message={notification.message} />
+        {notification.message && (
+          <Notification type={notification.type} message={notification.message} />
+        )}
       </div>
       <section id="login-reg">
         <div className='toggle'>
           <button onClick={toggleFunction}>
-            <FontAwesomeIcon icon={faBars}/>
+            <FontAwesomeIcon icon={faBars} />
           </button>
         </div>
         <div className="row pt-120 d-flex justify-content-center">
@@ -129,7 +141,6 @@ export default function CreateTournament(props) {
                         onChange={handleChange}
                         required
                       />
-                      {errors[field] && <div className="error" style={{ color: "red" }}>{errors[field]}</div>}
                     </div>
                   ))}
                   {/* Date input field */}
@@ -143,7 +154,6 @@ export default function CreateTournament(props) {
                       onChange={handleDateTimeChange}
                       required
                     />
-                    {errors.startDateTime && <div className="error" style={{ color: "red" }}>{errors.startDateTime}</div>}
                   </div>
                   {/* Time input field */}
                   <div className="form-group" style={{ padding: "5px" }}>
@@ -156,7 +166,6 @@ export default function CreateTournament(props) {
                       onChange={handleDateTimeChange}
                       required
                     />
-                    {errors.startDateTime && <div className="error" style={{ color: "red" }}>{errors.startDateTime}</div>}
                   </div>
                   <div className="form-group">
                     <button type="submit" className="cmn-btn">
