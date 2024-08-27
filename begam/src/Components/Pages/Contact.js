@@ -45,11 +45,6 @@ const Contact = () => {
     e.preventDefault();
     if (!validate()) return;
 
-    if (!token) {
-      setNotification({ type: 'error', message: 'Login First !!!' });
-      return;
-    }
-
     try {
       await contact({
         name: formData.name,
