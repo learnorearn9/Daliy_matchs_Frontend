@@ -16,10 +16,12 @@ import { participents, updateUserEmail } from "../../api/api";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import Notification from "../atoms/notification";
+import Spinner from "../atoms/Spinner";
 
 export default function UserDetail(props) {
   const { user } = props;
   // State for managing tournaments
+  const [loading, setLoading] = useState(false);
   const [userTournaments, setUserTournaments] = useState([]);
   const token = useSelector((state) => state.token);
   const updatedAt = dayjs(user.user.updatedAt);
@@ -56,9 +58,19 @@ export default function UserDetail(props) {
     // Log the updated form data
     console.log("Updated User Details:", formData);
     // You can make an API call here to update the user details on the server
-    const res = await updateUserEmail(formData, token);
-    console.log(res);
-    navigate("/verify", { state: { email: formData.email } });
+    try {
+      setLoading(true)
+      const res = await updateUserEmail(formData, token);
+      setLoading(false)
+      console.log(res);
+      navigate("/verify", { state: { email: formData.email } });
+    } catch (error) {
+      setNotifications([{ type: "error", message: "Error Occured!!!" }]);
+    }
+    finally{
+      setLoading(false)
+    }
+
     // Disable editing after submitting
     setIsEditable(false);
   };
@@ -98,6 +110,10 @@ export default function UserDetail(props) {
 
   if (!user) {
     return <div>Loading...</div>;
+  }
+
+  if (loading) {
+    return <Spinner/>;
   }
 
   return (

@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { getUserDetails, logout } from "../../api/api";
 import Preloader from "../atoms/Preloader"; // Import Preloader
+import Spinner from "../atoms/Spinner";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -111,7 +112,7 @@ export default function Navbar() {
 
   return (
     <>
-      {loading && <Preloader />} {/* Show loader if loading is true */}
+      {loading && <Spinner />} {/* Show loader if loading is true */}
 
       <header
         id="header-section"

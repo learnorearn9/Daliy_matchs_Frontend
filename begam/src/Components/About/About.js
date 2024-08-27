@@ -5,6 +5,7 @@ import Preloader from "../atoms/Preloader";
 import Footer from "../Home/Footer";
 import { ABOUT_PAGE_DATA } from "../../Constants/constant"; // Adjust the path as necessary
 import { Link } from "react-router-dom";
+import Spinner from "../atoms/Spinner";
 export default function About() {
   const [loading, setLoading] = useState(true);
 
@@ -16,7 +17,7 @@ export default function About() {
   }, []);
 
   if (loading) {
-    return <Preloader />;
+    return <Spinner/>;
   }
 
   const { banner, aboutSection, teamSection } = ABOUT_PAGE_DATA;

@@ -8,6 +8,7 @@ import { format, subHours, subMinutes } from "date-fns";
 import Notification from "../atoms/notification";
 import Preloader from "../atoms/Preloader";
 import { Link } from "react-router-dom";
+import Spinner from "../atoms/Spinner";
 const SingleTournament = () => {
   const { id } = useParams();
   const [tournaments, setTournaments] = useState([]);
@@ -22,8 +23,6 @@ const SingleTournament = () => {
   const [countdowns, setCountdowns] = useState({});
   const [showQRCode, setShowQRCode] = useState(false);
   const [notification, setNotification] = useState({ message: "", type: "" });
-  // const [isLoading, setIsLoading] = useState(true);
-  const isLoading = !tournament;
 
   const fetchUserTournaments = async () => {
     try {
@@ -190,11 +189,16 @@ useEffect(() => {
   }
 }, [notification]);
 
+
+if(loading){
+  return (
+    <Spinner/>
+  )
+}
+
   return (
     <>
-          {isLoading ? (
-            <Preloader /> // Show the Preloader when loading
-          ) : (
+
             <>
       <Navbar />
       <div className="notification-container">
@@ -540,7 +544,6 @@ useEffect(() => {
         </div>
       )}
       </>
-    )}
     </>
   );
 };

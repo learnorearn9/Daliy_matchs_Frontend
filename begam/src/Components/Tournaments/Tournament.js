@@ -3,6 +3,7 @@ import Navbar from '../Home/Navbar';
 import ScrollToTop from '../atoms/scrollTotop';
 import Preloader from '../atoms/Preloader';
 import AllTournaments from './AllTournaments';
+import Spinner from '../atoms/Spinner';
 
 export default function Tournament() {
     const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ export default function Tournament() {
     }, []);
 
     if (loading) {
-        return <Preloader />; // Show the Preloader while loading
+        return <Spinner />; // Show the Preloader while loading
     }
 
     return (

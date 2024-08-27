@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { format, subHours, subMinutes } from "date-fns"; // Import the Preloader component
 import Preloader from "../atoms/Preloader";
+import Spinner from "../atoms/Spinner";
 
 export default function AllTournaments() {
   const [tournaments, setTournaments] = useState([]);
@@ -58,7 +59,7 @@ export default function AllTournaments() {
   return (
     <>
           {loading ? (
-        <Preloader /> // Show loader while loading
+        <Spinner /> // Show loader while loading
       ) : (
         token && (
           <>

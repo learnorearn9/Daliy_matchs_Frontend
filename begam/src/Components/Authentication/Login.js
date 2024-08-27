@@ -7,6 +7,7 @@ import { setToken } from '../../ReduxStore/action';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import Spinner from '../atoms/Spinner';
 
 export default function Login() {
   const location = useLocation();
@@ -84,7 +85,7 @@ export default function Login() {
 
   return (
     <>
-      {loading && <Preloader />} {/* Show preloader while loading is true */}
+      {loading && <Spinner />} {/* Show preloader while loading is true */}
       {!loading && (
         <>
           <div className="notification-container">

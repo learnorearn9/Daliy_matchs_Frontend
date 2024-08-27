@@ -6,6 +6,7 @@ import { validateFields } from "../../utils/Validation";
 import Notification from "../atoms/notification";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import Spinner from "../atoms/Spinner";
 
 export default function Signup() {
   const [details, setDetails] = useState({
@@ -90,7 +91,7 @@ export default function Signup() {
 
   return (
     <>
-      {loading && <Preloader />}
+      {loading && <Spinner />}
       <div className="notification-container">
         {notifications.map((notification, index) => (
           <Notification
