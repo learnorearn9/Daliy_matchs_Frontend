@@ -24,21 +24,27 @@ export default function VerifyEmail() {
     setNotifications([]); // Clear previous notifications
     try {
       const response = await verify({ email: email, otp: otp });
-      if (response.success) {
-        setNotifications([{ type: "success", message: "Verification successful!" }]);
-        if (token) {
-          navigate('/');
-        } else {
-          navigate('/');
-        }
-      } else {
-        setNotifications([{ type: "error", message: "Verification failed. Please check the OTP." }]);
-      }
+      setNotifications([
+        { type: "success", message: "Verification successful!" },
+      ]);
+  
+      // Wait for 3 seconds before navigating
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1000);
     } catch (error) {
       console.error("Error during verification:", error);
-      setNotifications([{ type: "error", message: "An error occurred during verification" }]);
+      setNotifications([
+        { type: "error", message: "An error occurred during verification" },
+      ]);
+  
+      // Wait for 3 seconds before navigating
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1000);
     }
   };
+  
 
   useEffect(() => {
     if (notifications.length > 0) {
@@ -71,20 +77,25 @@ export default function VerifyEmail() {
                     <div className="form-group">
                       <label>Enter OTP Here</label>
                       <div className="otp-container">
-                        <input
-                          placeholder="Enter OTP"
-                          type={showOtp ? "text" : "password"} // Toggle between text and password
-                          id="otp"
-                          name="otp"
-                          value={otp}
-                          onChange={handleOtpChange}
-                        />
-                        <span
-                          className="otp-toggle-icon"
-                          onClick={() => setShowOtp(!showOtp)}
-                        >
-                          <FontAwesomeIcon icon={showOtp ? faEyeSlash : faEye} /> {/* Toggle icon */}
-                        </span>
+                        <div className="password-input-wrapper">
+                          <input
+                            placeholder="Enter OTP"
+                            type={showOtp ? "text" : "password"} // Toggle between text and password
+                            id="otp"
+                            name="otp"
+                            value={otp}
+                            onChange={handleOtpChange}
+                          />
+                          <span
+                            className="password-toggle-icon"
+                            onClick={() => setShowOtp(!showOtp)}
+                          >
+                            <FontAwesomeIcon
+                              icon={showOtp ? faEyeSlash : faEye}
+                            />{" "}
+                            {/* Toggle icon */}
+                          </span>{" "}
+                        </div>
                       </div>
                     </div>
                     <div className="form-group">

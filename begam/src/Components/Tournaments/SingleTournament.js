@@ -42,30 +42,46 @@ const SingleTournament = () => {
       const response = await participents(token);
       const allParticipants = response?.data || [];
       console.log(allParticipants);
-      // Filter participants by tournamentStateId first
-      console.log(allParticipants[0].tournamentStateId._id);
+  
+    // Step 1: Filter participants from the current date onward
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to the start of today
 
-      const filteredByTournament = allParticipants.filter(
-        (participant) =>
-          participant.tournamentStateId._id === tournament?.tournamentStateId
+    const participantsFromToday = allParticipants.filter((participant) => {
+      const participantDate = new Date(participant.tournamentStateId.date);
+      return (
+        participantDate >= today && // Ensure the participant date is today or later
+        participant.tournamentStateId._id === tournament?.tournamentStateId // Ensure tournamentStateId matches
       );
+    });
 
-      // Set total count of participants for this tournamentStateId
-      setTotal(filteredByTournament.length);
-      console.log(filteredByTournament);
+    // Step 2: Set total count of participants for this filtered list
+    setTotal(participantsFromToday.length);
+    console.log(participantsFromToday);
 
-      // Further filter by payment status
-      const confirmedParticipants = filteredByTournament.filter(
-        (participant) => participant.paymentStatus === true
-      );
-      console.log(confirmedParticipants);
-
+    // Step 3: Further filter by payment status
+    const confirmedParticipants = participantsFromToday.filter(
+      (participant) => participant.paymentStatus === true
+    );
+  
+      // Log confirmed participants with date
+      confirmedParticipants.forEach((participant) => {
+        const participantDate = new Date(participant.tournamentStateId.date);
+        console.log(
+          `Participant: ${participant.userId.name}, Date: ${participantDate.toDateString()}`
+        );
+      });
+  
       // Set confirmed participants
       setParticipent(confirmedParticipants || []);
+      console.log(participent);
+      
     } catch (error) {
       console.error("Error fetching participants:", error);
     }
   };
+
+  
   const [loading, setLoading] = useState(false);
 
   const calculateCountdown = () => {
@@ -197,8 +213,6 @@ if(loading){
 }
 
   return (
-    <>
-
             <>
       <Navbar />
       <div className="notification-container">
@@ -441,12 +455,12 @@ if(loading){
                         <ul>
                           <li>
                             <span>Registered</span>
-                            <span>{total ? total : 1}</span>
+                            <span>{total ? total : 0}</span>
                           </li>
                           <li>
                             <span>Confirmed</span>
                             <span>
-                              {participent.length ?  participent.length : 1}
+                              {participent.length ?  participent.length : 0}
                             </span>
                           </li>
                           <li>
@@ -544,7 +558,6 @@ if(loading){
         </div>
       )}
       </>
-    </>
   );
 };
 
