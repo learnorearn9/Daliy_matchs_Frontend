@@ -5,6 +5,7 @@ import { getAllTournaments, getallUser, insertPlayerOfTheWeek } from '../../api/
 import Notification from '../atoms/notification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Spinner from '../atoms/Spinner';
 
 const InsertPlayerOfTheWeek = (props) => {
     const { updateToggle } = props;
@@ -23,7 +24,7 @@ const InsertPlayerOfTheWeek = (props) => {
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const [notification, setNotification] = useState({ message: "", type: "" }); // Notification state
-
+    const [loading,setLoading] = useState(false)
     useEffect(() => {
         if (notification) {
           const timer = setTimeout(() => {
@@ -69,6 +70,7 @@ const InsertPlayerOfTheWeek = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validate()) { // Changed this to properly check validation
+            setLoading(true);
             try {
                 console.log("Submitting player data:", playerData);
                 const res = await insertPlayerOfTheWeek(playerData, token);
@@ -88,6 +90,9 @@ const InsertPlayerOfTheWeek = (props) => {
                     setNotification({ message: error.message, type: "error" }); // Error notification
                     console.error("Error message:", error.message);
                 }
+            }
+            finally{
+                setLoading(false);
             }
         }
     };
@@ -134,6 +139,10 @@ const InsertPlayerOfTheWeek = (props) => {
     const toggleFunction = () => {
         updateToggle(prev => !prev);  
     }
+
+    if (loading) {
+        return <Spinner/>;
+      }
 
     return (
         <>

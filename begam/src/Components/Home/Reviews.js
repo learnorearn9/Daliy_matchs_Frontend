@@ -3,6 +3,7 @@ import { createUserReview, getUserDetails, getUserReview } from "../../api/api";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Notification from "../atoms/notification"; // Import Notification component
+import Spinner from "../atoms/Spinner";
 
 export default function Testimonial() {
   const [review, setReview] = useState([]);
@@ -12,7 +13,7 @@ export default function Testimonial() {
   const [rating, setRating] = useState("");
   const [user_id, setUser_Id] = useState("");
   const [notifications, setNotifications] = useState([]); // State for notifications
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     getReview();
     if (token) {
@@ -64,6 +65,7 @@ export default function Testimonial() {
 
     if (!validateReviewForm()) return; // Validate form
 
+    setLoading(true);
     try {
       const res = await createUserReview(
         { user_id: user_id, comment: comment, star: rating },
@@ -79,8 +81,17 @@ export default function Testimonial() {
       console.error("Error submitting review:", error);
       setNotifications([{ type: "error", message: "Failed to submit review. Please try again later." }]);
     }
+    finally{
+      setLoading(false);
+    }
   };
 
+
+  if(loading){
+    return (
+      <Spinner/>
+    )
+  }
   return (
     <>
       {/* Notifications Section */}

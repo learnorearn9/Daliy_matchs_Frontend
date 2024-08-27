@@ -10,6 +10,7 @@ import { getUserDetails } from "../../api/api";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearToken } from "../../ReduxStore/action";
+import Spinner from "../atoms/Spinner";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ export default function Profile() {
   }, []);
 
   if (loading) {
-    return <Preloader />;
+    return <Spinner/>;
   }
 
   return (

@@ -6,6 +6,7 @@ import Notification from "../atoms/notification";
 import { format } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Spinner from "../atoms/Spinner";
 
 const InsertResult = (props) => {
   const { updateToggle } = props;
@@ -22,7 +23,7 @@ const InsertResult = (props) => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [notification, setNotification] = useState({ message: "", type: "" }); // Notification state
- 
+  const [loading,setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,6 +59,7 @@ const InsertResult = (props) => {
     e.preventDefault();
     if (!validate()) return;
     try {
+      setLoading(true);
       const res = await insertResult(playerData, token);
       console.log("Result inserted successfully:", res);
       setNotification({ message: "Result inserted successfully!", type: "success" }); // Success notification
@@ -78,6 +80,9 @@ const InsertResult = (props) => {
       } else {
         setNotification({ message: error.message, type: "error" }); // Error notification
       }
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -125,7 +130,9 @@ const InsertResult = (props) => {
   const toggleFunction = () => {
     updateToggle(prev => !prev);  
 }
-
+if (loading) {
+  return <Spinner/>;
+}
 
   return (
     <>

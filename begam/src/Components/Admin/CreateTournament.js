@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import Notification from "../atoms/notification";
+import Spinner from "../atoms/Spinner";
 
 export default function CreateTournament(props) {
   const { updateToggle } = props;
@@ -23,6 +24,8 @@ export default function CreateTournament(props) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [notification, setNotification] = useState({ message: "", type: "" }); // Notification state
+  const [loading,setLoading] = useState(false)
+
 
   useEffect(() => {
     if (notification.message) {
@@ -83,6 +86,7 @@ export default function CreateTournament(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
+      setLoading(true);
       try {
         const res = await createTournament(tournamentData, token);
         setNotification({ message: "Tournament created successfully!", type: "success" }); // Success notification
@@ -100,6 +104,9 @@ export default function CreateTournament(props) {
       } catch (error) {
         setNotification({ message: error.response?.data?.message || "Error creating tournament", type: "error" }); // Error notification
       }
+      finally{
+        setLoading(false)
+      }
     } else {
       // Display all validation errors in the notification
       setNotification({ message: Object.values(errors).join(' '), type: "error" });
@@ -109,6 +116,10 @@ export default function CreateTournament(props) {
   const toggleFunction = () => {
     updateToggle(prev => !prev);  
   };
+
+  if (loading) {
+    return <Spinner/>;
+  }
 
   return (
     <>

@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getUserDetails, participents, revokeUser, updateStatus } from "../../api/api";
+import {
+  getUserDetails,
+  participents,
+  revokeUser,
+  updateStatus,
+} from "../../api/api";
 import { useSelector } from "react-redux";
 import Notification from "../atoms/notification";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import Spinner from "../atoms/Spinner";
 
 export default function Participants(props) {
   const [participants, setParticipants] = useState([]);
@@ -12,7 +17,7 @@ export default function Participants(props) {
   const token = useSelector((state) => state.token);
   const [role, setRole] = useState(false); // Default to false
   const [notification, setNotification] = useState({ message: "", type: "" });
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     getUserRole();
     getParticipents();
@@ -31,7 +36,7 @@ export default function Participants(props) {
     try {
       const res = await participents(token);
       console.log(res.data);
-      
+
       const mappedParticipants = res?.data.map((participant) => ({
         userId: participant.userId._id,
         id: participant._id,
@@ -47,10 +52,10 @@ export default function Participants(props) {
       //   const previousDay = new Date();
       //   previousDay.setDate(previousDay.getDate()+1);
       //   previousDay.setHours(0, 0, 0, 0);
-        
+
       //   return participantDate.toDateString() === previousDay.toDateString();
       // });
-      
+
       setParticipants(mappedParticipants || []);
       console.log(filteredParticipants);
     } catch (error) {
@@ -59,7 +64,6 @@ export default function Participants(props) {
   };
 
   const handleAcceptClick = async (participant) => {
-
     const data = {
       participantId: participant.id,
       tournamentId: participant.tournamentId,
@@ -73,17 +77,26 @@ export default function Participants(props) {
       //     p.id === participant.id ? { ...p, status: "Payed" } : p
       //   )
       // );
+      setLoading(true);
       const res = await updateStatus(data, token);
-      setNotification({ message: "Participant accepted successfully.", type: "success" });
+      setNotification({
+        message: "Participant accepted successfully.",
+        type: "success",
+      });
       window.location.reload();
     } catch (error) {
-      setNotification({ message: "Failed to accept participant.", type: "error" });
+      setNotification({
+        message: "Failed to accept participant.",
+        type: "error",
+      });
       console.error("Error accepting participant:", error);
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   const handleRevokeClick = async (participant) => {
-console.log("Revoke>>",participant);
+    console.log("Revoke>>", participant);
 
     const data = {
       userId: participant.userId,
@@ -92,19 +105,26 @@ console.log("Revoke>>",participant);
     };
     console.log("Revoke clicked with data:", data);
     try {
+      setLoading(true);
       const res = await revokeUser(data, token);
       console.log("Revoke response:", res);
-      setNotification({ message: "Participant revoked successfully.", type: "success" });
+      setNotification({
+        message: "Participant revoked successfully.",
+        type: "success",
+      });
       window.location.reload();
     } catch (error) {
       setNotification({
-        message: `Error: ${error.response?.data?.message || "An error occurred"}`,
-        type: "error"
+        message: `Error: ${
+          error.response?.data?.message || "An error occurred"
+        }`,
+        type: "error",
       });
       console.error("Error revoking participant:", error);
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   const handleFilterChange = (status) => {
     setFilter(status);
@@ -118,21 +138,25 @@ console.log("Revoke>>",participant);
 
   const { updateToggle } = props;
   const toggleFunction = () => {
-    updateToggle(prev => !prev);  
-}
+    updateToggle((prev) => !prev);
+  };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
-     <div className="notification-container">
-      <Notification type={notification.type} message={notification.message} />
-    </div>
+      <div className="notification-container">
+        <Notification type={notification.type} message={notification.message} />
+      </div>
 
       <div className="users" style={{ padding: "20px" }}>
-      <div className='toggle'>
-                    <button onClick={toggleFunction}>
-                      <FontAwesomeIcon icon={faBars}/>
-                    </button>
-                </div> 
+        <div className="toggle">
+          <button onClick={toggleFunction}>
+            <FontAwesomeIcon icon={faBars} />
+          </button>
+        </div>
         <div className="participant" style={{ paddingTop: "30px" }}>
           <div className="container">
             <div className="row">
@@ -159,56 +183,65 @@ console.log("Revoke>>",participant);
                       Not Payed
                     </button>
                   </div>
-                  <div >
-                  {filteredParticipants.map((participant) => (
-                    <div className="participants-single" key={participant.id} style={{display:"flex",gap:"20px"}}>
-                      <div className="left-area d-flex align-items-center" style={{minWidth:"55%"}}>
-                        <img src={participant.img} alt="participant" />
-                        <div className="right-side">
-                          <h6>
-                            {participant.name}{" "}
-                            {/* {participant.status === "Payed" ? (
+                  <div>
+                    {filteredParticipants.map((participant) => (
+                      <div
+                        className="participants-single"
+                        key={participant.id}
+                        style={{ display: "flex", gap: "20px" }}
+                      >
+                        <div
+                          className="left-area d-flex align-items-center"
+                          style={{ minWidth: "55%" }}
+                        >
+                          <img src={participant.img} alt="participant" />
+                          <div className="right-side">
+                            <h6>
+                              {participant.name}{" "}
+                              {/* {participant.status === "Payed" ? (
                               <span style={{ color: "green" }}> (Payed)</span>
                             ) : (
                               <span style={{ color: "red" }}> (Not Payed)</span>
                             )} */}
-                           - {
-                          
-                              participant.tournamentStateId.tournamentId.name
-                            }
-                          </h6>
+                              -{" "}
+                              {participant.tournamentStateId.tournamentId.name}
+                            </h6>
+                          </div>
                         </div>
+                        {participant.status === "Not Payed" && (
+                          <div
+                            className="right-area"
+                            style={{ padding: "5px" }}
+                          >
+                            <button
+                              onClick={() => handleAcceptClick(participant)}
+                              style={{
+                                marginRight: "10px",
+                                marginBottom: "10px",
+                                backgroundColor: "#0D0D59",
+                                color: "white",
+                                borderRadius: "5px",
+                                padding: "5px 10px",
+                              }}
+                            >
+                              Accept
+                            </button>
+                            <button
+                              onClick={() => handleRevokeClick(participant)}
+                              style={{
+                                backgroundColor: "red",
+                                color: "white",
+                                borderRadius: "5px",
+                                padding: "5px 10px",
+                              }}
+                            >
+                              Revoke
+                            </button>
+                          </div>
+                        )}
                       </div>
-                      {participant.status === "Not Payed" && (
-                        <div className="right-area" style={{padding:"5px"}}>
-                          <button
-                            onClick={() => handleAcceptClick(participant)}
-                            style={{
-                              marginRight: "10px",
-                              marginBottom:"10px",
-                              backgroundColor: "#0D0D59",
-                              color: "white",
-                              borderRadius: "5px",
-                              padding: "5px 10px",
-                            }}
-                          >
-                            Accept
-                          </button>
-                          <button
-                            onClick={() => handleRevokeClick(participant)}
-                            style={{
-                              backgroundColor: "red",
-                              color: "white",
-                              borderRadius: "5px",
-                              padding: "5px 10px",
-                            }}
-                          >
-                            Revoke
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}</div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

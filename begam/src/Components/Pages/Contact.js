@@ -6,6 +6,7 @@ import Notification from '../atoms/notification'; // Ensure correct import
 import { Link } from 'react-router-dom';
 import { contact } from '../../api/api';
 import { useSelector } from 'react-redux';
+import Spinner from '../atoms/Spinner';
 
 const Contact = () => {
   const token = useSelector((state) => state.token);
@@ -20,6 +21,8 @@ const Contact = () => {
     message: '',
   });
 
+  const [loading,setLoading] = useState(false);
+  
   const validate = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = 'Name is required';
@@ -45,6 +48,7 @@ const Contact = () => {
     e.preventDefault();
     if (!validate()) return;
 
+    setLoading(true)
     try {
       await contact({
         name: formData.name,
@@ -56,6 +60,9 @@ const Contact = () => {
     } catch (error) {
       setNotification({ type: 'error', message: 'Error submitting form. Please try again.' });
     }
+    finally{
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -66,6 +73,13 @@ const Contact = () => {
       return () => clearTimeout(timer);
     }
   }, [notification]);
+
+  if(loading){
+    return (
+      <Spinner/>
+    )
+  }
+
 
   return (
     <>

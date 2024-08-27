@@ -1,6 +1,8 @@
 // src/atoms/Notification.js
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 const Notification = ({ type, message }) => {
   const [visible, setVisible] = useState(true);
@@ -20,6 +22,7 @@ const Notification = ({ type, message }) => {
 
   return (
     <div className={`notification ${type}`}>
+      <FontAwesomeIcon icon={faCircleInfo} style={{marginRight:"10px"}}/>
       {message}
     </div>
   );
