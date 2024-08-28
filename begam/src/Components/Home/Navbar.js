@@ -34,13 +34,14 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 50);
     };
 
-    if(authToken){
-    getUserDetail();}
+    if (authToken) {
+      getUserDetail();
+    }
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
+    };
+  }, [authToken]);
 
   const handleLogout = () => {
     setOpen(true);
@@ -51,14 +52,14 @@ export default function Navbar() {
   };
 
   const getUserDetail = async () => {
-      try {
-        const res = await getUserDetails(authToken);
-        setUsername(res.data.data.user.name);
-      } catch (error) {
-        dispatch(clearToken());
-        navigate("/");
-        console.error("Error fetching user details:", error);
-      }
+    try {
+      const res = await getUserDetails(authToken);
+      setUsername(res.data.data.user.name);
+    } catch (error) {
+      dispatch(clearToken());
+      navigate("/");
+      console.error("Error fetching user details:", error);
+    }
   };
 
   const confirmLogout = async () => {
@@ -113,7 +114,6 @@ export default function Navbar() {
   return (
     <>
       {loading && <Spinner />} {/* Show loader if loading is true */}
-
       <header
         id="header-section"
         className={`header-section ${

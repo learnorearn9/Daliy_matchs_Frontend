@@ -36,7 +36,7 @@ export default function Participants(props) {
     try {
       const res = await participents(token);
       console.log(res.data);
-
+  
       const mappedParticipants = res?.data.map((participant) => ({
         userId: participant.userId._id,
         id: participant._id,
@@ -46,22 +46,28 @@ export default function Participants(props) {
         tournamentId: participant.tournamentId,
         tournamentStateId: participant.tournamentStateId,
       }));
-      //  // Filter participants based on the previous day's date
-      //  const filteredParticipants = mappedParticipants.filter(participant => {
-      //   const participantDate = new Date(participant.tournamentStateId.date);
-      //   const previousDay = new Date();
-      //   previousDay.setDate(previousDay.getDate()+1);
-      //   previousDay.setHours(0, 0, 0, 0);
-
-      //   return participantDate.toDateString() === previousDay.toDateString();
-      // });
-
-      setParticipants(mappedParticipants || []);
-      console.log(filteredParticipants);
+  
+      // Filter participants starting from the current day onward
+      const filteredParticipants = mappedParticipants.filter((participant) => {
+        const participantDate = new Date(participant.tournamentStateId.date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to the start of today
+  
+        // Include participants with dates from today onward
+        return participantDate >= today;
+      });
+  
+      setParticipants(filteredParticipants || []);
+    // Log the filtered participants with their dates
+    filteredParticipants.forEach((participant) => {
+      const participantDate = new Date(participant.tournamentStateId.date);
+      console.log(`Participant: ${participant.name}, Date: ${participantDate.toDateString()}`);
+    });
     } catch (error) {
       console.error("Error fetching participants:", error);
     }
   };
+  
 
   const handleAcceptClick = async (participant) => {
     const data = {

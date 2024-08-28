@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { resetpassword } from "../../api/api";
+import Spinner from "../atoms/Spinner";
 
 export default function RecoverPassword() {
   const location = useLocation();
@@ -12,16 +14,12 @@ export default function RecoverPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
-
+  const [loading, setLoading] = useState(false);
   const validateForm = () => {
     const newErrors = {};
     // Email validation
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Please enter a valid email address.";
-    }
-    // Password validation
-    if (!/^\d{1,8}$/.test(password)) {
-      newErrors.password = "Password must be a number and between 1 to 8 digits.";
     }
     // Confirm password validation
     if (password !== confirmPassword) {
@@ -37,11 +35,16 @@ export default function RecoverPassword() {
       return;
     }
     try {
-      // Perform the password reset logic here
-      navigate('/login');
+      setLoading(true);
+      const response = await resetpassword({ email, password });
+      console.log(response.data);
+      navigate("/verify", { state: { email: email } });
     } catch (error) {
       console.error("Error during verification:", error);
       alert("An error occurred during verification");
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -53,6 +56,11 @@ export default function RecoverPassword() {
     setShowConfirmPassword((prevShowConfirmPassword) => !prevShowConfirmPassword);
   };
 
+  if(loading){
+    return (
+      <Spinner/>
+    )
+  }
   return (
     <section id="login-reg" style={{ minHeight: "100vh" }}>
       <div className="overlay pb-120">

@@ -18,6 +18,10 @@ export const logout = (token) => {
   });
 };
 
+export const resetpassword = (data) => {
+  return axiosInstance.post("/reset/password",data);
+};
+
 export const getTournaments = (token, date) => {
   return authAxiosInstance.get("/home/get/tournament", {
     params: {
