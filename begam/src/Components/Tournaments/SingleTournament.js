@@ -376,13 +376,13 @@ if(loading){
                       data-toggle="tab"
                       onClick={() => setOption("participants")}
                       role="tab"
-                      aria-controls="participants"
                       aria-selected={option === "participants"}
+                      style={{cursor:"nwse-resize"}}
                     >
                       Participants
                     </a>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item" >
                     <a
                       className={`nav-link ${
                         option === "prizes" ? "active" : ""
@@ -391,7 +391,6 @@ if(loading){
                       data-toggle="tab"
                       onClick={() => setOption("prizes")}
                       role="tab"
-                      aria-controls="prizes"
                       aria-selected={option === "prizes"}
                     >
                       Prizes
