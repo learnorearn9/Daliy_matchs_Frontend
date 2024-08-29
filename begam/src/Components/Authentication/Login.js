@@ -34,7 +34,7 @@ export default function Login() {
   }, [user, pwd]);
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePassword = (password) => password.length < 8;
+  const validatePassword = (password) => password.length >= 8;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,6 +55,8 @@ export default function Login() {
     }
 
     try {
+      console.log("DOne");
+      
       const response = await login({ email: user, password: pwd });
       const accessToken = response?.data?.token;
       dispatch(setToken(accessToken));
