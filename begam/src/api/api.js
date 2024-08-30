@@ -146,8 +146,8 @@ export const editTournament = (data,token) => {
   });
 };
 
-export const verifyEmail = (data) => {
-  return axiosInstance.post("/verify-email",data);
+export const verifyEmail = (email) => {
+  return axiosInstance.post("/verify-email",email);
 };
 
 export const contact = (data) => {
