@@ -1,4 +1,6 @@
 import { axiosInstance, authAxiosInstance,authAdminInstance } from "./axios";
+import axios from 'axios';
+
 
 export const login = (credentials) => {
   return axiosInstance.post("/login", credentials);
@@ -146,9 +148,25 @@ export const editTournament = (data,token) => {
   });
 };
 
-export const verifyEmail = (email) => {
-  return axiosInstance.post("/verify-email",email);
+// export const verifyEmail = (email) => {
+//   return axiosInstance.post("/verify-email",email);
+// };
+
+// Example changeemail function
+// export const changeemail = async (email) => {
+//   try {
+//     const response = await axios.post('https://daliy-matchs-backend-rp07.onrender.com/api/user/verify-email', { email });
+//     return response.data;
+//   } catch (error) {
+//     console.error('API error:', error);
+//     return { success: false };
+//   }
+// };
+
+export const changeemail = async (email) => {
+  return axiosInstance.post('/verify-email', { email });
 };
+
 
 export const contact = (data) => {
   return axiosInstance.post("/contact/user",data);
