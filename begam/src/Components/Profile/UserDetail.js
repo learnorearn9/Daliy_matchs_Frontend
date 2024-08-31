@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowDown,
-  faArrowUp,
+  faArrowLeftLong,
+  faArrowRightLong,
   faAward,
   faCheck,
-  faChevronDown,
-  faChevronUp,
   faCircle,
   faCoins,
   faEdit,
@@ -19,6 +17,8 @@ import Notification from "../atoms/notification";
 import Spinner from "../atoms/Spinner";
 
 export default function UserDetail(props) {
+  // Define ITEMS_PER_PAGE if not already defined
+  const ITEMS_PER_PAGE = 5;
   const { user } = props;
   // State for managing tournaments
   const [loading, setLoading] = useState(false);
@@ -28,6 +28,11 @@ export default function UserDetail(props) {
   const [notifications, setNotifications] = useState([]); // State for notifications
   // State to manage the visibility of all tournaments
   const [showAllTournaments, setShowAllTournaments] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Calculate the number of pages
+  const totalPages = Math.ceil(userTournaments.length / ITEMS_PER_PAGE);
 
   const daysAgo = dayjs().diff(updatedAt, "day");
   const navigate = useNavigate();
@@ -59,16 +64,15 @@ export default function UserDetail(props) {
     console.log("Updated User Details:", formData);
     // You can make an API call here to update the user details on the server
     try {
-      setLoading(true)
+      setLoading(true);
       const res = await updateUserEmail(formData, token);
-      setLoading(false)
+      setLoading(false);
       console.log(res);
       navigate("/verify", { state: { email: formData.email } });
     } catch (error) {
       setNotifications([{ type: "error", message: "Error Occured!!!" }]);
-    }
-    finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
 
     // Disable editing after submitting
@@ -107,95 +111,122 @@ export default function UserDetail(props) {
     setShowAllTournaments(!showAllTournaments);
   };
 
-
   if (!user) {
     return <div>Loading...</div>;
   }
 
   if (loading) {
-    return <Spinner/>;
+    return <Spinner />;
   }
 
+  // Get the tournaments for the current page
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentTournaments = userTournaments.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+
+  // Handle page change
+  const handlePageChange = (direction) => {
+    setCurrentPage((prevPage) => {
+      if (direction === "next") {
+        return Math.min(prevPage + 1, totalPages);
+      } else {
+        return Math.max(prevPage - 1, 1);
+      }
+    });
+  };
+
   return (
-<>
-<div className="notification-container">
+    <>
+      <div className="notification-container">
         {notifications.map((notification, index) => (
-          <Notification key={index} type={notification.type} message={notification.message} />
+          <Notification
+            key={index}
+            type={notification.type}
+            message={notification.message}
+          />
         ))}
       </div>
-    <section id="all-trophies" className="pb-120">
-      <div className="container">
-        <div className="tab-content">
-          <div
-            className="tab-pane fade show active"
-            role="tabpanel"
-            aria-labelledby="overview-tab"
-            style={{ display: "flex", alignItems: "space-between" }}
-          >
-            <div className="statistics-area">
-              <div className="row">
-                <div className="col-lg-9">
-                  <div className="total-area" style={{ marginBottom: "30px" }}>
-                    <div className="head-area d-flex justify-content-between">
-                      <div className="left">
-                        <h5>Personal Details</h5>
+      <section id="all-trophies" className="pb-120">
+        <div className="container">
+          <div className="tab-content">
+            <div
+              className="tab-pane fade show active"
+              role="tabpanel"
+              aria-labelledby="overview-tab"
+              style={{ display: "flex", alignItems: "space-between" }}
+            >
+              <div className="statistics-area">
+                <div className="row">
+                  <div className="col-lg-9">
+                    <div
+                      className="total-area"
+                      style={{ marginBottom: "30px" }}
+                    >
+                      <div className="head-area d-flex justify-content-between">
+                        <div className="left">
+                          <h5>Personal Details</h5>
+                        </div>
+                        <div class="right">
+                          <p class="text-sm">
+                            Last Update: <span>{daysAgo} days ago</span>
+                          </p>
+                        </div>
+                        <div className="right" style={{ color: "white" }}>
+                          <FontAwesomeIcon
+                            icon={isEditable ? faCheck : faEdit}
+                            onClick={
+                              isEditable ? handleSubmit : handleEditClick
+                            }
+                            style={{ cursor: "pointer" }}
+                          />
+                        </div>
                       </div>
-                      <div class="right">
-                        <p class="text-sm">
-                          Last Update: <span>{daysAgo} days ago</span>
-                        </p>
-                      </div>
-                      <div className="right" style={{ color: "white" }}>
-                        <FontAwesomeIcon
-                          icon={isEditable ? faCheck : faEdit}
-                          onClick={isEditable ? handleSubmit : handleEditClick}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </div>
-                    </div>
-                    <div className="tab-content" id="myTabContents">
-                      <div
-                        className="tab-pane fade show active"
-                        id="fortnite"
-                        role="tabpanel"
-                        aria-labelledby="fortnite-tab"
-                      >
-                        <div className="row">
-                          <div
-                            className="col-lg-12 col-md-12"
-                            style={{ paddingTop: "15px" }}
-                          >
-                            <div className="profile-input">
-                              <label htmlFor="name">Name</label>
-                              <input
-                                id="name"
-                                type="text"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                readOnly={!isEditable}
-                              />
+                      <div className="tab-content" id="myTabContents">
+                        <div
+                          className="tab-pane fade show active"
+                          id="fortnite"
+                          role="tabpanel"
+                          aria-labelledby="fortnite-tab"
+                        >
+                          <div className="row">
+                            <div
+                              className="col-lg-12 col-md-12"
+                              style={{ paddingTop: "15px" }}
+                            >
+                              <div className="profile-input">
+                                <label htmlFor="name">Name</label>
+                                <input
+                                  id="name"
+                                  type="text"
+                                  value={formData.name}
+                                  onChange={handleInputChange}
+                                  readOnly={!isEditable}
+                                />
+                              </div>
+                              <div className="profile-input">
+                                <label htmlFor="email">Email</label>
+                                <input
+                                  id="email"
+                                  type="text"
+                                  value={formData.email}
+                                  onChange={handleInputChange}
+                                  readOnly={!isEditable}
+                                />
+                              </div>
+                              <div className="profile-input">
+                                <label htmlFor="phone">Phone</label>
+                                <input
+                                  id="phoneNumber"
+                                  type="text"
+                                  value={formData.phoneNumber}
+                                  onChange={handleInputChange}
+                                  readOnly={!isEditable}
+                                />
+                              </div>
+                              <div style={{ height: "45px" }}></div>
                             </div>
-                            <div className="profile-input">
-                              <label htmlFor="email">Email</label>
-                              <input
-                                id="email"
-                                type="text"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                                readOnly={!isEditable}
-                              />
-                            </div>
-                            <div className="profile-input">
-                              <label htmlFor="phone">Phone</label>
-                              <input
-                                id="phoneNumber"
-                                type="text"
-                                value={formData.phoneNumber}
-                                onChange={handleInputChange}
-                                readOnly={!isEditable}
-                              />
-                            </div>
-                            <div style={{ height: "45px" }}></div>
                           </div>
                         </div>
                       </div>
@@ -203,61 +234,70 @@ export default function UserDetail(props) {
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="statistics-area">
-              <div class="row">
-                <div class="col-lg-9">
-                  <div class="total-area">
-                    <div class="head-area d-flex justify-content-between">
-                      <div class="left">
-                        <h5>Game Statistics</h5>
-                        <p class="text-sm">Player's game specific statistics</p>
+              <div class="statistics-area">
+                <div class="row">
+                  <div class="col-lg-9">
+                    <div class="total-area">
+                      <div class="head-area d-flex justify-content-between">
+                        <div class="left">
+                          <h5>Game Statistics</h5>
+                          <p class="text-sm">
+                            Player's game specific statistics
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div class="tab-content" id="myTabContents">
-                      <div
-                        class="tab-pane fade show active"
-                        id="fortnite"
-                        role="tabpanel"
-                        aria-labelledby="fortnite-tab"
-                      >
-                        <div class="row">
-                          <div class="col-lg-4 col-md-6">
-                            <div class="single-item text-center">
-                              <img
-                                src="images/statistics-icon-1.png"
-                                alt="image"
-                              />
-                              <p>Tournaments Played</p>
-                              <h4>
-                                {user.TournamentDetails.tournamentsParticipated}
-                              </h4>
+                      <div class="tab-content" id="myTabContents">
+                        <div
+                          class="tab-pane fade show active"
+                          id="fortnite"
+                          role="tabpanel"
+                          aria-labelledby="fortnite-tab"
+                        >
+                          <div class="row">
+                            <div class="col-lg-4 col-md-6">
+                              <div class="single-item text-center">
+                                <img
+                                  src="images/statistics-icon-1.png"
+                                  alt="image"
+                                />
+                                <p>Tournaments Played</p>
+                                <h4>
+                                  {
+                                    user.TournamentDetails
+                                      .tournamentsParticipated
+                                  }
+                                </h4>
+                              </div>
                             </div>
-                          </div>
-                          <div class="col-lg-4 col-md-6">
-                            <div class="single-item text-center">
-                              <FontAwesomeIcon
-                                icon={faCoins}
-                                style={{ fontSize: "45px", color: "white" }}
-                              />
-                              <p>
-                                Times
-                                <br /> Paid
-                              </p>
-                              <h4>{user.TournamentDetails.totalPrizeMoney}</h4>
+                            <div class="col-lg-4 col-md-6">
+                              <div class="single-item text-center">
+                                <FontAwesomeIcon
+                                  icon={faCoins}
+                                  style={{ fontSize: "45px", color: "white" }}
+                                />
+                                <p>
+                                  Times
+                                  <br /> Paid
+                                </p>
+                                <h4>
+                                  {user.TournamentDetails.totalPrizeMoney}
+                                </h4>
+                              </div>
                             </div>
-                          </div>
-                          <div class="col-lg-4 col-md-6">
-                            <div class="single-item text-center">
-                              <FontAwesomeIcon
-                                icon={faAward}
-                                style={{ fontSize: "45px", color: "white" }}
-                              />
-                              <p>
-                                Tournaments
-                                <br /> Won
-                              </p>
-                              <h4>{user.TournamentDetails.firstPlaceCount}</h4>
+                            <div class="col-lg-4 col-md-6">
+                              <div class="single-item text-center">
+                                <FontAwesomeIcon
+                                  icon={faAward}
+                                  style={{ fontSize: "45px", color: "white" }}
+                                />
+                                <p>
+                                  Tournaments
+                                  <br /> Won
+                                </p>
+                                <h4>
+                                  {user.TournamentDetails.firstPlaceCount}
+                                </h4>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -268,97 +308,74 @@ export default function UserDetail(props) {
               </div>
             </div>
           </div>
-        </div>
-        <div className="user-tournaments">
-            <div className="statistics-area">
-              <div className="row">
-                <div className="col-lg-6">
-                  <div className="total-area">
-                    <div className="head-area d-flex justify-content-between">
-                      <div className="left">
-                        <h5>Your Tournaments</h5>
-                      </div>
-                      <div className="right" style={{ cursor: "pointer" }} onClick={handleToggleView}>
-                        <p style={{ color: "white" }}>
-                          {showAllTournaments ? "Hide All" : "View All"}{" "}
-                          <FontAwesomeIcon
-                            icon={showAllTournaments ? faChevronUp : faChevronDown}
-                          />
-                        </p>
-                      </div>
-                    </div>
-                    <div className="tab-content" id="myTabContents">
-                      <div
-                        className="tab-pane fade show active"
-                        id="fortnite"
-                        role="tabpanel"
-                        aria-labelledby="fortnite-tab"
-                      >
-                        <div className="row">
-                          <div className="col-lg-12 col-md-12">
-                            <div style={{border:"1px solid white",padding:"10px 5px", borderRadius:"10px",marginBottom:"10px"}}>
-                          {upcomingTournaments.length === 0 && (
-                              <p>No upcoming tournaments found.</p>
-                            )}</div>
-                            <div>
-                            {showAllTournaments
-                              ? userTournaments.map((tournament) => (
-                                <>
-                                  <div
-                                    className="usertournament"
-                                    key={tournament._id}
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "10px",
-                                    }}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faCircle}
-                                      style={{ color: "white" }}
-                                    />
-                                    <p>
-                                      {
-                                        tournament.tournamentStateId
-                                          .tournamentId.name
-                                      }
-                                    </p>
-                                  </div></>
-                                ))
-                              : upcomingTournaments.map((tournament) => (
-                                  <div
-                                    className="usertournament"
-                                    key={tournament._id}
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "10px",
-                                    }}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faCircle}
-                                      style={{ color: "white" }}
-                                    />
-                                    <p>
-                                      {
-                                        tournament.tournamentStateId
-                                          .tournamentId.name
-                                      }
-                                    </p>
-                                  </div>
-                                ))}
+          <div className="user-tournaments">
+      <div className="statistics-area">
+        <div className="row">
+          <div className="col-lg-6">
+            <div className="total-area">
+              <div className="head-area d-flex justify-content-between">
+                <div className="left">
+                  <h5>Your Tournaments</h5>
+                </div>
+              </div>
+              <div className="tab-content" id="myTabContents">
+                <div
+                  className="tab-pane fade show active"
+                  id="fortnite"
+                  role="tabpanel"
+                  aria-labelledby="fortnite-tab"
+                >
+                  <div className="row">
+                    <div className="col-lg-12 col-md-12">
+                      <div>
+                        {currentTournaments.map((tournament) => (
+                          <div
+                            className="usertournament"
+                            key={tournament._id}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faCircle}
+                              style={{ color: 'white' }}
+                            />
+                            <p>
+                              {tournament.tournamentStateId.tournamentId.name}
+                            </p>
                           </div>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              {totalPages > 1 && (
+                <div className="pagination-controls d-flex justify-content-between">
+                  <button
+                    onClick={() => handlePageChange('previous')}
+                    disabled={currentPage === 1}
+                  >
+                    <FontAwesomeIcon icon={faArrowLeftLong}/>
+                  </button>
+                  <span>{`${currentPage} of ${totalPages}`}</span>
+                  <button
+                    onClick={() => handlePageChange('next')}
+                    disabled={currentPage === totalPages}
+                  >
+                    <FontAwesomeIcon icon={faArrowRightLong} />
+                  </button>
+                </div>
+              )}
             </div>
-            </div>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
+        </div>
+      </section>
     </>
   );
 }

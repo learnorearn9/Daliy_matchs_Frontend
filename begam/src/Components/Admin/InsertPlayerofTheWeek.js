@@ -177,11 +177,7 @@ const InsertPlayerOfTheWeek = (props) => {
                                                 </option>
                                             ))}
                                         </select>
-                                        {errors.userId && (
-                                            <div className="error" style={{ color: "red" }}>
-                                                {errors.userId}
-                                            </div>
-                                        )}
+                                      
                                     </div>
                                     <div className="form-group" style={{ padding: "5px" }}>
                                         <label htmlFor="tournamentId">Tournament</label>
@@ -199,11 +195,7 @@ const InsertPlayerOfTheWeek = (props) => {
                                                 </option>
                                             ))}
                                         </select>
-                                        {errors.tournamentId && (
-                                            <div className="error" style={{ color: "red" }}>
-                                                {errors.tournamentId}
-                                            </div>
-                                        )}
+                                    
                                     </div>
                                     {[
                                         { label: "Date", name: "date", type: "date" },

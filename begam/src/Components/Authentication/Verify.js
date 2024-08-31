@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { verifyEmail } from "../../api/api";
+import { changeemail, verifyEmail } from "../../api/api";
 import { useSelector } from "react-redux";
 import Notification from "../atoms/notification"; // Import Notification component
+import Spinner from "../atoms/Spinner";
 
 export default function Verify() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ export default function Verify() {
   const [errors, setErrors] = useState({});
   const [notifications, setNotifications] = useState([]);
   const token = useSelector((state) => state.token);
+  const [loading,setLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
@@ -23,37 +25,48 @@ export default function Verify() {
 
   const handleVerification = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    console.log("Verification started");
     if (validateForm()) {
+      console.log("Form is valid");
       setNotifications([]); // Clear previous notifications
       try {
-        // Perform the email verification logic here
-        const res = await verifyEmail(email);
-        if (res.success) {
+        const res = await changeemail(email);
           setNotifications([{ type: "success", message: "OTP sent successfully!" }]);
-          if (token) {
-            navigate('/');
-          } else {
-            navigate('/');
-          }
-        } else {
-          setNotifications([{ type: "error", message: "Failed to send OTP. Please try again." }]);
-        }
       } catch (error) {
         console.error("Error during verification:", error);
         setNotifications([{ type: "error", message: "An error occurred during verification" }]);
       }
+      finally{
+        setEmail("");
+        setLoading(false);
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
+    } else {
+      console.log("Form is invalid");
     }
   };
+  
 
   useEffect(() => {
     if (notifications.length > 0) {
       const timer = setTimeout(() => {
         setNotifications([]);
-      }, 10000); // Clear notifications after 10 seconds
+      }, 1000); // Clear notifications after 10 seconds
       return () => clearTimeout(timer);
     }
   }, [notifications]);
 
+
+  if(loading){
+    return (
+      <>
+      <Spinner/>
+      </>
+    )
+  }
   return (
     <section id="login-reg" style={{ minHeight: "100vh" }}>
       <div className="overlay pb-120">
